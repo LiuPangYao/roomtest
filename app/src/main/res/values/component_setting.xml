@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="main_logo_height">60dp</dimen>
+    <dimen name="main_logo_size">28sp</dimen>
+    <dimen name="recycler_item_margin">5dp</dimen>
+    <dimen name="recycler_item_size_main">22sp</dimen>
+    <dimen name="recycler_item_size_second">14sp</dimen>
+</resources>

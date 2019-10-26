@@ -16,6 +16,8 @@ public class toyInfo {
     public String web;
     //@ColumnInfo
     public String imageUri;
+    //@ColumnInfo
+    public String date;
 
     public int getId() {
         return mId;
@@ -50,5 +52,12 @@ public class toyInfo {
     }
     public void setImageUri(String imageUri) {
         this.imageUri = imageUri;
+    }
+
+    public String getDate() {
+        return date;
+    }
+    public void setDate(String date) {
+        this.date = date;
     }
 }

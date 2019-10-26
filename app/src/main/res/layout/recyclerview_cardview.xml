@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/recycler_item_margin"
+    android:layout_marginRight="@dimen/recycler_item_margin"
+    android:foreground="?attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="@dimen/recycler_item_margin">
+
+        <ImageView
+            android:id="@+id/toy_imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:padding="@dimen/recycler_item_margin"
+            app:srcCompat="@mipmap/app_launcher_main_foreground" />
+
+        <TextView
+            android:id="@+id/toy_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/toy_imageView"
+            android:padding="@dimen/recycler_item_margin"
+            android:text="toy_name"
+            android:textSize="@dimen/recycler_item_size_main" />
+
+        <TextView
+            android:id="@+id/toy_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toy_name"
+            android:layout_toRightOf="@id/toy_imageView"
+            android:padding="@dimen/recycler_item_margin"
+            android:text="toy_date"
+            android:textSize="@dimen/recycler_item_size_second" />
+
+        <TextView
+            android:id="@+id/toy_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toy_date"
+            android:layout_toRightOf="@id/toy_imageView"
+            android:padding="@dimen/recycler_item_margin"
+            android:text="toy_price"
+            android:textSize="@dimen/recycler_item_size_second" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

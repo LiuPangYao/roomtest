@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ToySoul</string>
+    <string name="main_logo">ToySoul</string>
+    <string name="NO_INFORMATION">NO INFORMATION</string>
 </resources>
