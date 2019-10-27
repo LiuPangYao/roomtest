@@ -15,6 +15,9 @@ public interface toyDao {
     @Query("SELECT * FROM toyInfo WHERE mId IN (:toyIds)")
     List<toyInfo> loadAllByIds(int[] toyIds);
 
+    @Query("SELECT * FROM toyInfo WHERE mId IN (:toyIds)")
+    List<toyInfo> loadAllByOnlyIds(int[] toyIds);
+
     @Insert
     void insert(toyInfo... toyInfos);
 
