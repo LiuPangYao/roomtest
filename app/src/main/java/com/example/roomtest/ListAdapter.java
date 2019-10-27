@@ -1,6 +1,7 @@
 package com.example.roomtest;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.roomtest.database.toyInfo;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
     public ListAdapter(List<toyInfo> data, Context context)
     {
         this.toyList = data;
-        Log.d(TAG, "ListAdapter: " + toyList.size());
+        //Log.d(TAG, "ListAdapter: " + toyList.size());
         this.context = context;
     }
 
@@ -33,7 +35,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
         ImageView imgToy;
         TextView textViewName;
         TextView textViewDate;
-        TextView textViewPrice;
+        TextView textViewBuyPrice;
+        TextView textViewSellPrice;
+
 
         public ViewHolder(View itemView)
         {
@@ -41,7 +45,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
             this.imgToy = (ImageView) itemView.findViewById(R.id.toy_imageView);
             this.textViewName = (TextView) itemView.findViewById(R.id.toy_name);
             this.textViewDate = (TextView) itemView.findViewById(R.id.toy_date);
-            this.textViewPrice = (TextView) itemView.findViewById(R.id.toy_price);
+            this.textViewBuyPrice = (TextView) itemView.findViewById(R.id.toy_buy_price);
+            this.textViewSellPrice = (TextView) itemView.findViewById(R.id.toy_sell_price);
         }
     }
 
@@ -55,12 +60,23 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
 
 
     @Override
-    public void onBindViewHolder(ListAdapter.ViewHolder holder, final int position)
+    public void onBindViewHolder(ViewHolder holder, final int position)
     {
         Log.d(TAG, "onBindViewHolder: test position " + position);
         holder.textViewName.setText(toyList.get(position).getName());
-        holder.textViewDate.setText(toyList.get(position).getDate());
-        holder.textViewPrice.setText(String.valueOf(toyList.get(position).getPrice()));
+        holder.textViewDate.setText(/*context.getString(R.string.DATE_ACQUISITION) +*/ toyList.get(position).getDate());
+        holder.textViewBuyPrice.setText(context.getString(R.string.P_PRICE) + String.valueOf(toyList.get(position).getBuyPrice()));
+        holder.textViewSellPrice.setText(context.getString(R.string.PRICE) +String.valueOf(toyList.get(position).getSellPrice()));
+
+        Log.d(TAG, "url = " + Uri.parse(toyList.get(position).getImageUri()));
+
+        //Picasso
+        Picasso.get()
+                .load(Uri.parse(toyList.get(position).getImageUri()+".png")) // 圖片路徑
+                .placeholder(R.mipmap.app_launcher_main_foreground)  // 圖片讀取完成之前先顯示的佔位圖
+                .error(R.mipmap.app_launcher_main_foreground)        // 圖片讀取失敗時要顯示的錯誤圖
+                //.resize(189, 267)
+                .into(holder.imgToy);  // 要顯示圖的View
 
         holder.itemView.setOnClickListener(new View.OnClickListener()
         {

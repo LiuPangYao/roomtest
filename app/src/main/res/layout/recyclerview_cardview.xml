@@ -21,34 +21,58 @@
             android:padding="@dimen/recycler_item_margin"
             app:srcCompat="@mipmap/app_launcher_main_foreground" />
 
-        <TextView
-            android:id="@+id/toy_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/toy_imageView"
-            android:padding="@dimen/recycler_item_margin"
-            android:text="toy_name"
-            android:textSize="@dimen/recycler_item_size_main" />
-
-        <TextView
-            android:id="@+id/toy_date"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/toy_name"
             android:layout_toRightOf="@id/toy_imageView"
-            android:padding="@dimen/recycler_item_margin"
-            android:text="toy_date"
-            android:textSize="@dimen/recycler_item_size_second" />
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/toy_price"
+            <TextView
+                android:id="@+id/toy_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/recycler_item_margin"
+                android:text="toy_name"
+                android:textSize="@dimen/recycler_item_size_main"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/toy_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toy_name"
+                android:padding="@dimen/recycler_item_margin"
+                android:text="toy_date"
+                android:textSize="@dimen/recycler_item_size_second" />
+
+            <TextView
+                android:id="@+id/toy_buy_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toy_date"
+                android:paddingLeft="@dimen/recycler_item_margin"
+                android:text="toy_buy_price"
+                android:textColor="@color/colorLightBlue"
+                android:textSize="@dimen/recycler_item_size_second" />
+
+            <TextView
+                android:id="@+id/toy_sell_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toy_buy_price"
+                android:paddingLeft="@dimen/recycler_item_margin"
+                android:text="toy_sell_price"
+                android:textColor="@color/colorLightRed"
+                android:textSize="@dimen/recycler_item_size_second" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/price_market"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/toy_date"
-            android:layout_toRightOf="@id/toy_imageView"
+            android:layout_alignParentRight="true"
             android:padding="@dimen/recycler_item_margin"
-            android:text="toy_price"
-            android:textSize="@dimen/recycler_item_size_second" />
-
+            android:visibility="gone"
+            app:srcCompat="@mipmap/app_launcher_main_foreground" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

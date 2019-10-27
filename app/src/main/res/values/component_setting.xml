@@ -2,6 +2,7 @@
 <resources>
     <dimen name="main_logo_height">60dp</dimen>
     <dimen name="main_logo_size">28sp</dimen>
+    <dimen name="no_information_size">30sp</dimen>
     <dimen name="recycler_item_margin">5dp</dimen>
     <dimen name="recycler_item_size_main">22sp</dimen>
     <dimen name="recycler_item_size_second">14sp</dimen>

@@ -2,4 +2,10 @@
     <string name="app_name">ToySoul</string>
     <string name="main_logo">ToySoul</string>
     <string name="NO_INFORMATION">NO INFORMATION</string>
+    <string name="SOLD_OUT">SOLD OUT</string>
+    <string name="SELL">SELL</string>
+    <string name="PRE_ORDER">PRE ORDER</string>
+    <string name="DATE_ACQUISITION">date acquisition : </string>
+    <string name="P_PRICE">purchase price : </string>
+    <string name="PRICE">price : </string>
 </resources>
