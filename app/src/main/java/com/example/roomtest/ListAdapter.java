@@ -72,10 +72,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
 
         //Picasso
         Picasso.get()
-                .load(Uri.parse(toyList.get(position).getImageUri()+".png")) // 圖片路徑
-                .placeholder(R.mipmap.app_launcher_main_foreground)  // 圖片讀取完成之前先顯示的佔位圖
-                .error(R.mipmap.app_launcher_main_foreground)        // 圖片讀取失敗時要顯示的錯誤圖
-                //.resize(189, 267)
+                .load(Uri.parse(toyList.get(position).getImageUri()+".png")) // internet path
+                .placeholder(R.mipmap.app_launcher_main_foreground)  // preload
+                .error(R.mipmap.app_launcher_main_foreground)        // load error
                 .into(holder.imgToy);  // 要顯示圖的View
 
         holder.itemView.setOnClickListener(new View.OnClickListener()
