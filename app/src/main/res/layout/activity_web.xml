@@ -13,18 +13,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
-    </WebView>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView_back"
         android:layout_width="@dimen/imageview_button_size"
         android:layout_height="@dimen/imageview_button_size"
-        android:background="@mipmap/back_view_icon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="@dimen/imageview_button_margin"
-        android:onClick="onClick"/>
+        android:background="@mipmap/back_view_icon"
+        android:onClick="onClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBarWeb"

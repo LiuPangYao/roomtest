@@ -9,7 +9,7 @@ public class Constants {
 
     // PRICE STATE
     public static final int INCREASE = 0;
-    public static final int COMMON = 0;
-    public static final int FALLING = 0;
+    public static final int COMMON = 1;
+    public static final int FALLING = 2;
 
 }
