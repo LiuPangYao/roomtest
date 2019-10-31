@@ -10,4 +10,6 @@
     <dimen name="recycler_item_size_second">14sp</dimen>
     <dimen name="menu_icon_size">35dp</dimen>
     <dimen name="image_button_margin">12.5dp</dimen>
+    <dimen name="item_size">15dp</dimen>
+    <dimen name="progressbar_size">16sp</dimen>
 </resources>

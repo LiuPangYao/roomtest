@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:padding="@dimen/recycler_item_margin"
             app:srcCompat="@mipmap/app_launcher_main_foreground" />
 
@@ -25,7 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/toy_imageView"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/item_size">
 
             <TextView
                 android:id="@+id/toy_name"
@@ -33,6 +35,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/recycler_item_margin"
                 android:text="toy_name"
+                android:textColor="@color/colorLightBlack"
                 android:textSize="@dimen/recycler_item_size_main"
                 android:textStyle="bold" />
 
@@ -41,8 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/toy_name"
-                android:padding="@dimen/recycler_item_margin"
                 android:text="toy_date"
+                android:paddingLeft="@dimen/recycler_item_margin"
                 android:textSize="@dimen/recycler_item_size_second" />
 
             <TextView

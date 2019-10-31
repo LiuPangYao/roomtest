@@ -8,5 +8,6 @@
     <string name="DATE_ACQUISITION">date acquisition : </string>
     <string name="P_PRICE">purchase price : </string>
     <string name="PRICE">price : </string>
-    <string name="WEBVIEW_NOT_SUPPORT">webview not support</string>
+    <string name="WEBVIEW_NOT_SUPPORT">webview url not support</string>
+    <string name="PROGRESS_DIALOG">Loading...</string>
 </resources>

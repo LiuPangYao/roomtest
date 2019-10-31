@@ -8,4 +8,6 @@
     <color name="colorLightRed">#FF3333</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorLightBlue">#0066FF</color>
+    <color name="colorLightBlack">#000000</color>
+    <color name="colorBlack">#343134</color>
 </resources>

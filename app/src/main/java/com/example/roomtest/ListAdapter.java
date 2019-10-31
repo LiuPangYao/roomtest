@@ -75,7 +75,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
         //Picasso
         Picasso.get()
                 .load(Uri.parse(toyList.get(position).getImageUri()+".png")) // internet path
-                .placeholder(R.mipmap.app_launcher_main_foreground)  // preload
+                //.placeholder(R.mipmap.app_launcher_main_foreground)  // preload
                 .error(R.mipmap.app_launcher_main_foreground)        // load error
                 .into(holder.imgToy);  // component
 

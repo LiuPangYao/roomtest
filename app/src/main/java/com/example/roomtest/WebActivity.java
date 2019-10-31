@@ -13,7 +13,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.example.roomtest.database.dataBase;
 import com.example.roomtest.database.toyInfo;
@@ -24,7 +23,6 @@ public class WebActivity extends Activity implements View.OnClickListener {
 
     private WebView mWebView;
     private ImageView imgButton;
-    private ProgressBar mProgressBarWeb;
     List<toyInfo> toyList = null;
     private final String TAG = "WebActivity.class";
     int[] toyIds;
@@ -42,6 +40,8 @@ public class WebActivity extends Activity implements View.OnClickListener {
         //init
         init();
 
+        ProgressDialogUtil.showProgressDialog(this);
+
         //get intent information
         Intent intent = getIntent();
         int mId = intent.getIntExtra("mId", 0);
@@ -53,7 +53,6 @@ public class WebActivity extends Activity implements View.OnClickListener {
         settings.setJavaScriptEnabled(true);
 
         mWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
-        mProgressBarWeb.setVisibility(View.VISIBLE);
 
         testTask asyncTask = new testTask(this);
         asyncTask.execute("start");
@@ -70,7 +69,7 @@ public class WebActivity extends Activity implements View.OnClickListener {
 
             public void onPageFinished(WebView view, String url)
             {
-                mProgressBarWeb.setVisibility(View.GONE);
+                ProgressDialogUtil.dismiss();
             }
 
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl)
@@ -84,7 +83,6 @@ public class WebActivity extends Activity implements View.OnClickListener {
 
     public void init() {
         mWebView = findViewById(R.id.webview);
-        mProgressBarWeb = findViewById(R.id.progressBarWeb);
         imgButton = findViewById(R.id.imageView_back);
         imgButton.setOnClickListener(this);
     }

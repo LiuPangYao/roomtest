@@ -1,6 +1,7 @@
 package com.example.roomtest;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -122,11 +124,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.imageButton_menu:
                 if(!isStaggeredAdapter) {
                     initAdapterV2();
-                    mImageButton.setBackground(getResources().getDrawable(R.mipmap.menu_icon_2));
+                    mImageButton.setBackground(getResources().getDrawable(R.mipmap.menu_icon_1));
+                    //ConstraintLayout.LayoutParams mParams = new ConstraintLayout.LayoutParams(30, 30);
+                    //mImageButton.setLayoutParams(mParams);
                     isStaggeredAdapter = true;
                 } else {
                     initAdapter();
-                    mImageButton.setBackground(getResources().getDrawable(R.mipmap.menu_icon_1));
+                    mImageButton.setBackground(getResources().getDrawable(R.mipmap.menu_icon_3));
                     isStaggeredAdapter = false;
                 }
                 break;
