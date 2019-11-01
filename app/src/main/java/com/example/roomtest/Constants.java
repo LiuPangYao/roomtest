@@ -12,4 +12,8 @@ public class Constants {
     public static final int COMMON = 1;
     public static final int FALLING = 2;
 
+    // ITEM STYLE
+    public static final int LINEARITEM = 1;
+    public static final int STAGGERITEM = 2;
+
 }

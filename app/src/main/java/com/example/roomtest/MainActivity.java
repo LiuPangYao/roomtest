@@ -1,7 +1,6 @@
 package com.example.roomtest;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -15,19 +14,19 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.roomtest.database.FakeData;
 import com.example.roomtest.database.dataBase;
 import com.example.roomtest.database.toyInfo;
+import com.example.roomtest.recyclerview.ListAdapter;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private String TAG = "MainActivity.class";
+    private String TAG = "MainActivity";
     dataBase dataInstance = null;
     boolean isReady = false;
     SharedPreferences shared = null;
@@ -89,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRecyclerView.setLayoutManager(linearLayoutManager);
         // show data
         mListadapter = new ListAdapter(toyList, this);
+        mListadapter.setItemStyle(Constants.LINEARITEM);
         mRecyclerView.setAdapter(mListadapter);
         mListadapter.notifyDataSetChanged();
     }
@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRecyclerView.setLayoutManager(layoutManager);
         // show data
         mListadapter = new ListAdapter(toyList, this);
+        mListadapter.setItemStyle(Constants.STAGGERITEM);
         mRecyclerView.setAdapter(mListadapter);
         mListadapter.notifyDataSetChanged();
     }

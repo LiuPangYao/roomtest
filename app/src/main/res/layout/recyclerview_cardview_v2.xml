@@ -16,22 +16,21 @@
             android:id="@+id/toy_imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
             android:padding="@dimen/recycler_item_margin"
             app:srcCompat="@mipmap/app_launcher_main_foreground" />
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/item_size"
-            android:layout_toRightOf="@id/toy_imageView"
-            android:gravity="center_vertical">
+            android:layout_below="@id/toy_imageView"
+            android:layout_centerHorizontal="true">
 
             <TextView
                 android:id="@+id/toy_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:padding="@dimen/recycler_item_margin"
                 android:text="toy_name"
                 android:textColor="@color/colorLightBlack"
@@ -40,9 +39,10 @@
 
             <TextView
                 android:id="@+id/toy_date"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/toy_name"
+                android:layout_centerHorizontal="true"
                 android:paddingLeft="@dimen/recycler_item_margin"
                 android:text="toy_date"
                 android:textSize="@dimen/recycler_item_size_second" />
@@ -52,6 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/toy_date"
+                android:layout_centerHorizontal="true"
                 android:paddingLeft="@dimen/recycler_item_margin"
                 android:text="toy_buy_price"
                 android:textColor="@color/colorLightBlue"
@@ -62,25 +63,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/toy_buy_price"
+                android:layout_centerHorizontal="true"
                 android:paddingLeft="@dimen/recycler_item_margin"
                 android:text="toy_sell_price"
                 android:textColor="@color/colorLightRed"
                 android:textSize="@dimen/recycler_item_size_second" />
-        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/toy_sell_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerHorizontal="true"
-            android:background="@color/colorLightRed"
-            android:paddingLeft="@dimen/recycler_item_margin"
-            android:text="toy_sell_state"
-            android:textStyle="bold"
-            android:layout_centerVertical="true"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/recycler_item_size_main" />
+            <TextView
+                android:id="@+id/toy_sell_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toy_sell_price"
+                android:layout_centerHorizontal="true"
+                android:background="@color/colorLightRed"
+                android:paddingLeft="@dimen/recycler_item_margin"
+                android:text="toy_sell_state"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/recycler_item_size_second"
+                android:visibility="gone" />
+
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/price_market"
@@ -90,5 +92,6 @@
             android:padding="@dimen/recycler_item_margin"
             android:visibility="gone"
             app:srcCompat="@mipmap/app_launcher_main_foreground" />
+
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

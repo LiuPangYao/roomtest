@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ToySoul</string>
+    <string name="main_logo">ToySoul</string>
+    <string name="NO_INFORMATION">無資料</string>
+    <string name="SOLD_OUT">售完</string>
+    <string name="SELL">販售中</string>
+    <string name="PRE_ORDER">預售中</string>
+    <string name="DATE_ACQUISITION">購買日期 :</string>
+    <string name="P_PRICE">購入價格 :</string>
+    <string name="PRICE">當前價格:</string>
+    <string name="WEBVIEW_NOT_SUPPORT">未提供對應網址</string>
+    <string name="PROGRESS_DIALOG">載入中...</string>
+</resources>

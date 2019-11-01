@@ -10,4 +10,7 @@
     <color name="colorLightBlue">#0066FF</color>
     <color name="colorLightBlack">#000000</color>
     <color name="colorBlack">#343134</color>
+    <color name="colorIncrease">#FF3333</color>
+    <color name="colorCommon">#33FFFF</color>
+    <color name="colorFalling">#99FF33</color>
 </resources>
