@@ -49,6 +49,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
         TextView textViewBuyPrice;
         TextView textViewSellPrice;
         TextView textViewState;
+        TextView textViewPriceState;
         RelativeLayout relativeLayoutColor;
 
         public ViewHolder(View itemView)
@@ -61,6 +62,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
             this.textViewSellPrice = itemView.findViewById(R.id.toy_sell_price);
             this.relativeLayoutColor = itemView.findViewById(R.id.relative_background);
             this.textViewState = itemView.findViewById(R.id.toy_sell_state);
+            this.textViewPriceState = itemView.findViewById(R.id.toy_sell_price_state);
         }
     }
 
@@ -90,10 +92,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
 
         if(toyList.get(position).getGain() == Constants.INCREASE) {
             //holder.relativeLayoutColor.setBackgroundColor(ContextCompat.getColor(context, R.color.colorIncrease));
+            holder.textViewPriceState.setText(context.getResources().getString(R.string.PRICE_INCREASE));
+            holder.textViewPriceState.setTextColor(ContextCompat.getColor(context, R.color.colorIncrease));
         } else if(toyList.get(position).getGain() == Constants.COMMON) {
             //holder.relativeLayoutColor.setBackgroundColor(ContextCompat.getColor(context, R.color.colorCommon));
+            holder.textViewPriceState.setText(context.getResources().getString(R.string.PRICE_COMMON));
+            holder.textViewPriceState.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
         } else if(toyList.get(position).getGain() == Constants.FALLING) {
             //holder.relativeLayoutColor.setBackgroundColor(ContextCompat.getColor(context, R.color.colorFalling));
+            holder.textViewPriceState.setText(context.getResources().getString(R.string.PRICE_FALLING));
+            holder.textViewPriceState.setTextColor(ContextCompat.getColor(context, R.color.colorFalling));
         }
 
         if(toyList.get(position).getSoldState() == Constants.PRE_ORDER) {

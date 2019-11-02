@@ -82,6 +82,21 @@
                 android:textSize="@dimen/recycler_item_size_second"
                 android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/toy_sell_price_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toy_sell_state"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/toy_sell_state"
+                android:background="@color/colorBlack"
+                android:paddingRight="@dimen/recycler_item_margin"
+                android:text="toy_sell_price_state"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/recycler_item_size_main"
+                android:textStyle="bold"
+                android:visibility="gone"/>
+
         </RelativeLayout>
 
         <ImageView

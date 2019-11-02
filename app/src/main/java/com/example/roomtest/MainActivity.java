@@ -21,17 +21,19 @@ import com.example.roomtest.database.FakeData;
 import com.example.roomtest.database.dataBase;
 import com.example.roomtest.database.toyInfo;
 import com.example.roomtest.recyclerview.ListAdapter;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
 
     private String TAG = "MainActivity";
     dataBase dataInstance = null;
-    boolean isReady = false;
+    boolean isDataReady = false;
+    boolean isDeveloper = false;
     SharedPreferences shared = null;
 
-    private TextView mTextViewEmpty;
+    private TextView mTextViewEmpty, mTextViewTitle;
     private ProgressBar mProgressBarLoading;
     private RecyclerView mRecyclerView;
     private ListAdapter mListadapter;
@@ -49,18 +51,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-       setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
-        // avoid data repeat
+        init();
+
+        // avoid data repeat store
         shared = getSharedPreferences("first_open", MODE_PRIVATE);
-        isReady = shared.getBoolean("isReady", false);
-        if(!isReady) {
-            boolean isFakeDataReady = true;
-            shared.edit().putBoolean("isReady", isFakeDataReady).commit();
-            Log.d(TAG, "dataBase is empty");
-        } else {
-            Log.d(TAG, "dataBase already setting");
-        }
+        isDataReady = shared.getBoolean("isReady", false);
+        isDeveloper = shared.getBoolean("isDeveloper",false);
 
         //init
         dataInstance = dataBase.getInstance(this);
@@ -69,16 +67,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         testTask asyncTask = new testTask(this);
         asyncTask.execute("start");
 
-        init();
+        checkDataSize();
     }
 
     public void init() {
         mRecyclerView = findViewById(R.id.recyclerView);
-        //not use
         mTextViewEmpty = findViewById(R.id.textViewEmpty);
         mProgressBarLoading = findViewById(R.id.progressBarLoading);
         mImageButton = findViewById(R.id.imageButton_menu);
         mImageButton.setOnClickListener(this);
+        mTextViewTitle = findViewById(R.id.textViewTitle);
+        mTextViewTitle.setOnLongClickListener(this);
     }
 
     public void initAdapter() {
@@ -117,24 +116,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void saveData() {
         FakeData.setData(this);
+        if(!isDataReady) {
+            boolean isFakeDataReady = true;
+            shared.edit().putBoolean("isReady", isFakeDataReady).commit();
+            isDataReady = true;
+            Log.d(TAG, "dataBase is empty");
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imageButton_menu:
-                if(!isStaggeredAdapter) {
-                    initAdapterV2();
-                    mImageButton.setBackground(getResources().getDrawable(R.mipmap.menu_icon_1));
-                    //ConstraintLayout.LayoutParams mParams = new ConstraintLayout.LayoutParams(30, 30);
-                    //mImageButton.setLayoutParams(mParams);
-                    isStaggeredAdapter = true;
+                if(!isDataReady) {
+                    return;
                 } else {
-                    initAdapter();
-                    mImageButton.setBackground(getResources().getDrawable(R.mipmap.menu_icon_3));
-                    isStaggeredAdapter = false;
+                    if(!isStaggeredAdapter) {
+                        initAdapterV2();
+                        mImageButton.setBackground(getResources().getDrawable(R.mipmap.menu_icon_1));
+                        //ConstraintLayout.LayoutParams mParams = new ConstraintLayout.LayoutParams(30, 30);
+                        //mImageButton.setLayoutParams(mParams);
+                        isStaggeredAdapter = true;
+                    } else {
+                        initAdapter();
+                        mImageButton.setBackground(getResources().getDrawable(R.mipmap.menu_icon_3));
+                        isStaggeredAdapter = false;
+                    }
                 }
                 break;
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        switch (v.getId()) {
+            case R.id.textViewTitle:
+                if(!isDeveloper) {
+                    Snackbar.make(v, this.getString(R.string.DEVELOPER), Snackbar.LENGTH_LONG).show();
+                    isDeveloper = true;
+                    // do not run in main thread
+                    testTask asyncTask = new testTask(this);
+                    asyncTask.execute("start");
+                }
+                break;
+        }
+        return false;
+    }
+
+    public void checkDataSize() {
+        if(isDataReady) {
+            mTextViewEmpty.setVisibility(View.GONE);
+        } else {
+            mTextViewEmpty.setVisibility(View.VISIBLE);
         }
     }
 
@@ -147,15 +180,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         protected Boolean doInBackground(String... strings) {
-            if(!isReady) {
+
+            if(isDeveloper && !isDataReady) {
+                shared.edit().putBoolean("isDeveloper", true).commit();
                 saveData();
             }
             printData();
+
             return true;
         }
 
         protected void onPostExecute(Boolean result) {
-            initAdapter();
+            checkDataSize();
+
+            if(isDataReady) {
+                if(isStaggeredAdapter) {
+                    initAdapterV2();
+                } else {
+                    initAdapter();
+                }
+            }
         }
     }
 }

@@ -10,4 +10,8 @@
     <string name="PRICE">price : </string>
     <string name="WEBVIEW_NOT_SUPPORT">webview url not provided</string>
     <string name="PROGRESS_DIALOG">Loading...</string>
+    <string name="DEVELOPER">become developer</string>
+    <string name="PRICE_INCREASE">INCREASE</string>
+    <string name="PRICE_COMMON">COMMON</string>
+    <string name="PRICE_FALLING">FALLING</string>
 </resources>

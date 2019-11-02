@@ -11,4 +11,8 @@
     <string name="PRICE">當前價格:</string>
     <string name="WEBVIEW_NOT_SUPPORT">未提供對應網址</string>
     <string name="PROGRESS_DIALOG">載入中...</string>
+    <string name="DEVELOPER">已成為開發者(小熊維尼)</string>
+    <string name="PRICE_COMMON">平</string>
+    <string name="PRICE_FALLING">跌</string>
+    <string name="PRICE_INCREASE">漲</string>
 </resources>
