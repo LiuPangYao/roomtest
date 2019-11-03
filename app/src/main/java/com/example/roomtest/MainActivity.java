@@ -37,11 +37,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressBar mProgressBarLoading;
     private RecyclerView mRecyclerView;
     private ListAdapter mListadapter;
-    private ImageButton mImageButton;
+    private ImageButton mImageButton,mImageDateButton;
 
     List<toyInfo> toyList = null;
 
     private boolean isStaggeredAdapter = false;
+    private boolean isDateOrder = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mTextViewEmpty = findViewById(R.id.textViewEmpty);
         mProgressBarLoading = findViewById(R.id.progressBarLoading);
         mImageButton = findViewById(R.id.imageButton_menu);
+        mImageDateButton = findViewById(R.id.imageButton_date);
         mImageButton.setOnClickListener(this);
+        mImageDateButton.setOnClickListener(this);
         mTextViewTitle = findViewById(R.id.textViewTitle);
         mTextViewTitle.setOnLongClickListener(this);
     }
@@ -142,6 +145,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mImageButton.setBackground(getResources().getDrawable(R.mipmap.menu_icon_3));
                         isStaggeredAdapter = false;
                     }
+                }
+                break;
+            case R.id.imageButton_date:
+                if(!isDataReady) {
+                    return;
+                } else {
+                    if(!isDateOrder) {
+                        mImageDateButton.setBackground(getResources().getDrawable(R.mipmap.date_new));
+                        mListadapter.setDateOrder(Constants.DATE_NEW_OLD);
+                        //mListadapter.notifyDataSetChanged();
+                        isDateOrder = true;
+                    } else {
+                        mImageDateButton.setBackground(getResources().getDrawable(R.mipmap.date_old));
+                        mListadapter.setDateOrder(Constants.DATE_OLD_NEW);
+                        //mListadapter.notifyDataSetChanged();
+                        isDateOrder = false;
+                    }
+
+                    mListadapter.notifyDataSetChanged();
+
                 }
                 break;
         }

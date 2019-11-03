@@ -64,4 +64,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/imageButton_date"
+        android:layout_width="@dimen/menu_icon_size_date"
+        android:layout_height="@dimen/menu_icon_size_date"
+        android:layout_marginTop="@dimen/image_button_margin_date"
+        android:layout_marginBottom="@dimen/image_button_margin_date"
+        android:layout_marginLeft="@dimen/image_button_margin_date"
+        android:layout_marginRight="@dimen/image_button_margin_date_right"
+        android:background="@mipmap/date_old"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton_menu"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

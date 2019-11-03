@@ -16,4 +16,8 @@ public class Constants {
     public static final int LINEARITEM = 1;
     public static final int STAGGERITEM = 2;
 
+    // DATE
+    public static final int DATE_OLD_NEW = 1;
+    public static final int DATE_NEW_OLD = 2;
+
 }
