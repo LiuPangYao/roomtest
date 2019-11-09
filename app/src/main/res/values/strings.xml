@@ -14,4 +14,14 @@
     <string name="PRICE_INCREASE">INCREASE</string>
     <string name="PRICE_COMMON">COMMON</string>
     <string name="PRICE_FALLING">FALLING</string>
+    <string name="TAB_LIST">list</string>
+    <string name="TAB_INFO">info</string>
+    <string name="TAB_ABOUT">about</string>
+    <string name="FIX">Repairs in progress</string>
+    <string name="PERMISSION">Privacy Policy</string>
+    <string name="UPDATELIST">update list</string>
+    <string name="AD">ad</string>
+    <string name="QUESTION_RETURN">bug report</string>
+    <string name="SERVICE">Terms of Service</string>
+    <string name="COMPONENT_USE">component use</string>
 </resources>

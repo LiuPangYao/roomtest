@@ -13,4 +13,13 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <style name="TabLayoutStyle" parent="Base.Widget.Design.TabLayout">
+        <item name="tabBackground">@color/colorWhite</item>
+        <item name="tabIndicatorColor">@color/colorDarkRed</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabSelectedTextColor">@color/colorDarkRed</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/colorDarkRed</item>
+    </style>
+
 </resources>

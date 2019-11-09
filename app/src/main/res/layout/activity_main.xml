@@ -24,7 +24,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
@@ -68,12 +68,67 @@
         android:id="@+id/imageButton_date"
         android:layout_width="@dimen/menu_icon_size_date"
         android:layout_height="@dimen/menu_icon_size_date"
-        android:layout_marginTop="@dimen/image_button_margin_date"
-        android:layout_marginBottom="@dimen/image_button_margin_date"
         android:layout_marginLeft="@dimen/image_button_margin_date"
+        android:layout_marginTop="@dimen/image_button_margin_date"
         android:layout_marginRight="@dimen/image_button_margin_date_right"
+        android:layout_marginBottom="@dimen/image_button_margin_date"
         android:background="@mipmap/date_old"
         app:layout_constraintEnd_toStartOf="@+id/imageButton_menu"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        style="@style/TabLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tab_layout_height"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/TAB_LIST" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/TAB_INFO" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/TAB_ABOUT" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/colorDarkRed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tabLayout" />
+
+    <include
+        android:id="@+id/relative_edit"
+        layout="@layout/editorview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+
+    <include
+        android:id="@+id/relative_about"
+        layout="@layout/about"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

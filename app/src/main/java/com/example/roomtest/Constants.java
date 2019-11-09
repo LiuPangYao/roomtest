@@ -20,4 +20,8 @@ public class Constants {
     public static final int DATE_OLD_NEW = 1;
     public static final int DATE_NEW_OLD = 2;
 
+    // AD
+    public static final String AD_BANNER = "ca-app-pub-2657997950776627/9014448267";
+    public static final String AD_INTERNAL = "ca-app-pub-2657997950776627/6143924104";
+
 }

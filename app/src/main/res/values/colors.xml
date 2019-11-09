@@ -13,4 +13,5 @@
     <color name="colorIncrease">#FF3333</color>
     <color name="colorCommon">#33FFFF</color>
     <color name="colorFalling">#99FF33</color>
+    <color name="colorWhiteSmoke">#D3D3D3</color>
 </resources>

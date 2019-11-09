@@ -13,6 +13,11 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/app_launcher_main_round"
         android:supportsRtl="true">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2657997950776627~4077477040"/>
+
         <activity android:name=".WebActivity"></activity>
         <activity
             android:name=".MainActivity"

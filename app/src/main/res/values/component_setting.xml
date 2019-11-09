@@ -6,13 +6,21 @@
     <dimen name="imageview_button_margin">5dp</dimen>
     <dimen name="imageview_button_size">55dp</dimen>
     <dimen name="recycler_item_margin">5dp</dimen>
-    <dimen name="recycler_item_size_main">22sp</dimen>
+    <dimen name="recycler_item_size_main">20sp</dimen>
+    <dimen name="recycler_item_size_main_v2">18sp</dimen>
     <dimen name="recycler_item_size_second">14sp</dimen>
     <dimen name="menu_icon_size">35dp</dimen>
     <dimen name="menu_icon_size_date">25dp</dimen>
     <dimen name="image_button_margin">12.5dp</dimen>
     <dimen name="image_button_margin_date">17.5dp</dimen>
-    <dimen name="image_button_margin_date_right">5dp</dimen>
+    <dimen name="image_button_margin_date_right">10dp</dimen>
     <dimen name="item_size">15dp</dimen>
     <dimen name="progressbar_size">16sp</dimen>
+    <dimen name="tab_layout_height">65dp</dimen>
+    <dimen name="view_height">1dp</dimen>
+    <dimen name="fix_margin">5dp</dimen>
+    <dimen name="fix_icon">75dp</dimen>
+    <dimen name="icon_top">50dp</dimen>
+    <dimen name="textview_bottom">30dp</dimen>
+
 </resources>

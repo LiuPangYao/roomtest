@@ -48,7 +48,7 @@ public class FakeData {
         toy4.setName("EAA-066 金鋼狼");
         toy4.setBuyPrice(2340);
         toy4.setSellPrice(2390);
-        toy4.setWeb("https://www.toy-people.com/?p=48110");
+        toy4.setWeb("https://www.toy-people.com/?p=44680");
         toy4.setImageUri("https://imgur.com/zZja4Nu");
         toy4.setDate("2019-05-24");
         toy4.setSoldState(Constants.SELL);

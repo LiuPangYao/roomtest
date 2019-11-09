@@ -11,8 +11,18 @@
     <string name="PRICE">當前價格:</string>
     <string name="WEBVIEW_NOT_SUPPORT">未提供對應網址</string>
     <string name="PROGRESS_DIALOG">載入中...</string>
-    <string name="DEVELOPER">已成為開發者(小熊維尼-習)</string>
+    <string name="DEVELOPER">已成為開發者(小熊維尼)</string>
     <string name="PRICE_COMMON">持平</string>
     <string name="PRICE_FALLING">跌</string>
     <string name="PRICE_INCREASE">漲</string>
+    <string name="TAB_ABOUT">關於</string>
+    <string name="TAB_INFO">資訊</string>
+    <string name="TAB_LIST">列表</string>
+    <string name="FIX">維修中</string>
+    <string name="PERMISSION">隱私權政策</string>
+    <string name="UPDATELIST">更新項目</string>
+    <string name="AD">廣告</string>
+    <string name="QUESTION_RETURN">意見回報</string>
+    <string name="SERVICE">服務條款</string>
+    <string name="COMPONENT_USE">元件使用</string>
 </resources>

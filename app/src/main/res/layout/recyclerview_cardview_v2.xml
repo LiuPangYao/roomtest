@@ -34,7 +34,7 @@
                 android:padding="@dimen/recycler_item_margin"
                 android:text="toy_name"
                 android:textColor="@color/colorLightBlack"
-                android:textSize="@dimen/recycler_item_size_main"
+                android:textSize="@dimen/recycler_item_size_second"
                 android:textStyle="bold" />
 
             <TextView
@@ -44,6 +44,7 @@
                 android:layout_below="@id/toy_name"
                 android:layout_centerHorizontal="true"
                 android:paddingLeft="@dimen/recycler_item_margin"
+                android:paddingBottom="@dimen/recycler_item_margin"
                 android:text="toy_date"
                 android:textSize="@dimen/recycler_item_size_second" />
 
@@ -95,7 +96,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/recycler_item_size_main"
                 android:textStyle="bold"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </RelativeLayout>
 
