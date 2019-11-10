@@ -32,8 +32,8 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
         this.context = context;
 
         mInterstitialAd = new InterstitialAd(context);
-        //mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-        mInterstitialAd.setAdUnitId(Constants.AD_INTERNAL);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        //mInterstitialAd.setAdUnitId(Constants.AD_INTERNAL);
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
     }
 

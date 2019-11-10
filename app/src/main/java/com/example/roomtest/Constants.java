@@ -24,4 +24,9 @@ public class Constants {
     public static final String AD_BANNER = "ca-app-pub-2657997950776627/9014448267";
     public static final String AD_INTERNAL = "ca-app-pub-2657997950776627/6143924104";
 
+    // ACTION MOVE
+    public static final int ACTION_NULL = 0;
+    public static final int ACTION_INSERT = 1;
+    public static final int ACTION_UPDATE = 2;
+
 }

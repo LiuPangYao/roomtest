@@ -11,20 +11,23 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.roomtest.Constants;
+import com.example.roomtest.Diaog.editDialogFragment;
 import com.example.roomtest.R;
 import com.example.roomtest.WebActivity;
+import com.example.roomtest.database.listSort;
 import com.example.roomtest.database.toyInfo;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
@@ -53,94 +56,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
 
     public void setDateOrder(int style) {
         dateStyle = style;
-
-        if(dateStyle == Constants.DATE_OLD_NEW) {
-            for(int i = 0 ; i < toyList.size() ; i++) {
-
-                String dateString = toyList.get(i).getDate();
-
-                if(toyListRestore.size() == 0) {
-                    toyListRestore.add(toyList.get(i));
-                } else {
-                    for(int j = 0 ; j < toyListRestore.size() ; j++) {
-                        try {
-                            boolean isBigger = compare(toyListRestore.get(j).getDate(), dateString);
-
-                            if(!isBigger) {
-                                toyListRestore.add(j, toyList.get(i));
-                                break;
-                            } else if(j == toyListRestore.size() - 1) {
-                                toyListRestore.add(toyList.get(i));
-                                break;
-                            }
-
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-
-            toyList.clear();
-            toyList.addAll(toyListRestore);
-            toyListRestore.clear();
-
-        } else if(dateStyle == Constants.DATE_NEW_OLD) {
-
-            for(int i = 0 ; i < toyList.size() ; i++) {
-
-                String dateString = toyList.get(i).getDate();
-
-                if(toyListRestore.size() == 0) {
-                    toyListRestore.add(toyList.get(i));
-                } else {
-                    for(int j = 0 ; j < toyListRestore.size() ; j++) {
-                        try {
-                            boolean isBigger = compare(toyListRestore.get(j).getDate(), dateString);
-
-                            Log.d(TAG, "setDateOrder: compare");
-                            
-                            if(isBigger) {
-                                Log.d(TAG, "setDateOrder: set in");
-                                toyListRestore.add(j, toyList.get(i));
-                                break;
-                            } else if(j == toyListRestore.size() - 1) {
-                                Log.d(TAG, "setDateOrder: end");
-                                toyListRestore.add(toyList.get(i));
-                                break;
-                            }
-
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-            Log.d(TAG, "setDateOrder: break for - loop");
-
-            toyList.clear();
-            toyList.addAll(toyListRestore);
-            toyListRestore.clear();
-            Log.d(TAG, "setDateOrder: " + toyListRestore.size() + ", " + toyList.size());
-        }
-    }
-
-    public boolean compare(String t1, String t2) throws ParseException {
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date time1 = sdf.parse(t1);
-        Date time2 = sdf.parse(t2);
-
-        //if(time1.before(time2))
-        //    return true;
-        //else
-        //    return false;
-
-        if(time1.getTime()-time2.getTime()<0)
-            return true;
-        else
-            return false;
-
+        toyListRestore = listSort.sortlist(dateStyle, toyList);
+        toyList.clear();
+        toyList.addAll(toyListRestore);
+        toyListRestore.clear();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -184,7 +103,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
 
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position)
+    public void onBindViewHolder(final ViewHolder holder, final int position)
     {
         Log.d(TAG, "onBindViewHolder: test position " + position);
         holder.textViewName.setText(toyList.get(position).getName());
@@ -195,7 +114,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
         if(toyList.get(position).getGain() == Constants.INCREASE) {
             //holder.relativeLayoutColor.setBackgroundColor(ContextCompat.getColor(context, R.color.colorIncrease));
             holder.textViewPriceState.setText(context.getResources().getString(R.string.PRICE_INCREASE));
-            holder.textViewPriceState.setTextColor(ContextCompat.getColor(context, R.color.colorIncrease));
+            holder.textViewPriceState.setTextColor(ContextCompat.getColor(context, R.color.colorDarkRed));
         } else if(toyList.get(position).getGain() == Constants.COMMON) {
             //holder.relativeLayoutColor.setBackgroundColor(ContextCompat.getColor(context, R.color.colorCommon));
             holder.textViewPriceState.setText(context.getResources().getString(R.string.PRICE_COMMON));
@@ -236,6 +155,25 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
                 } else {
                     Snackbar.make(v, context.getString(R.string.WEBVIEW_NOT_SUPPORT), Snackbar.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                if(!toyList.get(position).getWeb().equals("")) {
+                    //Log.d(TAG, "onLongClick: " + position);
+                    toyInfo toys = toyList.get(position);
+
+                    FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+                    editDialogFragment dialog = editDialogFragment.instance("Update Toy Info(Beta)", Constants.ACTION_UPDATE, toys);
+                    dialog.show(manager, "update");
+                } else {
+                    Snackbar.make(v, "error!", Snackbar.LENGTH_SHORT).show();
+                }
+
+                return true;
             }
         });
     }

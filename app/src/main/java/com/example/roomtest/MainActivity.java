@@ -1,16 +1,15 @@
 package com.example.roomtest;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,9 +19,13 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.roomtest.database.FakeData;
+import com.example.roomtest.Diaog.editDialogFragment;
+import com.example.roomtest.asyncTask.InsertFakeDataAsyncTask;
+import com.example.roomtest.asyncTask.InsertAsyncTask;
 import com.example.roomtest.database.dataBase;
+import com.example.roomtest.database.listSort;
 import com.example.roomtest.database.toyInfo;
 import com.example.roomtest.recyclerview.ListAdapter;
 import com.example.roomtest.recyclerview.SimpleAdapter;
@@ -31,13 +34,19 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
+public class MainActivity extends AppCompatActivity implements
+        View.OnClickListener,
+        View.OnLongClickListener,
+        editDialogFragment.InsertDialogListener,
+        InsertAsyncTask.CompleteCallBack,
+        InsertFakeDataAsyncTask.CompleteFakeCallBack{
 
     private String TAG = "MainActivity";
     dataBase dataInstance = null;
@@ -48,14 +57,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView mTextViewEmpty, mTextViewTitle, mTextViewVersion;
     private ProgressBar mProgressBarLoading;
     private RecyclerView mRecyclerView, mRecyclerViewSimple;
-    private ListAdapter mListadapter;
+    private ListAdapter mListAdapter;
     private SimpleAdapter mSimpleAdapter;
     private ImageButton mImageButton, mImageDateButton;
     private RelativeLayout relativeLayoutEditor, relativeLayoutAbout;
+    private FloatingActionButton mFloatButton;
 
     private TabLayout mTabLayout;
 
     List<toyInfo> toyList = null;
+    List<toyInfo> toyListRestore = null;
     List<String> simpleList = null;
 
     private boolean isStaggeredAdapter = false;
@@ -74,22 +85,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         init();
-        // admod
+        // ad mod
         initAdMod();
 
         // avoid data repeat store
-        shared = getSharedPreferences("first_open", MODE_PRIVATE);
+        shared = getSharedPreferences("app_setting", MODE_PRIVATE);
         isDataReady = shared.getBoolean("isReady", false);
         isDeveloper = shared.getBoolean("isDeveloper", false);
 
         // init
         dataInstance = dataBase.getInstance(this);
 
-        // do not run in main thread
-        testTask asyncTask = new testTask(this);
-        asyncTask.execute("start");
+        // load Data ,do not run in main thread
+        InsertFakeDataAsyncTask asyncTask = new InsertFakeDataAsyncTask(this, this, isDataReady, isDeveloper);
+        asyncTask.execute("load data");
 
-        checkDataSize();
+        checkDataSizeDisplay();
     }
 
     /** Called when leaving the activity */
@@ -120,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void init() {
+        // list
         mRecyclerView = findViewById(R.id.recyclerView);
         mTextViewEmpty = findViewById(R.id.textViewEmpty);
         mProgressBarLoading = findViewById(R.id.progressBarLoading);
@@ -129,12 +141,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mImageDateButton.setOnClickListener(this);
         mTextViewTitle = findViewById(R.id.textViewTitle);
         mTextViewTitle.setOnLongClickListener(this);
+        mFloatButton = findViewById(R.id.floatingActionButton);
 
+        // tab
         mTabLayout = findViewById(R.id.tabLayout);
         tabListener();
 
+        // edit
         relativeLayoutEditor = findViewById(R.id.relative_edit);
 
+        // info
         relativeLayoutAbout = findViewById(R.id.relative_about);
         mTextViewVersion = findViewById(R.id.textViewVersion);
         mRecyclerViewSimple = findViewById(R.id.about_recyclerview);
@@ -170,33 +186,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         relativeLayoutEditor.setVisibility(View.GONE);
                         relativeLayoutAbout.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.VISIBLE);
+                        mFloatButton.setVisibility(View.VISIBLE);
                         if (!isDataReady)
                             mTextViewEmpty.setVisibility(View.VISIBLE);
 
                         initList();
-
-                        //Log.d(TAG, "onTabSelected: 1");
+                        //Log.d(TAG, "onTabSelected: list");
                         break;
                     case 1:
                         relativeLayoutEditor.setVisibility(View.VISIBLE);
                         relativeLayoutAbout.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.GONE);
                         mTextViewEmpty.setVisibility(View.GONE);
+                        mFloatButton.setVisibility(View.GONE);
 
                         closeInitList();
-
-                        //Log.d(TAG, "onTabSelected: 2");
+                        //Log.d(TAG, "onTabSelected: info");
                         break;
                     case 2:
                         relativeLayoutEditor.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.GONE);
                         relativeLayoutAbout.setVisibility(View.VISIBLE);
                         mTextViewEmpty.setVisibility(View.GONE);
+                        mFloatButton.setVisibility(View.GONE);
 
                         initAbout();
                         closeInitList();
-
-                        //Log.d(TAG, "onTabSelected: 3");
+                        //Log.d(TAG, "onTabSelected: about");
                         break;
                 }
             }
@@ -219,10 +235,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         // show data
-        mListadapter = new ListAdapter(toyList, this);
-        mListadapter.setItemStyle(Constants.LINEARITEM);
-        mRecyclerView.setAdapter(mListadapter);
-        mListadapter.notifyDataSetChanged();
+        mListAdapter = new ListAdapter(toyList, this);
+        mListAdapter.setItemStyle(Constants.LINEARITEM);
+        mRecyclerView.setAdapter(mListAdapter);
+        mListAdapter.notifyDataSetChanged();
     }
 
     public void initAdapterStaggered() {
@@ -231,10 +247,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         // show data
-        mListadapter = new ListAdapter(toyList, this);
-        mListadapter.setItemStyle(Constants.STAGGERITEM);
-        mRecyclerView.setAdapter(mListadapter);
-        mListadapter.notifyDataSetChanged();
+        mListAdapter = new ListAdapter(toyList, this);
+        mListAdapter.setItemStyle(Constants.STAGGERITEM);
+        mRecyclerView.setAdapter(mListAdapter);
+        mListAdapter.notifyDataSetChanged();
     }
 
     public void initSimpleAdapter() {
@@ -255,26 +271,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRecyclerViewSimple.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         mRecyclerViewSimple.setAdapter(mSimpleAdapter);
         mSimpleAdapter.notifyDataSetChanged();
-    }
-
-    public void loadList() {
-        toyList = dataBase.getInstance(this).getToyDao().getAll();
-
-        if (toyList.size() > 0) {
-            for (int i = 0; i < toyList.size(); i++) {
-                Log.d(TAG, "printData: name = " + toyList.get(i).getName() + ", buyPrice = " + toyList.get(i).getBuyPrice() + ", web = " + toyList.get(i).getWeb());
-            }
-        }
-    }
-
-    public void saveData() {
-        FakeData.setData(this);
-        if (!isDataReady) {
-            boolean isFakeDataReady = true;
-            shared.edit().putBoolean("isReady", isFakeDataReady).commit();
-            isDataReady = true;
-            Log.d(TAG, "dataBase is empty");
-        }
     }
 
     @Override
@@ -303,16 +299,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     if (!isDateOrder) {
                         mImageDateButton.setBackground(getResources().getDrawable(R.mipmap.date_new));
-                        mListadapter.setDateOrder(Constants.DATE_NEW_OLD);
+                        mListAdapter.setDateOrder(Constants.DATE_NEW_OLD);
                         isDateOrder = true;
                     } else {
                         mImageDateButton.setBackground(getResources().getDrawable(R.mipmap.date_old));
-                        mListadapter.setDateOrder(Constants.DATE_OLD_NEW);
+                        mListAdapter.setDateOrder(Constants.DATE_OLD_NEW);
                         isDateOrder = false;
                     }
 
-                    mListadapter.notifyDataSetChanged();
+                    mListAdapter.notifyDataSetChanged();
                 }
+                break;
+            case R.id.floatingActionButton:
+                showInsertOrUpdateDialog(Constants.ACTION_INSERT);
                 break;
         }
     }
@@ -324,48 +323,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (!isDeveloper) {
                     Snackbar.make(v, this.getString(R.string.DEVELOPER), Snackbar.LENGTH_LONG).show();
                     isDeveloper = true;
-                    // do not run in main thread
-                    testTask asyncTask = new testTask(this);
-                    asyncTask.execute("start");
+                    // store fake data, do not run in main thread
+                    InsertFakeDataAsyncTask asyncTask = new InsertFakeDataAsyncTask(this, this, isDataReady, isDeveloper);
+                    asyncTask.execute("store fake data");
                 }
                 break;
         }
         return false;
     }
 
-    class testTask extends AsyncTask<String, Integer, Boolean> {
-
-        Context mContext = null;
-
-        testTask(Context context) {
-            mContext = context;
-        }
-
-        protected Boolean doInBackground(String... strings) {
-
-            if (isDeveloper && !isDataReady) {
-                shared.edit().putBoolean("isDeveloper", true).commit();
-                saveData();
-            }
-            loadList();
-
-            return true;
-        }
-
-        protected void onPostExecute(Boolean result) {
-            checkDataSize();
-
-            if (isDataReady) {
-                if (isStaggeredAdapter) {
-                    initAdapterStaggered();
-                } else {
-                    initAdapter();
-                }
-            }
-        }
-    }
-
-    public void checkDataSize() {
+    /**
+     * visible no data message
+     */
+    public void checkDataSizeDisplay() {
         if (isDataReady) {
             mTextViewEmpty.setVisibility(View.GONE);
         } else {
@@ -386,6 +356,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void initAbout() {
 
+        // default 1.0
         String version = "1.0";
         try {
             PackageInfo packageInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -396,4 +367,112 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mTextViewVersion.setText("v " + version);
     }
+
+    /**
+     * action move
+     * ACTION_INSERT, ACTION_UPDATE
+     */
+    public void showInsertOrUpdateDialog(int dialogStyle) {
+
+        editDialogFragment dialog = null;
+
+        if(dialogStyle == Constants.ACTION_INSERT) {
+            dialog = editDialogFragment.instance("Insert Toy Info(Beta)", Constants.ACTION_INSERT);
+            dialog.show(getSupportFragmentManager(), "InsertDialog");
+        } else if(dialogStyle == Constants.ACTION_UPDATE) {
+            dialog = editDialogFragment.instance("Update Toy Info(Beta)", Constants.ACTION_UPDATE);
+            dialog.show(getSupportFragmentManager(), "updateDialog");
+        }
+    }
+
+    /**
+     * print data base data, ready for use
+     */
+    public void loadList() {
+        toyList = dataBase.getInstance(this).getToyDao().getAll();
+
+        if (toyList.size() > 0) {
+            for (int i = 0; i < toyList.size(); i++) {
+                Log.d(TAG, "printData: name = " + toyList.get(i).getName()
+                        + ", buyPrice = " + toyList.get(i).getBuyPrice()
+                        + ", web = " + toyList.get(i).getWeb());
+            }
+        }
+    }
+
+    // callback start
+    @Override
+    public void onDialogOKClick(DialogFragment dialog, toyInfo info, int style) {
+        if(style == Constants.ACTION_INSERT) {
+            InsertAsyncTask insertAsyncTask= new InsertAsyncTask(this, this);
+            insertAsyncTask.execute(info);
+        } else {
+            // update
+            Toast.makeText(this, "prepare, not ready", Toast.LENGTH_LONG).show();
+            // create async task fot update
+        }
+
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onDialogCancelClick(DialogFragment dialog) {
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onTaskComplete(List<toyInfo> list) {
+
+        toyList = list;
+
+        // sequence list
+        if (!isDateOrder) {
+            toyListRestore = listSort.sortlist(Constants.DATE_OLD_NEW, list);
+            toyList.clear();
+            toyList.addAll(toyListRestore);
+            //isDateOrder = true;
+        } else {
+            toyListRestore = listSort.sortlist(Constants.DATE_NEW_OLD, list);
+            toyList.clear();
+            toyList.addAll(toyListRestore);
+            //isDateOrder = false;
+        }
+
+        if (isStaggeredAdapter) {
+            initAdapterStaggered();
+        } else {
+            initAdapter();
+        }
+    }
+
+    @Override
+    public void onTaskComplete(List<toyInfo> list, boolean dataReady, boolean developer) {
+        isDataReady = dataReady;
+        isDeveloper = developer;
+        toyList = list;
+
+        // sequence list
+        if (!isDateOrder) {
+            toyListRestore = listSort.sortlist(Constants.DATE_OLD_NEW, list);
+            toyList.clear();
+            toyList.addAll(toyListRestore);
+            //isDateOrder = true;
+        } else {
+            toyListRestore = listSort.sortlist(Constants.DATE_NEW_OLD, list);
+            toyList.clear();
+            toyList.addAll(toyListRestore);
+            //isDateOrder = false;
+        }
+
+        checkDataSizeDisplay();
+
+        if (isDataReady) {
+            if (isStaggeredAdapter) {
+                initAdapterStaggered();
+            } else {
+                initAdapter();
+            }
+        }
+    }
+    // callback end
 }
