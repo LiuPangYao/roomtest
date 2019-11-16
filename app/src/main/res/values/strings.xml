@@ -48,4 +48,11 @@
     <string name="DELETE">delete</string>
     <string name="DELETE_CHECK">delete check</string>
     <string name="PREPARE_WAIT">preapare, function not ready</string>
+    <string name="COUNT">count</string>
+    <string name="NT">NT 0</string>
+    <string name="CUMULATIVE">Cumulative amount</string>
+    <string name="COLLECTION">Collection amount</string>
+    <string name="NET">net earnings / net loss</string>
+    <string name="NET_E">net earnings</string>
+    <string name="NET_L">net loss</string>
 </resources>

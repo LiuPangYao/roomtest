@@ -10,6 +10,7 @@
         android:layout_height="@dimen/fix_icon"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:visibility="gone"
         app:srcCompat="@mipmap/fix_icon" />
 
     <TextView
@@ -19,7 +20,84 @@
         android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true"
         android:layout_margin="@dimen/fix_margin"
-        android:text="@string/FIX" />
+        android:text="@string/FIX"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textViewCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingTop="40dp"
+        android:text="0"
+        android:textColor="@color/colorBlack"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewCountDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewCount"
+        android:gravity="center_horizontal"
+        android:text="@string/COUNT"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textViewPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewCountDisplay"
+        android:gravity="center_horizontal"
+        android:paddingTop="20dp"
+        android:text="@string/NT"
+        android:textColor="@color/colorBlack"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewPriceDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewPrice"
+        android:gravity="center_horizontal"
+        android:text="@string/CUMULATIVE"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textViewSold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewPriceDisplay"
+        android:gravity="center_horizontal"
+        android:paddingTop="20dp"
+        android:text="@string/NT"
+        android:textColor="@color/colorBlack"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewSoldDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewSold"
+        android:gravity="center_horizontal"
+        android:text="@string/COLLECTION"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/State"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewSoldDisplay"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="@string/NET"
+        android:textColor="@color/colorWhite"
+        android:textSize="25sp"
+        android:background="@color/colorBlack"
+        android:layout_margin="10dp" />
+
 </RelativeLayout>
 
 

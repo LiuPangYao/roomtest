@@ -37,4 +37,11 @@
     <string name="DELETE">刪除</string>
     <string name="DELETE_CHECK">確認刪除</string>
     <string name="PREPARE_WAIT">功能準備中</string>
+    <string name="COUNT">收藏數量</string>
+    <string name="NT">NT 0</string>
+    <string name="CUMULATIVE">累積金額</string>
+    <string name="COLLECTION">收藏金額</string>
+    <string name="NET">淨賺/淨損</string>
+    <string name="NET_E">淨賺</string>
+    <string name="NET_L">淨損</string>
 </resources>

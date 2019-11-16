@@ -64,6 +64,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
 
         //Log.d(TAG, "ListAdapter: " + toyList.size());
         Log.d(TAG, "ListAdapter: list update size");
+        //notifyDataSetChanged();
     }
 
     public ListAdapter(Context context) {
@@ -86,14 +87,15 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
     }
 
     @Override
-    public void onItemDelete(int position, final List<toyInfo> mList) {
+    public void onItemDelete(int position, List<toyInfo> mList) {
 
         final int mPosition = position;
-        Log.d(TAG, "onItemDelete: " + mPosition);
-        //Log.d(TAG, "toyList size prepare = " + toyList.size());
-        Log.d(TAG, "toyList size prepare = " + mList.size());
+        Log.d(TAG, "onItemDelete: " + position);
+        Log.d(TAG, "toyList size prepare1 = " + toyList.size());
+        Log.d(TAG, "toyList size prepare2 = " + mList.size());
+        Log.d(TAG, "toyList size prepare3 = " + getToyList().size());
 
-        notifySetListDataChanged(mList);
+        notifySetListDataChanged(toyList);
 
         dialog = new AlertDialog.Builder(context)
                 .setTitle(context.getString(R.string.DELETE))
@@ -102,15 +104,19 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                Log.d(TAG, "toyList size = " + mList.size());
-                                toyInfo stroreToy = mList.get(mPosition);
+                                Log.d(TAG, "toyList size = " + toyList.size());
+                                toyInfo storeToy = toyList.get(mPosition);
+
                                 // database delete
                                 deleteAsyncTask task = new deleteAsyncTask(context);
-                                task.execute(stroreToy);
+                                task.execute(storeToy);
 
-                                mList.remove(mPosition);
+                                //mList.remove(mPosition);
                                 toyList.remove(mPosition);
+
                                 notifyItemRemoved(mPosition);
+                                notifyDataSetChanged();
+
                                 dialog.dismiss();
                             }
                         }
@@ -262,9 +268,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         return toyList.size();
     }
 
-    /*public List<toyInfo> getToyList() {
+    public List<toyInfo> getToyList() {
         return toyList;
-    }*/
+    }
 
     public void notifySetListDataChanged(List<toyInfo>list){
         this.toyList = list;

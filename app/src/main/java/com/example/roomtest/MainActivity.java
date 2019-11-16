@@ -54,11 +54,12 @@ public class MainActivity extends AppCompatActivity implements
 
     private String TAG = "MainActivity";
     dataBase dataInstance = null;
-    boolean isDataReady = false;
+    boolean isDataReady = false; // Warning
     boolean isDeveloper = false;
     SharedPreferences shared = null;
 
     private TextView mTextViewEmpty, mTextViewTitle, mTextViewVersion;
+    private TextView mCountEdit, mPriceEdit, mSoldEdit, mState;
     private ProgressBar mProgressBarLoading;
     private RecyclerView mRecyclerView, mRecyclerViewSimple;
     private ListAdapter mListAdapter;
@@ -159,6 +160,10 @@ public class MainActivity extends AppCompatActivity implements
 
         // edit
         relativeLayoutEditor = findViewById(R.id.relative_edit);
+        mCountEdit = findViewById(R.id.textViewCount);
+        mPriceEdit = findViewById(R.id.textViewPrice);
+        mSoldEdit = findViewById(R.id.textViewSold);
+        mState = findViewById(R.id.State);
 
         // info
         relativeLayoutAbout = findViewById(R.id.relative_about);
@@ -211,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements
                         mFloatButton.setVisibility(View.GONE);
 
                         closeInitList();
+                        initEdit();
                         //Log.d(TAG, "onTabSelected: info");
                         break;
                     case 2:
@@ -249,14 +255,18 @@ public class MainActivity extends AppCompatActivity implements
         mListAdapter = new ListAdapter(toy_List, this);
         mListAdapter.setItemStyle(ToyConstants.LINEARITEM);
 
+        //notify data change
+        mListAdapter.notifyDataSetChanged();
+
         // move and delete
-        ItemTouchHelper.Callback callback = new ListAdapterTouchHelperCallback(mListAdapter, toy_List);
+        ItemTouchHelper.Callback callback = new ListAdapterTouchHelperCallback(mListAdapter/*, mListAdapter*/, toy_List);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mRecyclerView);
 
         mRecyclerView.setAdapter(mListAdapter);
         mListAdapter.setOnDeleteListener(this);
-        //mListAdapter.notifySetListDataChanged(toy_List);
+        mListAdapter.notifySetListDataChanged(toy_List);
+
         mListAdapter.notifyDataSetChanged();
     }
 
@@ -357,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements
      * visible no data message
      */
     public void checkDataSizeDisplay() {
-        Log.d(TAG, "checkDataSizeDisplay: someone to call this");
+        Log.d(TAG, "checkDataSizeDisplay: someone to call this, " + isDataReady);
         if (isDataReady) {
             mTextViewEmpty.setVisibility(View.GONE);
         } else {
@@ -388,6 +398,38 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         mTextViewVersion.setText("v " + version);
+    }
+
+    /**
+     * control edit
+     */
+    public void initEdit() {
+        if(toyList != null && toyList.size() != 0) {
+            mCountEdit.setText(String.valueOf(toyList.size()));
+
+            int sumPrice = 0;
+            for(int i = 0 ; i < toyList.size() ; i++) {
+                sumPrice = sumPrice + toyList.get(i).getBuyPrice();
+                mPriceEdit.setText("NT " + sumPrice);
+            }
+
+            int soldPrice = 0;
+            for(int i = 0 ; i < toyList.size() ; i++) {
+                soldPrice = soldPrice + toyList.get(i).getSellPrice();
+                mSoldEdit.setText("NT " + soldPrice);
+            }
+
+            if(soldPrice == sumPrice) {
+                mState.setText(getString(R.string.PRICE_COMMON));
+            } else if (soldPrice > sumPrice) {
+                mState.setText(getString(R.string.NET_E) + " " + String.valueOf(soldPrice-sumPrice));
+                mState.setTextColor(getColor(R.color.colorIncrease));
+            } else {
+                mState.setText(getString(R.string.NET_L) + " " + String.valueOf(sumPrice-soldPrice));
+                mState.setTextColor(getColor(R.color.colorFalling));
+            }
+
+        }
     }
 
     /**
@@ -544,20 +586,25 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void deleteStateNone() {
-        this.runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        mTextViewEmpty.setVisibility(View.VISIBLE);
-                    }
-                }
-        );
         // can not be Winnie the Pooh
         isDataReady = false;
         isDeveloper = false;
         shared.edit().putBoolean("isReady", false).commit();
         shared.edit().putBoolean("isDeveloper", false).commit();
+
         //checkDataSizeDisplay();
+
+        findViewById(R.id.textViewEmpty).setVisibility(View.VISIBLE);
+
+        /*this.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        // some problem
+                        findViewById(R.id.textViewEmpty).setVisibility(View.VISIBLE);
+                    }
+                }
+        );*/
     }
     // callback end
 }
