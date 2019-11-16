@@ -2,7 +2,7 @@ package com.example.roomtest.database;
 
 import android.content.Context;
 
-import com.example.roomtest.Constants;
+import com.example.roomtest.ToyConstants;
 
 public class FakeData {
 
@@ -18,8 +18,8 @@ public class FakeData {
         toy1.setWeb("https://www.toy-people.com/?p=38665");
         toy1.setImageUri("https://imgur.com/5BHCO65");
         toy1.setDate("2019-05-01");
-        toy1.setSoldState(Constants.SOLD_OUT);
-        toy1.setGain(Constants.SELL);
+        toy1.setSoldState(ToyConstants.SOLD_OUT);
+        toy1.setGain(ToyConstants.SELL);
         dataInstance.getToyDao().insert(toy1);
 
         toyInfo toy2 = new toyInfo();
@@ -29,8 +29,8 @@ public class FakeData {
         toy2.setWeb("https://www.toy-people.com/?p=38513");
         toy2.setImageUri("https://imgur.com/tJl7j2Y");
         toy2.setDate("2019-05-10");
-        toy2.setSoldState(Constants.SOLD_OUT);
-        toy2.setGain(Constants.COMMON);
+        toy2.setSoldState(ToyConstants.SOLD_OUT);
+        toy2.setGain(ToyConstants.COMMON);
         dataInstance.getToyDao().insert(toy2);
 
         toyInfo toy3 = new toyInfo();
@@ -40,8 +40,8 @@ public class FakeData {
         toy3.setWeb("https://www.toy-people.com/?p=35374");
         toy3.setImageUri("https://imgur.com/fg1jY5C");
         toy3.setDate("2019-05-11");
-        toy3.setSoldState(Constants.SELL);
-        toy3.setGain(Constants.INCREASE);
+        toy3.setSoldState(ToyConstants.SELL);
+        toy3.setGain(ToyConstants.INCREASE);
         dataInstance.getToyDao().insert(toy3);
 
         toyInfo toy4 = new toyInfo();
@@ -51,8 +51,8 @@ public class FakeData {
         toy4.setWeb("https://www.toy-people.com/?p=44680");
         toy4.setImageUri("https://imgur.com/zZja4Nu");
         toy4.setDate("2019-05-24");
-        toy4.setSoldState(Constants.SELL);
-        toy4.setGain(Constants.INCREASE);
+        toy4.setSoldState(ToyConstants.SELL);
+        toy4.setGain(ToyConstants.INCREASE);
         dataInstance.getToyDao().insert(toy4);
 
         toyInfo toy5 = new toyInfo();
@@ -62,8 +62,8 @@ public class FakeData {
         toy5.setWeb("https://www.toy-people.com/?p=48108");
         toy5.setImageUri("https://imgur.com/76drfLI");
         toy5.setDate("2019-06-16");
-        toy5.setSoldState(Constants.PRE_ORDER);
-        toy5.setGain(Constants.INCREASE);
+        toy5.setSoldState(ToyConstants.PRE_ORDER);
+        toy5.setGain(ToyConstants.INCREASE);
         dataInstance.getToyDao().insert(toy5);
 
         toyInfo toy6 = new toyInfo();
@@ -73,8 +73,8 @@ public class FakeData {
         toy6.setWeb("https://www.toy-people.com/?p=45927");
         toy6.setImageUri("https://imgur.com/4apuRHs");
         toy6.setDate("2019-09-07");
-        toy6.setSoldState(Constants.SELL);
-        toy6.setGain(Constants.INCREASE);
+        toy6.setSoldState(ToyConstants.SELL);
+        toy6.setGain(ToyConstants.INCREASE);
         dataInstance.getToyDao().insert(toy6);
 
         toyInfo toy7 = new toyInfo();
@@ -84,8 +84,8 @@ public class FakeData {
         toy7.setWeb("https://www.toy-people.com/?p=48110");
         toy7.setImageUri("https://imgur.com/DiAvxnM");
         toy7.setDate("2019-09-28");
-        toy7.setSoldState(Constants.PRE_ORDER);
-        toy7.setGain(Constants.INCREASE);
+        toy7.setSoldState(ToyConstants.PRE_ORDER);
+        toy7.setGain(ToyConstants.INCREASE);
         dataInstance.getToyDao().insert(toy7);
 
         toyInfo toy8 = new toyInfo();
@@ -95,8 +95,8 @@ public class FakeData {
         toy8.setWeb("https://www.toy-people.com/?p=48751");
         toy8.setImageUri("https://imgur.com/GjZFw9o");
         toy8.setDate("2019-10-10");
-        toy8.setSoldState(Constants.PRE_ORDER);
-        toy8.setGain(Constants.INCREASE);
+        toy8.setSoldState(ToyConstants.PRE_ORDER);
+        toy8.setGain(ToyConstants.INCREASE);
         dataInstance.getToyDao().insert(toy8);
 
         toyInfo toy9 = new toyInfo();
@@ -106,8 +106,8 @@ public class FakeData {
         toy9.setWeb("");
         toy9.setImageUri("https://imgur.com/7WlxG8d");
         toy9.setDate("2019-10-22");
-        toy9.setSoldState(Constants.PRE_ORDER);
-        toy9.setGain(Constants.INCREASE);
+        toy9.setSoldState(ToyConstants.PRE_ORDER);
+        toy9.setGain(ToyConstants.INCREASE);
         dataInstance.getToyDao().insert(toy9);
     }
 

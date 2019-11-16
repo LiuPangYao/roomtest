@@ -1,6 +1,6 @@
 package com.example.roomtest;
 
-public class Constants {
+public class ToyConstants {
 
     // SELL STATE
     public static final int SOLD_OUT = 0;

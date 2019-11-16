@@ -3,6 +3,7 @@ package com.example.roomtest;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -24,10 +25,12 @@ import android.widget.Toast;
 import com.example.roomtest.Diaog.editDialogFragment;
 import com.example.roomtest.asyncTask.InsertFakeDataAsyncTask;
 import com.example.roomtest.asyncTask.InsertAsyncTask;
+import com.example.roomtest.asyncTask.updateAsyncTask;
 import com.example.roomtest.database.dataBase;
 import com.example.roomtest.database.listSort;
 import com.example.roomtest.database.toyInfo;
 import com.example.roomtest.recyclerview.ListAdapter;
+import com.example.roomtest.recyclerview.ListAdapterTouchHelperCallback;
 import com.example.roomtest.recyclerview.SimpleAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -46,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements
         View.OnLongClickListener,
         editDialogFragment.InsertDialogListener,
         InsertAsyncTask.CompleteCallBack,
-        InsertFakeDataAsyncTask.CompleteFakeCallBack{
+        InsertFakeDataAsyncTask.CompleteFakeCallBack,
+        updateAsyncTask.UpdateCallBack, ListAdapter.OnDeleteListener {
 
     private String TAG = "MainActivity";
     dataBase dataInstance = null;
@@ -103,7 +107,9 @@ public class MainActivity extends AppCompatActivity implements
         checkDataSizeDisplay();
     }
 
-    /** Called when leaving the activity */
+    /**
+     * Called when leaving the activity
+     */
     @Override
     public void onPause() {
         if (adView != null) {
@@ -112,7 +118,9 @@ public class MainActivity extends AppCompatActivity implements
         super.onPause();
     }
 
-    /** Called when returning to the activity */
+    /**
+     * Called when returning to the activity
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -121,7 +129,9 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    /** Called before the activity is destroyed */
+    /**
+     * Called before the activity is destroyed
+     */
     @Override
     public void onDestroy() {
         if (adView != null) {
@@ -229,27 +239,38 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
-    public void initAdapter() {
+    public void initAdapter(List<toyInfo> toy_List) {
         // init
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+        //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        //linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(new RecyclerViewNoBugLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        //mRecyclerView.setLayoutManager(linearLayoutManager);
         // show data
-        mListAdapter = new ListAdapter(toyList, this);
-        mListAdapter.setItemStyle(Constants.LINEARITEM);
+        mListAdapter = new ListAdapter(toy_List, this);
+        mListAdapter.setItemStyle(ToyConstants.LINEARITEM);
+
+        // move and delete
+        ItemTouchHelper.Callback callback = new ListAdapterTouchHelperCallback(mListAdapter, toy_List);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mRecyclerView);
+
         mRecyclerView.setAdapter(mListAdapter);
+        mListAdapter.setOnDeleteListener(this);
+        //mListAdapter.notifySetListDataChanged(toy_List);
         mListAdapter.notifyDataSetChanged();
     }
 
-    public void initAdapterStaggered() {
+    public void initAdapterStaggered(List<toyInfo> toy_List) {
         // init
         StaggeredGridLayoutManager layoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         // show data
-        mListAdapter = new ListAdapter(toyList, this);
-        mListAdapter.setItemStyle(Constants.STAGGERITEM);
+        mListAdapter = new ListAdapter(toy_List, this);
+        mListAdapter.setItemStyle(ToyConstants.STAGGERITEM);
+        mListAdapter.setOnDeleteListener(this);
         mRecyclerView.setAdapter(mListAdapter);
+        mListAdapter.notifySetListDataChanged(toy_List);
         mListAdapter.notifyDataSetChanged();
     }
 
@@ -267,8 +288,8 @@ public class MainActivity extends AppCompatActivity implements
         simpleList.add(getString(R.string.AD));
 
         // show data
-        mSimpleAdapter = new SimpleAdapter(simpleList,this);
-        mRecyclerViewSimple.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        mSimpleAdapter = new SimpleAdapter(simpleList, this);
+        mRecyclerViewSimple.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerViewSimple.setAdapter(mSimpleAdapter);
         mSimpleAdapter.notifyDataSetChanged();
     }
@@ -281,13 +302,13 @@ public class MainActivity extends AppCompatActivity implements
                     return;
                 } else {
                     if (!isStaggeredAdapter) {
-                        initAdapterStaggered();
+                        initAdapterStaggered(toyList);
                         mImageButton.setBackground(getResources().getDrawable(R.mipmap.menu_icon_1));
                         //ConstraintLayout.LayoutParams mParams = new ConstraintLayout.LayoutParams(30, 30);
                         //mImageButton.setLayoutParams(mParams);
                         isStaggeredAdapter = true;
                     } else {
-                        initAdapter();
+                        initAdapter(toyList);
                         mImageButton.setBackground(getResources().getDrawable(R.mipmap.menu_icon_3));
                         isStaggeredAdapter = false;
                     }
@@ -299,11 +320,11 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     if (!isDateOrder) {
                         mImageDateButton.setBackground(getResources().getDrawable(R.mipmap.date_new));
-                        mListAdapter.setDateOrder(Constants.DATE_NEW_OLD);
+                        mListAdapter.setDateOrder(ToyConstants.DATE_NEW_OLD);
                         isDateOrder = true;
                     } else {
                         mImageDateButton.setBackground(getResources().getDrawable(R.mipmap.date_old));
-                        mListAdapter.setDateOrder(Constants.DATE_OLD_NEW);
+                        mListAdapter.setDateOrder(ToyConstants.DATE_OLD_NEW);
                         isDateOrder = false;
                     }
 
@@ -311,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 break;
             case R.id.floatingActionButton:
-                showInsertOrUpdateDialog(Constants.ACTION_INSERT);
+                showInsertOrUpdateDialog(ToyConstants.ACTION_INSERT);
                 break;
         }
     }
@@ -336,6 +357,7 @@ public class MainActivity extends AppCompatActivity implements
      * visible no data message
      */
     public void checkDataSizeDisplay() {
+        Log.d(TAG, "checkDataSizeDisplay: someone to call this");
         if (isDataReady) {
             mTextViewEmpty.setVisibility(View.GONE);
         } else {
@@ -376,11 +398,11 @@ public class MainActivity extends AppCompatActivity implements
 
         editDialogFragment dialog = null;
 
-        if(dialogStyle == Constants.ACTION_INSERT) {
-            dialog = editDialogFragment.instance("Insert Toy Info(Beta)", Constants.ACTION_INSERT);
+        if (dialogStyle == ToyConstants.ACTION_INSERT) {
+            dialog = editDialogFragment.instance(getString(R.string.INSERT_INFO), ToyConstants.ACTION_INSERT);
             dialog.show(getSupportFragmentManager(), "InsertDialog");
-        } else if(dialogStyle == Constants.ACTION_UPDATE) {
-            dialog = editDialogFragment.instance("Update Toy Info(Beta)", Constants.ACTION_UPDATE);
+        } else if (dialogStyle == ToyConstants.ACTION_UPDATE) {
+            dialog = editDialogFragment.instance(getString(R.string.UPDATE_INFO), ToyConstants.ACTION_UPDATE);
             dialog.show(getSupportFragmentManager(), "updateDialog");
         }
     }
@@ -403,13 +425,15 @@ public class MainActivity extends AppCompatActivity implements
     // callback start
     @Override
     public void onDialogOKClick(DialogFragment dialog, toyInfo info, int style) {
-        if(style == Constants.ACTION_INSERT) {
-            InsertAsyncTask insertAsyncTask= new InsertAsyncTask(this, this);
+        if (style == ToyConstants.ACTION_INSERT) {
+            InsertAsyncTask insertAsyncTask = new InsertAsyncTask(this, this);
             insertAsyncTask.execute(info);
         } else {
             // update
-            Toast.makeText(this, "prepare, not ready", Toast.LENGTH_LONG).show();
+            // Toast.makeText(this, getString(R.string.PREPARE_WAIT), Toast.LENGTH_LONG).show();
             // create async task fot update
+            updateAsyncTask task = new updateAsyncTask(this, this);
+            task.execute(info);
         }
 
         dialog.dismiss();
@@ -420,6 +444,10 @@ public class MainActivity extends AppCompatActivity implements
         dialog.dismiss();
     }
 
+    /**
+     * InsertAsyncTask
+     * @param list
+     */
     @Override
     public void onTaskComplete(List<toyInfo> list) {
 
@@ -427,52 +455,109 @@ public class MainActivity extends AppCompatActivity implements
 
         // sequence list
         if (!isDateOrder) {
-            toyListRestore = listSort.sortlist(Constants.DATE_OLD_NEW, list);
+            toyListRestore = listSort.sortlist(ToyConstants.DATE_OLD_NEW, list);
             toyList.clear();
             toyList.addAll(toyListRestore);
-            //isDateOrder = true;
         } else {
-            toyListRestore = listSort.sortlist(Constants.DATE_NEW_OLD, list);
+            toyListRestore = listSort.sortlist(ToyConstants.DATE_NEW_OLD, list);
             toyList.clear();
             toyList.addAll(toyListRestore);
-            //isDateOrder = false;
         }
 
+        isDataReady = true;
+        shared.edit().putBoolean("isReady", true).commit();
+
+
+        checkDataSizeDisplay();
+
         if (isStaggeredAdapter) {
-            initAdapterStaggered();
+            initAdapterStaggered(toyList);
         } else {
-            initAdapter();
+            initAdapter(toyList);
         }
     }
 
+    /**
+     *  Insert Fake Data
+     * @param list
+     * @param dataReady
+     * @param developer
+     */
     @Override
     public void onTaskComplete(List<toyInfo> list, boolean dataReady, boolean developer) {
         isDataReady = dataReady;
         isDeveloper = developer;
+
+        //shared.edit().putBoolean("isReady", isDataReady).commit();
+        //shared.edit().putBoolean("isDeveloper", isDeveloper).commit();
+
         toyList = list;
 
         // sequence list
         if (!isDateOrder) {
-            toyListRestore = listSort.sortlist(Constants.DATE_OLD_NEW, list);
+            toyListRestore = listSort.sortlist(ToyConstants.DATE_OLD_NEW, list);
             toyList.clear();
             toyList.addAll(toyListRestore);
-            //isDateOrder = true;
         } else {
-            toyListRestore = listSort.sortlist(Constants.DATE_NEW_OLD, list);
+            toyListRestore = listSort.sortlist(ToyConstants.DATE_NEW_OLD, list);
             toyList.clear();
             toyList.addAll(toyListRestore);
-            //isDateOrder = false;
         }
 
         checkDataSizeDisplay();
 
         if (isDataReady) {
             if (isStaggeredAdapter) {
-                initAdapterStaggered();
+                initAdapterStaggered(toyList);
             } else {
-                initAdapter();
+                initAdapter(toyList);
             }
         }
+    }
+
+    @Override
+    public void onUpdateTaskComplete(List<toyInfo> list) {
+        toyList = list;
+
+        // sequence list
+        if (!isDateOrder) {
+            toyListRestore = listSort.sortlist(ToyConstants.DATE_OLD_NEW, list);
+            toyList.clear();
+            toyList.addAll(toyListRestore);
+            //isDateOrder = true;
+        } else {
+            toyListRestore = listSort.sortlist(ToyConstants.DATE_NEW_OLD, list);
+            toyList.clear();
+            toyList.addAll(toyListRestore);
+            //isDateOrder = false;
+        }
+
+        if (isStaggeredAdapter) {
+            initAdapterStaggered(toyList);
+        } else {
+            initAdapter(toyList);
+        }
+    }
+
+    /**
+     * list size = 0
+     */
+    @Override
+    public void deleteStateNone() {
+        this.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        mTextViewEmpty.setVisibility(View.VISIBLE);
+                    }
+                }
+        );
+        // can not be Winnie the Pooh
+        isDataReady = false;
+        isDeveloper = false;
+        shared.edit().putBoolean("isReady", false).commit();
+        shared.edit().putBoolean("isDeveloper", false).commit();
+        //checkDataSizeDisplay();
     }
     // callback end
 }

@@ -1,32 +1,41 @@
 package com.example.roomtest.Diaog;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.roomtest.Constants;
+import com.example.roomtest.ToyConstants;
 import com.example.roomtest.R;
 import com.example.roomtest.database.toyInfo;
+
+import java.util.Calendar;
 
 public class editDialogFragment extends DialogFragment {
 
     static editDialogFragment dialog;
+    static int actionMove = ToyConstants.ACTION_NULL;
+    static toyInfo toys = null;
+    static String TAG = "editDialogFragment";
+
     InsertDialogListener listener;
     Button mButtonOK, mButtonCancel;
     TextView mTextViewTitle;
-    EditText mEdtName, mEdtBuyPrice, mEdtSellPrice, mEdtDate, mEdtWeb, mEdtUri, mEdtGain, mEdtSellState;
-    static int actionMove = Constants.ACTION_NULL;
-    static toyInfo toys = null;
-    static String TAG = "editDialogFragment";
+    EditText mEdtDate; // extra onclick
+    EditText mEdtName, mEdtBuyPrice, mEdtSellPrice, mEdtWeb, mEdtUri;
+    Spinner sellstateSpinner, gainSpinner;
+
 
     @Override
     public void onAttach(Context context) {
@@ -41,19 +50,12 @@ public class editDialogFragment extends DialogFragment {
     }
 
     public interface InsertDialogListener {
-        void onDialogOKClick(DialogFragment dialog, toyInfo info ,int style);
+        void onDialogOKClick(DialogFragment dialog, toyInfo info, int style);
         void onDialogCancelClick(DialogFragment dialog);
     }
 
     public static editDialogFragment instance(String title, int action) {
-
-        //if (dialog == null) {
-        //    synchronized (editDialogFragment.class) {
-        //        if (dialog == null) {
-                    dialog = new editDialogFragment();
-        //        }
-        //    }
-        //}
+        dialog = new editDialogFragment();
 
         actionMove = action;
 
@@ -65,18 +67,9 @@ public class editDialogFragment extends DialogFragment {
     }
 
     public static editDialogFragment instance(String title, int action, toyInfo mToyInfo) {
+        dialog = new editDialogFragment();
 
-        //if (dialog == null) {
-        //    synchronized (editDialogFragment.class) {
-        //        if (dialog == null) {
-                    dialog = new editDialogFragment();
-        //        }
-        //    }
-        //}
-
-        //Log.d(TAG, "instance: execute");
         actionMove = action;
-
         toys = mToyInfo;
 
         Bundle bundle = new Bundle();
@@ -91,7 +84,7 @@ public class editDialogFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.insert_dialog, container, false);
 
-        mTextViewTitle = view.findViewById(R.id.dialodTitle);
+        mTextViewTitle = view.findViewById(R.id.dialogTitle);
         mButtonOK = view.findViewById(R.id.buttonOK);
         mButtonCancel = view.findViewById(R.id.buttonCancel);
 
@@ -101,27 +94,28 @@ public class editDialogFragment extends DialogFragment {
         mEdtBuyPrice = view.findViewById(R.id.editTextBuyPrice);
         mEdtSellPrice = view.findViewById(R.id.editTextSellPrice);
         mEdtWeb = view.findViewById(R.id.editTextToyWeb);
-        mEdtGain = view.findViewById(R.id.editTextToyGain);
-        mEdtSellState = view.findViewById(R.id.editTextToySellState);
+        sellstateSpinner = view.findViewById(R.id.spinnerSellState);
+        gainSpinner = view.findViewById(R.id.spinnerGain);
 
-        mEdtName.setText("");
-        mEdtUri.setText("");
-        mEdtDate.setText("");
-        mEdtBuyPrice.setText("");
-        mEdtSellPrice.setText("");
-        mEdtWeb.setText("");
-        mEdtGain.setText("");
-        mEdtSellState.setText("");
+        ArrayAdapter<CharSequence> adapterSell = ArrayAdapter.createFromResource(getContext(), R.array.sell_state_array, android.R.layout.simple_spinner_item);
+        adapterSell.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sellstateSpinner.setAdapter(adapterSell);
 
-        if(actionMove == Constants.ACTION_UPDATE) {
+        ArrayAdapter<CharSequence> adapterGain = ArrayAdapter.createFromResource(getContext(), R.array.gain_state_array, android.R.layout.simple_spinner_item);
+        adapterGain.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gainSpinner.setAdapter(adapterGain);
+
+        if (actionMove == ToyConstants.ACTION_UPDATE) {
             mEdtName.setText(toys.getName());
             mEdtUri.setText(toys.getImageUri());
             mEdtDate.setText(toys.getDate());
             mEdtBuyPrice.setText(String.valueOf(toys.getBuyPrice()));
             mEdtSellPrice.setText(String.valueOf(toys.getSellPrice()));
             mEdtWeb.setText(toys.getWeb());
-            mEdtGain.setText(String.valueOf(toys.getGain()));
-            mEdtSellState.setText(String.valueOf(toys.getSoldState()));
+
+            sellstateSpinner.setSelection(toys.getSoldState());
+            gainSpinner.setSelection(toys.getGain());
+
         } else {
             // Fake Data
             mEdtName.setText("EAA-051 返校日");
@@ -130,19 +124,37 @@ public class editDialogFragment extends DialogFragment {
             mEdtBuyPrice.setText("2390");
             mEdtSellPrice.setText("2390");
             mEdtWeb.setText("https://www.toy-people.com/?p=38665");
-            mEdtGain.setText(String.valueOf(Constants.SOLD_OUT));
-            mEdtSellState.setText(String.valueOf(Constants.SELL));
+
+            // spinner use default sold out, increase
         }
 
         String title = getArguments().getString("title");
         mTextViewTitle.setText(title);
+
+        mEdtDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int day) {
+                        String dateTime = String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day);
+                        mEdtDate.setText(dateTime);
+                    }
+
+                }, year, month, day).show();
+            }
+        });
 
         mButtonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
 
-                    if(actionMove == Constants.ACTION_INSERT) {
+                    if (actionMove == ToyConstants.ACTION_INSERT) {
                         toys = new toyInfo();
                         toys.setName(mEdtName.getText().toString());
                         toys.setImageUri(mEdtUri.getText().toString());
@@ -150,11 +162,18 @@ public class editDialogFragment extends DialogFragment {
                         toys.setBuyPrice(Integer.valueOf(mEdtBuyPrice.getText().toString()));
                         toys.setSellPrice(Integer.valueOf(mEdtSellPrice.getText().toString()));
                         toys.setWeb(mEdtWeb.getText().toString());
-                        toys.setGain(Integer.valueOf(mEdtGain.getText().toString()));
-                        toys.setSoldState(Integer.valueOf(mEdtSellState.getText().toString()));
-                    } else if(actionMove == Constants.ACTION_UPDATE) {
-                        //to fo nothing
-                        toys.setImageUri("https://imgur.com/mLMdIbz");
+                        toys.setGain(Integer.valueOf(sellstateSpinner.getSelectedItemPosition()));
+                        toys.setSoldState(Integer.valueOf(gainSpinner.getSelectedItemPosition()));
+                    } else if (actionMove == ToyConstants.ACTION_UPDATE) {
+                        // to do nothing
+                        toys.setName(mEdtName.getText().toString());
+                        toys.setDate(mEdtDate.getText().toString());
+                        toys.setBuyPrice(Integer.valueOf(mEdtBuyPrice.getText().toString()));
+                        toys.setSellPrice(Integer.valueOf(mEdtSellPrice.getText().toString()));
+                        toys.setWeb(mEdtWeb.getText().toString());
+                        toys.setGain(Integer.valueOf(sellstateSpinner.getSelectedItemPosition()));
+                        toys.setSoldState(Integer.valueOf(gainSpinner.getSelectedItemPosition()));
+                        toys.setImageUri("https://imgur.com/mLMdIbz"); // write fake data
                     }
 
                     listener.onDialogOKClick(editDialogFragment.this, toys, actionMove);

@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.roomtest.Constants;
 import com.example.roomtest.R;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -33,7 +32,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
 
         mInterstitialAd = new InterstitialAd(context);
         mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-        //mInterstitialAd.setAdUnitId(Constants.AD_INTERNAL);
+        //mInterstitialAd.setAdUnitId(ToyConstants.AD_INTERNAL);
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
     }
 

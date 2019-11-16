@@ -2,7 +2,7 @@ package com.example.roomtest.database;
 
 import android.util.Log;
 
-import com.example.roomtest.Constants;
+import com.example.roomtest.ToyConstants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,7 +21,7 @@ public class listSort {
         toyList.addAll(sample);
         List<toyInfo> toyListRestore = new ArrayList<toyInfo>();
 
-        if(dateStyle == Constants.DATE_OLD_NEW) {
+        if(dateStyle == ToyConstants.DATE_OLD_NEW) {
             for(int i = 0 ; i < toyList.size() ; i++) {
 
                 String dateString = toyList.get(i).getDate();
@@ -52,7 +52,7 @@ public class listSort {
             toyList.addAll(toyListRestore);
             toyListRestore.clear();
 
-        } else if(dateStyle == Constants.DATE_NEW_OLD) {
+        } else if(dateStyle == ToyConstants.DATE_NEW_OLD) {
 
             for(int i = 0 ; i < toyList.size() ; i++) {
 

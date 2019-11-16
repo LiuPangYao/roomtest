@@ -6,188 +6,209 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
         <TextView
-            android:id="@+id/dialodTitle"
+            android:id="@+id/dialogTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Insert Toy Info"
-            android:textSize="30sp"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:text="Toy Info(Beta)"
+            android:textSize="25sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
-                android:id="@+id/toyname"
+                android:id="@+id/toyName"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="ToyName" />
+                android:gravity="left"
+                android:text="@string/TOY_NAME" />
 
             <EditText
                 android:id="@+id/editTextName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:maxLines="1" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/toyUri"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="ToyUri" />
+                android:gravity="left"
+                android:text="@string/IMAGE_URI" />
 
             <EditText
                 android:id="@+id/editTextToyUri"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10" />
+                android:layout_weight="1" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/toyDate"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="ToyDate" />
+                android:gravity="left"
+                android:text="@string/DATE_ACQUISITION" />
 
             <EditText
                 android:id="@+id/editTextToyDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10" />
+                android:ems="10"
+                android:focusable="false" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/toyBuyPrice"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="ToyBuyPrice" />
+                android:gravity="left"
+                android:text="@string/P_PRICE" />
 
             <EditText
                 android:id="@+id/editTextBuyPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10" />
+                android:digits="1234567890"
+                android:ems="6"
+                android:inputType="phone|number"
+                android:maxLines="1" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/toySellPrice"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="SellPrice" />
+                android:gravity="left"
+                android:text="@string/PRICE" />
 
             <EditText
                 android:id="@+id/editTextSellPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10" />
+                android:digits="1234567890"
+                android:ems="6"
+                android:inputType="phone|number"
+                android:maxLines="1" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/toyWeb"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="ToyWeb" />
+                android:gravity="left"
+                android:text="@string/TOY_WEB" />
 
             <EditText
                 android:id="@+id/editTextToyWeb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10" />
+                android:ems="100" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:id="@+id/toyGain"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="ToyGain" />
+                android:gravity="left"
+                android:text="@string/TOY_GAIN" />
 
-            <EditText
-                android:id="@+id/editTextToyGain"
+            <Spinner
+                android:id="@+id/spinnerGain"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:id="@+id/toySellState"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="ToySellState" />
+                android:gravity="left"
+                android:text="@string/TOY_SELL_STATE" />
 
-            <EditText
-                android:id="@+id/editTextToySellState"
+            <Spinner
+                android:id="@+id/spinnerSellState"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10" />
+                android:layout_height="wrap_content" />
+
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Button
@@ -195,14 +216,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="cancel" />
+                android:text="@string/CANCEL" />
 
             <Button
                 android:id="@+id/buttonOK"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="ok" />
+                android:text="@string/OK" />
         </LinearLayout>
 
     </LinearLayout>

@@ -5,9 +5,9 @@
     <string name="SOLD_OUT">SOLD OUT</string>
     <string name="SELL">SELL</string>
     <string name="PRE_ORDER">PRE ORDER</string>
-    <string name="DATE_ACQUISITION">date acquisition : </string>
-    <string name="P_PRICE">purchase price : </string>
-    <string name="PRICE">price : </string>
+    <string name="DATE_ACQUISITION">date acquisition</string>
+    <string name="P_PRICE">purchase price</string>
+    <string name="PRICE">price</string>
     <string name="WEBVIEW_NOT_SUPPORT">webview url not provided</string>
     <string name="PROGRESS_DIALOG">Loading...</string>
     <string name="DEVELOPER">become developer</string>
@@ -24,4 +24,28 @@
     <string name="QUESTION_RETURN">bug report</string>
     <string name="SERVICE">Terms of Service</string>
     <string name="COMPONENT_USE">component use</string>
+    <string name="OK">ok</string>
+    <string name="CANCEL">Cancel</string>
+    <string name="TOY_SELL_STATE">Sell State</string>
+    <string name="TOY_GAIN">Gain</string>
+    <string name="TOY_WEB">Introduction URL</string>
+    <string name="TOY_NAME">name</string>
+
+    <string-array name="sell_state_array">
+        <item>@string/SOLD_OUT</item>
+        <item>@string/SELL</item>
+        <item>@string/PRE_ORDER</item>
+    </string-array>
+
+    <string-array name="gain_state_array">
+        <item>@string/PRICE_INCREASE</item>
+        <item>@string/PRICE_COMMON</item>
+        <item>@string/PRICE_FALLING</item>
+    </string-array>
+    <string name="IMAGE_URI">image uri</string>
+    <string name="UPDATE_INFO">update info</string>
+    <string name="INSERT_INFO">insert info</string>
+    <string name="DELETE">delete</string>
+    <string name="DELETE_CHECK">delete check</string>
+    <string name="PREPARE_WAIT">preapare, function not ready</string>
 </resources>
