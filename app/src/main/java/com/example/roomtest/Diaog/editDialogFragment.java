@@ -118,12 +118,12 @@ public class editDialogFragment extends DialogFragment {
 
         } else {
             // Fake Data
-            mEdtName.setText("EAA-051 返校日");
+            /*mEdtName.setText("EAA-051 返校日");
             mEdtUri.setText("https://imgur.com/IVxECP6");
             mEdtDate.setText("2018-11-09");
             mEdtBuyPrice.setText("2390");
             mEdtSellPrice.setText("2390");
-            mEdtWeb.setText("https://www.toy-people.com/?p=38665");
+            mEdtWeb.setText("https://www.toy-people.com/?p=38665");*/
 
             // spinner use default sold out, increase
         }
@@ -155,6 +155,7 @@ public class editDialogFragment extends DialogFragment {
                 if (listener != null) {
 
                     if (actionMove == ToyConstants.ACTION_INSERT) {
+                        // TODO: 2019-11-17 沒有輸入資料 
                         toys = new toyInfo();
                         toys.setName(mEdtName.getText().toString());
                         toys.setImageUri(mEdtUri.getText().toString());
@@ -173,7 +174,8 @@ public class editDialogFragment extends DialogFragment {
                         toys.setWeb(mEdtWeb.getText().toString());
                         toys.setGain(Integer.valueOf(sellstateSpinner.getSelectedItemPosition()));
                         toys.setSoldState(Integer.valueOf(gainSpinner.getSelectedItemPosition()));
-                        toys.setImageUri("https://imgur.com/mLMdIbz"); // write fake data
+                        //toys.setImageUri("https://imgur.com/mLMdIbz"); // write fake data
+                        toys.setImageUri(mEdtUri.getText().toString());
                     }
 
                     listener.onDialogOKClick(editDialogFragment.this, toys, actionMove);
