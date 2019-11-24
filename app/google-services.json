@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "677245228128",
+    "firebase_url": "https://toysoul-play.firebaseio.com",
+    "project_id": "toysoul--play",
+    "storage_bucket": "toysoul--play.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677245228128:android:00ab4a40504b0272e21f05",
+        "android_client_info": {
+          "package_name": "com.toysoul.roomtest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677245228128-hq7o7of329uil908argdu4mloqvin4em.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.toysoul.roomtest",
+            "certificate_hash": "7001c1a0dccc13c3bea9e144274ac609e0a21a4f"
+          }
+        },
+        {
+          "client_id": "677245228128-7ghvumgcmejdqpb0lgd8uasksu7i93km.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-a0EZQVIJpMZUknKWQp1mozT451BNbnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677245228128-7ghvumgcmejdqpb0lgd8uasksu7i93km.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

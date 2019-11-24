@@ -7,8 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.roomtest.Diaog.permissionDialogFragment;
+import com.example.roomtest.Firebasefirestore;
 import com.example.roomtest.R;
 import com.example.roomtest.ToyConstants;
 import com.google.android.gms.ads.AdListener;
@@ -75,6 +79,12 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
                         Log.d("TAG", "The interstitial wasn't loaded yet.");
                         Snackbar.make(v, "The interstitial wasn't loaded yet.", Snackbar.LENGTH_SHORT).show();
                     }
+                } else if (position == 0) {
+                    permissionDialogFragment dialog = permissionDialogFragment.newInstance();
+                    FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+                    dialog.show(fm, "permission");
+                } else if (position == 2) {
+
                 } else {
                     Snackbar.make(v, context.getString(R.string.FIX), Snackbar.LENGTH_SHORT).show();
                 }
