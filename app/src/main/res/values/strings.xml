@@ -55,4 +55,10 @@
     <string name="NET">net earnings / net loss</string>
     <string name="NET_E">net earnings</string>
     <string name="NET_L">net loss</string>
+    <string name="TEL_MAIL">Telor Mail</string>
+    <string name="FEEDBACK_TITLE">issue</string>
+    <string name="DETAIL">details</string>
+    <string name="SEND">send</string>
+    <string name="INPUT_ERROR">Incomplete iput</string>
+    <string name="FEED_BACK_SUCCESSFUL">feed back successful</string>
 </resources>

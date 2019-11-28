@@ -20,6 +20,7 @@ public class permissionDialogFragment extends DialogFragment {
 
     public static permissionDialogFragment newInstance() {
         permissionDialogFragment frag = new permissionDialogFragment();
+        //frag.setCancelable(false);
         return frag;
     }
 

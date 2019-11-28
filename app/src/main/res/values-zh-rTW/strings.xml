@@ -44,4 +44,10 @@
     <string name="NET">淨賺/淨損</string>
     <string name="NET_E">淨賺</string>
     <string name="NET_L">淨損</string>
+    <string name="TEL_MAIL">電話 / 信箱</string>
+    <string name="FEEDBACK_TITLE">標題</string>
+    <string name="DETAIL">回報內容</string>
+    <string name="SEND">傳送</string>
+    <string name="INPUT_ERROR">輸入不完整</string>
+    <string name="FEED_BACK_SUCCESSFUL">回復成功</string>
 </resources>

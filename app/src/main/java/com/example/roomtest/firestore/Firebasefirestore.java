@@ -1,4 +1,4 @@
-package com.example.roomtest;
+package com.example.roomtest.firestore;
 
 import android.util.Log;
 

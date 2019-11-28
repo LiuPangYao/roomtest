@@ -11,10 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.roomtest.Diaog.feedbackDialogFragment;
 import com.example.roomtest.Diaog.permissionDialogFragment;
-import com.example.roomtest.Firebasefirestore;
 import com.example.roomtest.R;
-import com.example.roomtest.ToyConstants;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -83,8 +82,10 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
                     permissionDialogFragment dialog = permissionDialogFragment.newInstance();
                     FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
                     dialog.show(fm, "permission");
-                } else if (position == 2) {
-
+                } else if (position == 2) { // feedback form
+                    feedbackDialogFragment dialog = feedbackDialogFragment.instance();
+                    FragmentManager manager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    dialog.show(manager, "feedback");
                 } else {
                     Snackbar.make(v, context.getString(R.string.FIX), Snackbar.LENGTH_SHORT).show();
                 }
