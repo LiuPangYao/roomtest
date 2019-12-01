@@ -1,6 +1,5 @@
 package com.example.roomtest.firestore;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class UpdateMessage {

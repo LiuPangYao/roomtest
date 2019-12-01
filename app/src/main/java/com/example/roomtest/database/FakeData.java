@@ -100,7 +100,7 @@ public class FakeData {
         dataInstance.getToyDao().insert(toy8);
 
         toyInfo toy9 = new toyInfo();
-        toy9.setName("EAA-060 潛行戰衣");
+        toy9.setName("EAA-098 潛行戰衣");
         toy9.setBuyPrice(2150);
         toy9.setSellPrice(2390);
         toy9.setWeb("");
