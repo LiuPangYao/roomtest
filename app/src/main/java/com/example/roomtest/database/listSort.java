@@ -3,6 +3,7 @@ package com.example.roomtest.database;
 import android.util.Log;
 
 import com.example.roomtest.ToyConstants;
+import com.example.roomtest.firestore.UpdateMessage;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,39 @@ import java.util.List;
 public class listSort {
 
     static String TAG = "listSort";
+
+    public static ArrayList<UpdateMessage> sortList (ArrayList<UpdateMessage> sample) {
+
+        ArrayList<UpdateMessage> list = new ArrayList<UpdateMessage>();
+        list.addAll(sample);
+        ArrayList<UpdateMessage> storeList = new ArrayList<UpdateMessage>();
+
+        for(int i = 0 ; i < list.size() ; i++) {
+            String dateString = list.get(i).getDate();
+            if(storeList.size() == 0) {
+                storeList.add(list.get(i));
+            } else {
+                for(int j = 0 ; j < storeList.size() ; j++) {
+                    try {
+                        boolean isBigger = compare(storeList.get(j).getDate(), dateString);
+
+                        if(!isBigger) {
+                            storeList.add(j, list.get(i));
+                            break;
+                        } else if(j == storeList.size() - 1) {
+                            storeList.add(list.get(i));
+                            break;
+                        }
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        return storeList;
+    }
 
     public static List<toyInfo> sortlist(int style, List<toyInfo> sample) {
 

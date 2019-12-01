@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.roomtest.Diaog.MessageUpdateDialogFragment;
 import com.example.roomtest.Diaog.feedbackDialogFragment;
 import com.example.roomtest.Diaog.permissionDialogFragment;
 import com.example.roomtest.R;
@@ -22,8 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder>
-{
+public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder> {
     List<String> stringList = new ArrayList<>();
 
     private Context context;
@@ -40,20 +40,17 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
-    {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewAboutTitle;
 
-        public ViewHolder(View itemView)
-        {
+        public ViewHolder(View itemView) {
             super(itemView);
             this.textViewAboutTitle = itemView.findViewById(R.id.textView_about_title);
         }
     }
 
     @Override
-    public SimpleAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
+    public SimpleAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.about_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -61,17 +58,15 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
 
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position)
-    {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.textViewAboutTitle.setText(stringList.get(position).toString());
 
-        holder.textViewAboutTitle.setOnClickListener(new View.OnClickListener()
-        {
+        holder.textViewAboutTitle.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                // ad
-                if(position == 4) {
+            public void onClick(View v) {
+                FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+
+                if (position == 4) { // ad
                     if (mInterstitialAd.isLoaded()) {
                         mInterstitialAd.show();
                     } else {
@@ -80,12 +75,13 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
                     }
                 } else if (position == 0) {
                     permissionDialogFragment dialog = permissionDialogFragment.newInstance();
-                    FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
                     dialog.show(fm, "permission");
+                } else if (position == 1) {
+                    MessageUpdateDialogFragment dialog = MessageUpdateDialogFragment.newInstance();
+                    dialog.show(fm, "message update");
                 } else if (position == 2) { // feedback form
                     feedbackDialogFragment dialog = feedbackDialogFragment.instance();
-                    FragmentManager manager = ((AppCompatActivity) context).getSupportFragmentManager();
-                    dialog.show(manager, "feedback");
+                    dialog.show(fm, "feedback");
                 } else {
                     Snackbar.make(v, context.getString(R.string.FIX), Snackbar.LENGTH_SHORT).show();
                 }
@@ -104,8 +100,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return stringList.size();
     }
 }

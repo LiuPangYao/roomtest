@@ -61,4 +61,5 @@
     <string name="SEND">send</string>
     <string name="INPUT_ERROR">Incomplete iput</string>
     <string name="FEED_BACK_SUCCESSFUL">feed back successful</string>
+    <string name="UPDATE_MESSAGE">Update Message</string>
 </resources>

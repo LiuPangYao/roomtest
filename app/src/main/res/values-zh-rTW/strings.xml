@@ -50,4 +50,5 @@
     <string name="SEND">傳送</string>
     <string name="INPUT_ERROR">輸入不完整</string>
     <string name="FEED_BACK_SUCCESSFUL">回復成功</string>
+    <string name="UPDATE_MESSAGE">更新內容</string>
 </resources>

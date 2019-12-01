@@ -292,7 +292,8 @@ public class MainActivity extends AppCompatActivity implements
 
         simpleList = new ArrayList<>();
         simpleList.add(getString(R.string.PERMISSION));
-        simpleList.add(getString(R.string.SERVICE));
+        //simpleList.add(getString(R.string.SERVICE));
+        simpleList.add(getString(R.string.UPDATE_MESSAGE));
         simpleList.add(getString(R.string.QUESTION_RETURN));
         simpleList.add(getString(R.string.COMPONENT_USE));
         simpleList.add(getString(R.string.AD));
