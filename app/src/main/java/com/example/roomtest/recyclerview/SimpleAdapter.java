@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.roomtest.Diaog.MessageUpdateDialogFragment;
+import com.example.roomtest.Diaog.componentDialogFragment;
 import com.example.roomtest.Diaog.feedbackDialogFragment;
 import com.example.roomtest.Diaog.permissionDialogFragment;
 import com.example.roomtest.R;
@@ -64,15 +65,15 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
 
         holder.textViewAboutTitle.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
 
                 if (position == 4) { // ad
                     if (mInterstitialAd.isLoaded()) {
                         mInterstitialAd.show();
                     } else {
-                        Log.d("TAG", "The interstitial wasn't loaded yet.");
-                        Snackbar.make(v, "The interstitial wasn't loaded yet.", Snackbar.LENGTH_SHORT).show();
+                        //Log.d("TAG", "The interstitial wasn't loaded yet.");
+                        Snackbar.make(view, "The interstitial wasn't loaded yet.", Snackbar.LENGTH_SHORT).show();
                     }
                 } else if (position == 0) {
                     permissionDialogFragment dialog = permissionDialogFragment.newInstance();
@@ -82,9 +83,12 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
                     dialog.show(fm, "message update");
                 } else if (position == 2) { // feedback form
                     feedbackDialogFragment dialog = feedbackDialogFragment.instance();
-                    dialog.show(fm, "feedback");
+                    dialog.show(fm, "feed back");
+                } else if (position == 3) { // component use
+                    componentDialogFragment dialog = componentDialogFragment.newInstance(context);
+                    dialog.show(fm, "component");
                 } else {
-                    Snackbar.make(v, context.getString(R.string.FIX), Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(view, context.getString(R.string.FIX), Snackbar.LENGTH_SHORT).show();
                 }
             }
         });

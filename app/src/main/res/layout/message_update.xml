@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:text="@string/UPDATE_MESSAGE"
         android:textColor="@color/colorBlack"
-        android:textSize="30dp"
+        android:textSize="20sp"
         android:paddingTop="10dp"
         android:gravity="center"/>
 

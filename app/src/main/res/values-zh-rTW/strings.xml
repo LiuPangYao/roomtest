@@ -24,7 +24,7 @@
     <string name="AD">廣告(全幅)</string>
     <string name="QUESTION_RETURN">意見回報</string>
     <string name="SERVICE">服務條款</string>
-    <string name="COMPONENT_USE">元件使用</string>
+    <string name="COMPONENT_USE">元件 / 技術</string>
     <string name="OK">確認</string>
     <string name="CANCEL">取消</string>
     <string name="TOY_SELL_STATE">販售狀態</string>
@@ -51,4 +51,6 @@
     <string name="INPUT_ERROR">輸入不完整</string>
     <string name="FEED_BACK_SUCCESSFUL">回復成功</string>
     <string name="UPDATE_MESSAGE">更新內容</string>
+    <string name="COMPONENT">元件</string>
+    <string name="Technology">技術</string>
 </resources>
