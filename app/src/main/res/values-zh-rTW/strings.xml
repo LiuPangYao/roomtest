@@ -53,4 +53,7 @@
     <string name="UPDATE_MESSAGE">更新內容</string>
     <string name="COMPONENT">元件</string>
     <string name="Technology">技術</string>
+    <string name="NO_ASK_AGAIN">下次進入不再詢問</string>
+    <string name="GUIDED">導覽</string>
+    <string name="CLOSE_GUIDED">關閉導覽</string>
 </resources>

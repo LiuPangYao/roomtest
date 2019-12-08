@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textViewGuided"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorDarkRed"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:text="@string/GUIDED"
+        android:textColor="@color/colorBlack"
+        android:textSize="20sp" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewGuided"
+        android:orientation="vertical"
+        android:paddingTop="20dp" />
+
+    <LinearLayout
+        android:id="@+id/currentPageLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/viewpager2"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textCurrentPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/textView25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / "
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/textTotalPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@color/colorBlack" />
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/checkBoxAgain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/currentPageLinearLayout"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:text="@string/NO_ASK_AGAIN" />
+
+    <Button
+        android:id="@+id/buttonGuided"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkBoxAgain"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/colorDarkRed"
+        android:text="@string/CLOSE_GUIDED" />
+
+</RelativeLayout>

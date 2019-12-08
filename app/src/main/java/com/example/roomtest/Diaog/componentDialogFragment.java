@@ -63,6 +63,8 @@ public class componentDialogFragment extends DialogFragment {
         recyclerListKnowledge.add("FireStore");
         recyclerListKnowledge.add("Shared Preference");
         recyclerListKnowledge.add("Room");
+        recyclerListKnowledge.add("Picasso");
+        recyclerListKnowledge.add("Imgur");
 
         // default, show data
         TextAdapter textAdapter = new TextAdapter(recyclerListTool, mContext);

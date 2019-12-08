@@ -2,6 +2,7 @@ package com.example.roomtest;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.roomtest.Diaog.editDialogFragment;
+import com.example.roomtest.Diaog.viewPager2DialogFragment;
 import com.example.roomtest.asyncTask.InsertFakeDataAsyncTask;
 import com.example.roomtest.asyncTask.InsertAsyncTask;
 import com.example.roomtest.asyncTask.updateAsyncTask;
@@ -52,10 +54,11 @@ public class MainActivity extends AppCompatActivity implements
         InsertFakeDataAsyncTask.CompleteFakeCallBack,
         updateAsyncTask.UpdateCallBack, ListAdapter.OnDeleteListener {
 
-    private String TAG = "MainActivity";
+    private String TAG = "MainActivity.class";
     dataBase dataInstance = null;
     boolean isDataReady = false; // Warning
     boolean isDeveloper = false;
+    boolean isGuided    = false;
     SharedPreferences shared = null;
 
     private TextView mTextViewEmpty, mTextViewTitle, mTextViewVersion;
@@ -97,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements
         shared = getSharedPreferences("app_setting", MODE_PRIVATE);
         isDataReady = shared.getBoolean("isReady", false);
         isDeveloper = shared.getBoolean("isDeveloper", false);
+        isGuided    = shared.getBoolean("isGuided", false);
 
         // init
         dataInstance = dataBase.getInstance(this);
@@ -106,6 +110,11 @@ public class MainActivity extends AppCompatActivity implements
         asyncTask.execute("load data");
 
         checkDataSizeDisplay();
+
+        if(!isGuided) {
+            initViewPager2();
+        }
+
     }
 
     /**
@@ -243,6 +252,12 @@ public class MainActivity extends AppCompatActivity implements
 
             }
         });
+    }
+
+    public void initViewPager2() {
+        FragmentManager fm = this.getSupportFragmentManager();
+        viewPager2DialogFragment dialog = viewPager2DialogFragment.newInstance(this);
+        dialog.show(fm, "viewpager2");
     }
 
     public void initAdapter(List<toyInfo> toy_List) {

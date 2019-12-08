@@ -64,4 +64,7 @@
     <string name="UPDATE_MESSAGE">Update Message</string>
     <string name="COMPONENT">component</string>
     <string name="Technology">technology</string>
+    <string name="NO_ASK_AGAIN">Don\'t ask again next time</string>
+    <string name="GUIDED">Guided Tour</string>
+    <string name="CLOSE_GUIDED">close guided</string>
 </resources>
