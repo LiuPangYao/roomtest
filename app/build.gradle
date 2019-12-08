@@ -7,8 +7,8 @@ android {
         applicationId "com.toysoul.roomtest"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 11
-        versionName "1.0.9"
+        versionCode 12
+        versionName "1.0.10"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -55,4 +55,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:21.3.0'
     // add SDKs for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
+
+    compile 'info.hoang8f:android-segmented:1.0.6'
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+
 }
