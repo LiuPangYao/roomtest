@@ -24,23 +24,25 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class MessageUpdateDialogFragment extends DialogFragment {
+/**
+ * 2019-12-18
+ */
+public class messageUpdateDialogFragment extends DialogFragment {
 
     static FirebaseFirestore db;
-    String TAG = "MessageUpdateDialogFragment";
+    String TAG = "messageUpdateDialogFragment";
     ArrayList<UpdateMessage> recyclerList = new ArrayList<UpdateMessage>();
 
     RecyclerView mRecyclerView;
 
-    public MessageUpdateDialogFragment() {
+    public messageUpdateDialogFragment() {
         // Empty constructor is required for DialogFragment
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
     }
 
-    public static MessageUpdateDialogFragment newInstance() {
-        MessageUpdateDialogFragment frag = new MessageUpdateDialogFragment();
-        //frag.setCancelable(false);
+    public static messageUpdateDialogFragment newInstance() {
+        messageUpdateDialogFragment frag = new messageUpdateDialogFragment();
         // Access a Cloud Firestore instance from your Activity
         db = FirebaseFirestore.getInstance();
         return frag;
@@ -48,8 +50,7 @@ public class MessageUpdateDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.message_update, container, false);
+        View view = inflater.inflate(R.layout.message_update_dialogfragment, container, false);
         mRecyclerView = view.findViewById(R.id.recyclerMessageUpdate);
 
         readData();
@@ -57,14 +58,7 @@ public class MessageUpdateDialogFragment extends DialogFragment {
         return view;
     }
 
-    /*@Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }*/
-
     public void readData() {
-
-        //boolean isDataFinish = false;
 
         db.collection("versionControl")
                 .get()
@@ -76,23 +70,15 @@ public class MessageUpdateDialogFragment extends DialogFragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
 
-                                //document.getData().get("Date").toString();
-                                //document.getData().get("Version").toString();
-                                //List<String> dungeonGroup = (List<String>) document.get("Details");
-                                //ArrayList<String> documentGroup = (ArrayList<String>) document.get("Details");
-
                                 UpdateMessage updateMessage = new UpdateMessage(
                                         document.getData().get("Date").toString(),
                                         document.getData().get("Version").toString(),
                                         (ArrayList<String>) document.get("Details"));
 
                                 recyclerList.add(updateMessage);
-
-                                //Log.d(TAG, "onComplete: ");
                             }
 
                             Log.d(TAG, "onComplete: " + recyclerList.size());
-                            //isDataFinish = false;
 
                             MessageUpdateAdapter adapter = null;
 

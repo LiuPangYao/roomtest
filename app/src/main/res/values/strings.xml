@@ -67,4 +67,7 @@
     <string name="NO_ASK_AGAIN">Don\'t ask again next time</string>
     <string name="GUIDED">Guided Tour</string>
     <string name="CLOSE_GUIDED">close guided</string>
+    <string name="THEME">Theme Change</string>
+    <string name="NIGHT">Night</string>
+    <string name="MORNING">Morning</string>
 </resources>

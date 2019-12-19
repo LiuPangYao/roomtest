@@ -10,6 +10,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.roomtest.R;
 
+/**
+ * 2019-12-18
+ */
 public class permissionDialogFragment extends DialogFragment {
 
     public permissionDialogFragment() {
@@ -20,14 +23,13 @@ public class permissionDialogFragment extends DialogFragment {
 
     public static permissionDialogFragment newInstance() {
         permissionDialogFragment frag = new permissionDialogFragment();
-        //frag.setCancelable(false);
         return frag;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.permission, container);
+        return inflater.inflate(R.layout.permission_dialogfragment, container);
     }
 
     @Override

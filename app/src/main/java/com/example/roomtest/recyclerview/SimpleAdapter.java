@@ -1,7 +1,6 @@
 package com.example.roomtest.recyclerview;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.roomtest.Diaog.MessageUpdateDialogFragment;
+import com.example.roomtest.Diaog.messageUpdateDialogFragment;
 import com.example.roomtest.Diaog.componentDialogFragment;
 import com.example.roomtest.Diaog.feedbackDialogFragment;
 import com.example.roomtest.Diaog.permissionDialogFragment;
+import com.example.roomtest.Diaog.themeDialogFragment;
 import com.example.roomtest.R;
-import com.example.roomtest.ToyConstants;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -25,6 +24,9 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 2019-12-18
+ */
 public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder> {
     List<String> stringList = new ArrayList<>();
 
@@ -68,7 +70,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
             public void onClick(View view) {
                 FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
 
-                if (position == 4) { // ad
+                if (position == 4) {
                     if (mInterstitialAd.isLoaded()) {
                         mInterstitialAd.show();
                     } else {
@@ -77,16 +79,19 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
                     }
                 } else if (position == 0) {
                     permissionDialogFragment dialog = permissionDialogFragment.newInstance();
-                    dialog.show(fm, "permission");
+                    dialog.show(fm, "permission_dialogfragment");
                 } else if (position == 1) {
-                    MessageUpdateDialogFragment dialog = MessageUpdateDialogFragment.newInstance();
-                    dialog.show(fm, "message update");
-                } else if (position == 2) { // feedback form
+                    messageUpdateDialogFragment dialog = messageUpdateDialogFragment.newInstance();
+                    dialog.show(fm, "message_update_dialogfragment");
+                } else if (position == 2) {
                     feedbackDialogFragment dialog = feedbackDialogFragment.instance();
-                    dialog.show(fm, "feed back");
-                } else if (position == 3) { // component use
+                    dialog.show(fm, "feedback_dialogfragment");
+                } else if (position == 3) {
                     componentDialogFragment dialog = componentDialogFragment.newInstance(context);
-                    dialog.show(fm, "component");
+                    dialog.show(fm, "component_dialogfragment");
+                } else if (position == 5 ) {
+                    themeDialogFragment dialog = themeDialogFragment.newInstance(context);
+                    dialog.show(fm, "theme_dialogfragment");
                 } else {
                     Snackbar.make(view, context.getString(R.string.FIX), Snackbar.LENGTH_SHORT).show();
                 }

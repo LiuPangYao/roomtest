@@ -36,7 +36,7 @@ import java.util.List;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> implements
         ItemTouchHelperAdapter//,
         //deleteDialogFragment.deleteDialogListener
-        {
+{
 
     List<toyInfo> toyList = new ArrayList<toyInfo>();
     List<toyInfo> toyListRestore = new ArrayList<toyInfo>();
@@ -58,8 +58,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
 
         // add for after delete, database size = 0
         //if(toyList.size() == 0) {
-            //mCallback.deleteStateNone();
-            //Log.d(TAG, "getItemCount: 0");
+        //mCallback.deleteStateNone();
+        //Log.d(TAG, "getItemCount: 0");
         //}
 
         //Log.d(TAG, "ListAdapter: " + toyList.size());
@@ -221,7 +221,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
                 .load(Uri.parse(toyList.get(position).getImageUri() + ".png")) // internet path
                 //.placeholder(R.mipmap.app_launcher_main_foreground)  // preload
                 .error(R.mipmap.app_launcher_main_foreground)        // load error
-                .into(holder.imgToy);  // component
+                .into(holder.imgToy);  // component_dialogfragment
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,7 +260,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
     public int getItemCount() {
 
         // list size = 0
-        if(toyList.size() == 0) {
+        if (toyList.size() == 0) {
             mCallback.deleteStateNone();
             Log.d(TAG, "getItemCount: 0");
         }
@@ -272,7 +272,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         return toyList;
     }
 
-    public void notifySetListDataChanged(List<toyInfo>list){
+    public void notifySetListDataChanged(List<toyInfo> list) {
         this.toyList = list;
         notifyDataSetChanged();
     }

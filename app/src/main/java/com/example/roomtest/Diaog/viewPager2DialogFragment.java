@@ -23,6 +23,9 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * 2019-12-19
+ */
 public class viewPager2DialogFragment extends DialogFragment
         implements ViewPager2Adapter.OnCurrentPageCallBack {
 
@@ -31,7 +34,7 @@ public class viewPager2DialogFragment extends DialogFragment
     TextView currentPageText;
     TextView totalPageText;
     List<Drawable> list;
-    String TAG = "viewPager2DialogFragment.class";
+    String TAG = "viewPager2DialogFragment";
 
     public viewPager2DialogFragment() {
         // Empty constructor is required for DialogFragment
@@ -48,7 +51,7 @@ public class viewPager2DialogFragment extends DialogFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.viewpager2_dialog_fragment, container, false);
+        View view = inflater.inflate(R.layout.viewpager2_dialogfragment, container, false);
         ViewPager2 viewPager2 = view.findViewById(R.id.viewpager2);
         final CheckBox checkBoxAgain = view.findViewById(R.id.checkBoxAgain);
 
@@ -98,13 +101,13 @@ public class viewPager2DialogFragment extends DialogFragment
 
     @Override
     public void currentState(int totalPage, int currentPage) {
-        Log.d(TAG, "test current state");
+        Log.d(TAG, "current page & total page");
         currentPageText.setText(String.valueOf(currentPage));
         totalPageText.setText(String.valueOf(totalPage));
     }
 
     public void currentStatePage(int currentPage) {
-        Log.d(TAG, "test current state");
+        Log.d(TAG, "current page & total page");
         currentPageText.setText(String.valueOf(currentPage));
         totalPageText.setText(String.valueOf(list.size()));
     }

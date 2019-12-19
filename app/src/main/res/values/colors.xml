@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorRed">#FF0000</color>
     <color name="colorDarkRed">#CC0000</color>
+    <color name="colorDarkGreen">#008800</color>
     <color name="colorLightRed">#FF3333</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorLightBlue">#0066FF</color>
@@ -14,4 +15,5 @@
     <color name="colorCommon">#33FFFF</color>
     <color name="colorFalling">#99FF33</color>
     <color name="colorWhiteSmoke">#D3D3D3</color>
+    <color name="colorGray">#696969</color>
 </resources>

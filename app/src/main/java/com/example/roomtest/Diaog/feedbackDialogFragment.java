@@ -21,6 +21,9 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * 2019-12-19
+ */
 public class feedbackDialogFragment extends DialogFragment {
 
     static String TAG = "feedbackDialogFragment";
@@ -34,28 +37,15 @@ public class feedbackDialogFragment extends DialogFragment {
         void onDialogSendClick(DialogFragment dialog);
     }
 
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
-            listener = (feedbackDialogFragment.SendDialogListener) context;
-        } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(context.toString() + " must implement NoticeDialogListener");
-        }
-    }*/
-
     public static feedbackDialogFragment instance() {
         dialog = new feedbackDialogFragment();
-        //dialog.setCancelable(false);
         return dialog;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.feedback_form, container, false);
+        View view = inflater.inflate(R.layout.feedback_dialogfragment, container, false);
 
         sendButton = view.findViewById(R.id.buttonSend);
         edtTelMail = view.findViewById(R.id.editTextTelOrMail);

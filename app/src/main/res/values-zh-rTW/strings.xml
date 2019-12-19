@@ -56,4 +56,7 @@
     <string name="NO_ASK_AGAIN">下次進入不再詢問</string>
     <string name="GUIDED">導覽</string>
     <string name="CLOSE_GUIDED">關閉導覽</string>
+    <string name="THEME">主題切換</string>
+    <string name="NIGHT">夜間</string>
+    <string name="MORNING">白天</string>
 </resources>

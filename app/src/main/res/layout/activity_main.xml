@@ -76,6 +76,19 @@
         app:layout_constraintEnd_toStartOf="@+id/imageButton_menu"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/imageButton_camera"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="@dimen/image_button_margin_date"
+        android:layout_marginTop="14dp"
+        android:layout_marginRight="14dp"
+        android:layout_marginBottom="@dimen/image_button_margin_date"
+        android:background="@mipmap/camera_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         style="@style/TabLayoutStyle"

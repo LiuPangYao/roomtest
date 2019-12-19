@@ -29,4 +29,7 @@ public class ToyConstants {
     public static final int ACTION_INSERT = 1;
     public static final int ACTION_UPDATE = 2;
 
+    static final String EXTRA_RESULT_CODE="resultCode";
+    static final String EXTRA_RESULT_INTENT="resultIntent";
+
 }

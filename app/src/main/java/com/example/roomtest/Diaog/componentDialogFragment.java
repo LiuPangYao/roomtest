@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +19,9 @@ import java.util.ArrayList;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
+/**
+ * 2019-12-18
+ */
 public class componentDialogFragment extends DialogFragment {
 
     ArrayList<String> recyclerListTool;
@@ -43,14 +45,14 @@ public class componentDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.component, container, false);
+        View view = inflater.inflate(R.layout.component_dialogfragment, container, false);
         mRecyclerView = view.findViewById(R.id.recyclerTool);
 
-        // init
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
+        // init recyclerListTool
         recyclerListTool = new ArrayList<>();
         recyclerListTool.add("RecyclerView");
         recyclerListTool.add("CardView");
@@ -59,6 +61,7 @@ public class componentDialogFragment extends DialogFragment {
         recyclerListTool.add("Button");
         recyclerListTool.add("EditText");
 
+        // init technology
         recyclerListKnowledge = new ArrayList<>();
         recyclerListKnowledge.add("FireStore");
         recyclerListKnowledge.add("Shared Preference");
@@ -66,9 +69,8 @@ public class componentDialogFragment extends DialogFragment {
         recyclerListKnowledge.add("Picasso");
         recyclerListKnowledge.add("Imgur");
 
-        // default, show data
+        // default, show recyclerListTool data
         TextAdapter textAdapter = new TextAdapter(recyclerListTool, mContext);
-        //mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(textAdapter);
         textAdapter.notifyDataSetChanged();
 
@@ -79,9 +81,8 @@ public class componentDialogFragment extends DialogFragment {
         radioButtonOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // show data
+                // show recyclerListTool data
                 TextAdapter textAdapter = new TextAdapter(recyclerListTool, mContext);
-                //mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
                 mRecyclerView.setAdapter(textAdapter);
                 textAdapter.notifyDataSetChanged();
             }
@@ -91,9 +92,8 @@ public class componentDialogFragment extends DialogFragment {
         radioButtonTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // show data
+                // show recyclerListKnowledge data
                 TextAdapter textAdapter = new TextAdapter(recyclerListKnowledge, mContext);
-                //mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
                 mRecyclerView.setAdapter(textAdapter);
                 textAdapter.notifyDataSetChanged();
             }

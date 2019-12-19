@@ -22,6 +22,9 @@ import com.example.roomtest.database.toyInfo;
 
 import java.util.Calendar;
 
+/**
+ * 2019-12-19
+ */
 public class editDialogFragment extends DialogFragment {
 
     static editDialogFragment dialog;
@@ -82,7 +85,7 @@ public class editDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.insert_dialog, container, false);
+        View view = inflater.inflate(R.layout.edit_dialogfragment, container, false);
 
         mTextViewTitle = view.findViewById(R.id.dialogTitle);
         mButtonOK = view.findViewById(R.id.buttonOK);

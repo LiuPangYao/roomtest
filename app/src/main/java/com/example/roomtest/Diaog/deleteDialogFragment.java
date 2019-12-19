@@ -10,6 +10,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.roomtest.R;
 
+/**
+ * 2019-12-19
+ */
 public class deleteDialogFragment extends DialogFragment {
 
     static deleteDialogFragment dialog;

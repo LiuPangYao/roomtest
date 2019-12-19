@@ -17,7 +17,6 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-
             android:orientation="horizontal"
             segmentedgroup:sc_border_width="2dp"
             segmentedgroup:sc_corner_radius="10dp">
@@ -37,7 +36,6 @@
                 android:text="@string/Technology" />
 
         </info.hoang8f.android.segmented.SegmentedGroup>
-
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView

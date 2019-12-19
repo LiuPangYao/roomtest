@@ -1,4 +1,4 @@
-package com.example.roomtest;
+package com.example.roomtest.recyclerview;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -1,6 +1,9 @@
 package com.example.roomtest;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -9,10 +12,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.hardware.display.DisplayManager;
+import android.hardware.display.VirtualDisplay;
+import android.media.Image;
+import android.media.ImageReader;
+import android.media.projection.MediaProjection;
+import android.media.projection.MediaProjectionManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -33,6 +50,7 @@ import com.example.roomtest.database.listSort;
 import com.example.roomtest.database.toyInfo;
 import com.example.roomtest.recyclerview.ListAdapter;
 import com.example.roomtest.recyclerview.ListAdapterTouchHelperCallback;
+import com.example.roomtest.recyclerview.RecyclerViewNoBugLinearLayoutManager;
 import com.example.roomtest.recyclerview.SimpleAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -43,6 +61,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements
     dataBase dataInstance = null;
     boolean isDataReady = false; // Warning
     boolean isDeveloper = false;
-    boolean isGuided    = false;
+    boolean isGuided = false;
     SharedPreferences shared = null;
 
     private TextView mTextViewEmpty, mTextViewTitle, mTextViewVersion;
@@ -67,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements
     private RecyclerView mRecyclerView, mRecyclerViewSimple;
     private ListAdapter mListAdapter;
     private SimpleAdapter mSimpleAdapter;
-    private ImageButton mImageButton, mImageDateButton;
+    private ImageButton mImageButton, mImageDateButton, mImageCameraButton;
     private RelativeLayout relativeLayoutEditor, relativeLayoutAbout;
     private FloatingActionButton mFloatButton;
 
@@ -86,6 +108,11 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            mResultCode = savedInstanceState.getInt(STATE_RESULT_CODE);
+            mResultData = savedInstanceState.getParcelable(STATE_RESULT_DATA);
+        }
+
         // full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -100,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements
         shared = getSharedPreferences("app_setting", MODE_PRIVATE);
         isDataReady = shared.getBoolean("isReady", false);
         isDeveloper = shared.getBoolean("isDeveloper", false);
-        isGuided    = shared.getBoolean("isGuided", false);
+        isGuided = shared.getBoolean("isGuided", false);
 
         // init
         dataInstance = dataBase.getInstance(this);
@@ -111,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements
 
         checkDataSizeDisplay();
 
-        if(!isGuided) {
+        if (!isGuided) {
             initViewPager2();
         }
 
@@ -144,9 +171,20 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onDestroy() {
+
         if (adView != null) {
             adView.destroy();
         }
+
+        if (mVirtualDisplay != null) {
+            mVirtualDisplay.release();
+            mVirtualDisplay = null;
+        }
+
+        if (mMediaProjection != null) {
+            mMediaProjection.stop();
+        }
+
         super.onDestroy();
     }
 
@@ -157,8 +195,10 @@ public class MainActivity extends AppCompatActivity implements
         mProgressBarLoading = findViewById(R.id.progressBarLoading);
         mImageButton = findViewById(R.id.imageButton_menu);
         mImageDateButton = findViewById(R.id.imageButton_date);
+        mImageCameraButton = findViewById(R.id.imageButton_camera);
         mImageButton.setOnClickListener(this);
         mImageDateButton.setOnClickListener(this);
+        mImageCameraButton.setOnClickListener(this);
         mTextViewTitle = findViewById(R.id.textViewTitle);
         mTextViewTitle.setOnLongClickListener(this);
         mFloatButton = findViewById(R.id.floatingActionButton);
@@ -215,6 +255,7 @@ public class MainActivity extends AppCompatActivity implements
                             mTextViewEmpty.setVisibility(View.VISIBLE);
 
                         initList();
+                        mImageCameraButton.setVisibility(View.GONE);
                         //Log.d(TAG, "onTabSelected: list");
                         break;
                     case 1:
@@ -226,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements
 
                         closeInitList();
                         initEdit();
+                        mImageCameraButton.setVisibility(View.VISIBLE);
                         //Log.d(TAG, "onTabSelected: info");
                         break;
                     case 2:
@@ -237,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements
 
                         initAbout();
                         closeInitList();
+                        mImageCameraButton.setVisibility(View.GONE);
                         //Log.d(TAG, "onTabSelected: about");
                         break;
                 }
@@ -299,21 +342,24 @@ public class MainActivity extends AppCompatActivity implements
         mListAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * 2019-12-18
+     * set Data in mRecyclerViewSimple use SimpleAdapter
+     */
     public void initSimpleAdapter() {
-        // init
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerViewSimple.setLayoutManager(linearLayoutManager);
 
         simpleList = new ArrayList<>();
         simpleList.add(getString(R.string.PERMISSION));
-        //simpleList.add(getString(R.string.SERVICE));
         simpleList.add(getString(R.string.UPDATE_MESSAGE));
         simpleList.add(getString(R.string.QUESTION_RETURN));
         simpleList.add(getString(R.string.COMPONENT_USE));
         simpleList.add(getString(R.string.AD));
+        simpleList.add(getString(R.string.THEME));
 
-        // show data
+        // init SimpleAdapter
         mSimpleAdapter = new SimpleAdapter(simpleList, this);
         mRecyclerViewSimple.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerViewSimple.setAdapter(mSimpleAdapter);
@@ -360,6 +406,21 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.floatingActionButton:
                 showInsertOrUpdateDialog(ToyConstants.ACTION_INSERT);
                 break;
+            case R.id.imageButton_camera:
+
+                createEnvironment();
+
+                if (startScreenCapture()) {
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.e(TAG, "start startCapture");
+                            startCapture();
+                        }
+                    }, 200);
+                }
+                break;
         }
     }
 
@@ -377,6 +438,224 @@ public class MainActivity extends AppCompatActivity implements
                 break;
         }
         return false;
+    }
+
+    private final int REQUEST_CODE_SAVE_IMAGE_FILE = 0x002;
+    private int REQUEST_MEDIA_PROJECTION = 0x001;
+    private MediaProjection mMediaProjection;
+    private MediaProjectionManager mMediaProjectionManager;
+    private int mResultCode;
+    private Intent mResultData;
+    private ImageReader mImageReader;
+    private VirtualDisplay mVirtualDisplay;
+    private int mScreenDensity;
+    private int mWindowWidth;
+    private int mWindowHeight;
+    private String mImagePath;
+    private WindowManager mWindowManager;
+    private String mImageName;
+    private Bitmap mBitmap;
+    private static final String STATE_RESULT_CODE = "result_code";
+    private static final String STATE_RESULT_DATA = "result_data";
+
+    private void createEnvironment() {
+        mImagePath = getFilesDir() + "/screenshot/";
+
+        mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        mWindowWidth = mWindowManager.getDefaultDisplay().getWidth();
+        mWindowHeight = mWindowManager.getDefaultDisplay().getHeight();
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        mWindowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        mScreenDensity = displayMetrics.densityDpi;
+        mImageReader = ImageReader.newInstance(mWindowWidth, mWindowHeight, 0x1, 2);
+        mMediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        //startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), 0x003);
+    }
+
+    private boolean startScreenCapture() {
+        Log.e(TAG, "startScreenCapture");
+        if (this == null) {
+            return false;
+        }
+
+        if (mMediaProjection != null) {
+            Log.e(TAG, "startScreenCapture 1");
+            setUpVirtualDisplay();
+            return true;
+        } else if (mResultCode != 0 && mResultData != null) {
+            Log.e(TAG, "startScreenCapture 2");
+            setUpMediaProjection();
+            setUpVirtualDisplay();
+            return true;
+        } else {
+            Log.e(TAG, "startScreenCapture 3");
+            Log.d(TAG, "Requesting confirmation");
+            // This initiates a prompt dialog for the user to confirm screen projection.
+            //startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), REQUEST_MEDIA_PROJECTION);
+            Intent captureIntent = mMediaProjectionManager.createScreenCaptureIntent();
+            startActivityForResult(captureIntent, 0x001);
+            //openMainActivity();
+            return false;
+        }
+    }
+
+    private void setUpMediaProjection() {
+        mMediaProjection = mMediaProjectionManager.getMediaProjection(mResultCode, mResultData);
+    }
+
+    private void setUpVirtualDisplay() {
+        mVirtualDisplay = mMediaProjection.createVirtualDisplay(
+                "ScreenCapture",
+                mWindowWidth, mWindowHeight, mScreenDensity,
+                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+                mImageReader.getSurface(), null, null);
+    }
+
+    private void checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_SAVE_IMAGE_FILE);
+                } else {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_SAVE_IMAGE_FILE);
+                }
+                return;
+            } else {
+                saveToFile();
+            }
+        }
+    }
+
+    public static boolean checkSelfPermission(Context context, String permission) {
+        return ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_SAVE_IMAGE_FILE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission_dialogfragment was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    saveToFile();
+                } else {
+                    // permission_dialogfragment denied, boo! Disable the
+                    // functionality that depends on this permission_dialogfragment.
+                    Toast.makeText(this.getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+        }
+    }
+
+    private void saveToFile() {
+        try {
+            File fileFolder = new File(mImagePath);
+            if (!fileFolder.exists())
+                fileFolder.mkdirs();
+            File file = new File(mImagePath, mImageName);
+            if (!file.exists()) {
+                Log.d(TAG, "file create success ");
+                file.createNewFile();
+            }
+            FileOutputStream out = new FileOutputStream(file);
+            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+            out.close();
+            Log.d(TAG, "file save success ");
+            //Toast.makeText(this.getApplicationContext(), "Screenshot is done.", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            Log.e(TAG, e.toString());
+            e.printStackTrace();
+        }
+    }
+
+    private void startCapture() {
+        mImageName = System.currentTimeMillis() + ".png";
+        Log.i(TAG, "image name is : " + mImageName);
+
+        Image image = mImageReader.acquireLatestImage();
+        if (image == null) {
+            Log.e(TAG, "image is null.");
+            return;
+        }
+
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        final Image.Plane[] planes = image.getPlanes();
+        final ByteBuffer buffer = planes[0].getBuffer();
+        int pixelStride = planes[0].getPixelStride();
+        int rowStride = planes[0].getRowStride();
+        int rowPadding = rowStride - pixelStride * width;
+
+        mBitmap = Bitmap.createBitmap(width + rowPadding / pixelStride, height, Bitmap.Config.ARGB_8888);
+        mBitmap.copyPixelsFromBuffer(buffer);
+        mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, width, height);
+        image.close();
+
+        if (mBitmap != null) {
+            checkPermission();
+        }
+    }
+
+    private void openMainActivity() {
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(mainIntent);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_MEDIA_PROJECTION) {
+            if (resultCode != Activity.RESULT_OK) {
+                Log.d(TAG, "User cancelled");
+                //Toast.makeText(this, "User cancelled", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (this == null) {
+                return;
+            }
+
+            Intent service = new Intent(this, ExampleService.class);
+            service.putExtra("code", resultCode);
+            service.putExtra("data", data);
+            startForegroundService(service);
+
+            //Log.d(TAG, "Starting screen capture");
+            /*if (mMediaProjectionManager != null) {
+
+                mResultCode = resultCode;
+                mResultData = data;
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        //mMediaProjection = mMediaProjectionManager.getMediaProjection(mResultCode, mResultData);
+
+                        //setUpMediaProjection();
+                        setUpVirtualDisplay();
+                        startCapture();
+                    }
+                }, 200);
+            }*/
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mResultData != null) {
+            outState.putInt(STATE_RESULT_CODE, mResultCode);
+            outState.putParcelable(STATE_RESULT_DATA, mResultData);
+        }
     }
 
     /**
@@ -420,28 +699,28 @@ public class MainActivity extends AppCompatActivity implements
      * control edit
      */
     public void initEdit() {
-        if(toyList != null && toyList.size() != 0) {
+        if (toyList != null && toyList.size() != 0) {
             mCountEdit.setText(String.valueOf(toyList.size()));
 
             int sumPrice = 0;
-            for(int i = 0 ; i < toyList.size() ; i++) {
+            for (int i = 0; i < toyList.size(); i++) {
                 sumPrice = sumPrice + toyList.get(i).getBuyPrice();
                 mPriceEdit.setText("NT " + sumPrice);
             }
 
             int soldPrice = 0;
-            for(int i = 0 ; i < toyList.size() ; i++) {
+            for (int i = 0; i < toyList.size(); i++) {
                 soldPrice = soldPrice + toyList.get(i).getSellPrice();
                 mSoldEdit.setText("NT " + soldPrice);
             }
 
-            if(soldPrice == sumPrice) {
+            if (soldPrice == sumPrice) {
                 mState.setText(getString(R.string.PRICE_COMMON));
             } else if (soldPrice > sumPrice) {
-                mState.setText(getString(R.string.NET_E) + " " + String.valueOf(soldPrice-sumPrice));
+                mState.setText(getString(R.string.NET_E) + " " + String.valueOf(soldPrice - sumPrice));
                 mState.setTextColor(getColor(R.color.colorIncrease));
             } else {
-                mState.setText(getString(R.string.NET_L) + " " + String.valueOf(sumPrice-soldPrice));
+                mState.setText(getString(R.string.NET_L) + " " + String.valueOf(sumPrice - soldPrice));
                 mState.setTextColor(getColor(R.color.colorFalling));
             }
 
@@ -504,6 +783,7 @@ public class MainActivity extends AppCompatActivity implements
 
     /**
      * InsertAsyncTask
+     *
      * @param list
      */
     @Override
@@ -536,7 +816,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     *  Insert Fake Data
+     * Insert Fake Data
+     *
      * @param list
      * @param dataReady
      * @param developer
