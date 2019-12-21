@@ -75,9 +75,10 @@ public class componentDialogFragment extends DialogFragment {
         textAdapter.notifyDataSetChanged();
 
         SegmentedGroup segmentedOne = view.findViewById(R.id.segmentedComponent);
-        segmentedOne.setTintColor(Color.DKGRAY);
+        //segmentedOne.setTintColor(Color.DKGRAY);
 
         RadioButton radioButtonOne = view.findViewById(R.id.buttonOne);
+        radioButtonOne.setChecked(true);
         radioButtonOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

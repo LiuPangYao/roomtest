@@ -20,7 +20,6 @@
         android:roundIcon="@mipmap/app_launcher_main_round"
         android:supportsRtl="true">
 
-
         <service
             android:name=".ExampleService"
             android:enabled="true"
@@ -33,10 +32,9 @@
         <activity android:name=".WebActivity"></activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -1,5 +1,8 @@
 package com.example.roomtest;
 
+/**
+ * 2019-12-21
+ */
 public class ToyConstants {
 
     // SELL STATE
@@ -29,7 +32,12 @@ public class ToyConstants {
     public static final int ACTION_INSERT = 1;
     public static final int ACTION_UPDATE = 2;
 
-    static final String EXTRA_RESULT_CODE="resultCode";
-    static final String EXTRA_RESULT_INTENT="resultIntent";
+    // SCREEN CUT(NOT USE)
+    public static final String EXTRA_RESULT_CODE="resultCode";
+    public static final String EXTRA_RESULT_INTENT="resultIntent";
+
+    // THEME
+    public static final int DARK_MODE  = 1;
+    public static final int LIGHT_MODE = 0;
 
 }

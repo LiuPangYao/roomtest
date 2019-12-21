@@ -16,6 +16,7 @@ import com.example.roomtest.Diaog.feedbackDialogFragment;
 import com.example.roomtest.Diaog.permissionDialogFragment;
 import com.example.roomtest.Diaog.themeDialogFragment;
 import com.example.roomtest.R;
+import com.example.roomtest.ToyConstants;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -65,7 +66,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.textViewAboutTitle.setText(stringList.get(position).toString());
 
-        holder.textViewAboutTitle.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();

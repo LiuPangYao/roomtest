@@ -5,15 +5,13 @@ import android.content.SharedPreferences;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.example.roomtest.R;
+import com.example.roomtest.ToyConstants;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class themeControl {
 
-    int CURRENT_MODE = themeControl.LIGHT_MODE;
-    static int DARK_MODE  = 1;
-    static int LIGHT_MODE = 0;
+    int CURRENT_MODE = ToyConstants.LIGHT_MODE;
 
     SharedPreferences shared = null;
 
@@ -32,7 +30,7 @@ public class themeControl {
 
     public themeControl(Context context) {
         shared = context.getSharedPreferences("app_setting", MODE_PRIVATE);
-        CURRENT_MODE = shared.getInt("currentMode", themeControl.LIGHT_MODE);
+        CURRENT_MODE = shared.getInt("currentMode", ToyConstants.LIGHT_MODE);
     }
 
     public int getCurrentMode() {
@@ -40,7 +38,7 @@ public class themeControl {
     }
 
     public void changeStyle() {
-        if(CURRENT_MODE == LIGHT_MODE) {
+        if(CURRENT_MODE == ToyConstants.LIGHT_MODE) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);

@@ -2,6 +2,7 @@ package com.example.roomtest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
@@ -52,6 +53,7 @@ import com.example.roomtest.recyclerview.ListAdapter;
 import com.example.roomtest.recyclerview.ListAdapterTouchHelperCallback;
 import com.example.roomtest.recyclerview.RecyclerViewNoBugLinearLayoutManager;
 import com.example.roomtest.recyclerview.SimpleAdapter;
+import com.example.roomtest.tool.themeControl;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -68,6 +70,9 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 2019-12-21
+ */
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
         View.OnLongClickListener,
@@ -120,6 +125,9 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         init();
+
+        //initMode();
+
         // ad mod
         initAdMod();
 
@@ -221,6 +229,26 @@ public class MainActivity extends AppCompatActivity implements
         initSimpleAdapter();
     }
 
+    /**
+     * init APP setting theme
+     */
+    public void initMode() {
+        //int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        int currentNightMode = themeControl.getInstance(this).getCurrentMode();
+        switch (currentNightMode) {
+            //case Configuration.UI_MODE_NIGHT_NO:
+            case ToyConstants.LIGHT_MODE:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            //case Configuration.UI_MODE_NIGHT_YES:
+            case ToyConstants.DARK_MODE:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            //case Configuration.UI_MODE_NIGHT_UNDEFINED:
+            //    break;
+        }
+    }
+
     public void initAdMod() {
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -267,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements
 
                         closeInitList();
                         initEdit();
-                        mImageCameraButton.setVisibility(View.VISIBLE);
+                        mImageCameraButton.setVisibility(View.GONE);
                         //Log.d(TAG, "onTabSelected: info");
                         break;
                     case 2:

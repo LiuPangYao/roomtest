@@ -17,6 +17,8 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            segmentedgroup:sc_tint_color="@color/colorGray"
+            segmentedgroup:sc_checked_text_color="@color/colorWhite"
             android:orientation="horizontal"
             segmentedgroup:sc_border_width="2dp"
             segmentedgroup:sc_corner_radius="10dp">
@@ -26,14 +28,16 @@
                 style="@style/RadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/COMPONENT" />
+                android:text="@string/COMPONENT"
+                android:textColor="@color/commonWhite" />
 
             <RadioButton
                 android:id="@+id/buttonTwo"
                 style="@style/RadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Technology" />
+                android:text="@string/Technology"
+                android:textColor="@color/commonWhite" />
 
         </info.hoang8f.android.segmented.SegmentedGroup>
     </RelativeLayout>
