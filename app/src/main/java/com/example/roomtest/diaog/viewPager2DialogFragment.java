@@ -1,4 +1,4 @@
-package com.example.roomtest.Diaog;
+package com.example.roomtest.diaog;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -59,6 +59,8 @@ public class viewPager2DialogFragment extends DialogFragment
         totalPageText = view.findViewById(R.id.textTotalPage);
 
         list = new ArrayList<>();
+        list.add(getResources().getDrawable(R.mipmap.viewpager2_0));
+        list.add(getResources().getDrawable(R.mipmap.viewpager2_00));
         list.add(getResources().getDrawable(R.mipmap.viewpager2_01));
         list.add(getResources().getDrawable(R.mipmap.viewpager2_02));
         list.add(getResources().getDrawable(R.mipmap.viewpager2_03));

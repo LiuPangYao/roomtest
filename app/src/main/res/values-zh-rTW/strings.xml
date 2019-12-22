@@ -59,4 +59,5 @@
     <string name="THEME">主題切換</string>
     <string name="NIGHT">夜間</string>
     <string name="MORNING">白天</string>
+    <string name="PERMISSION_DENIED">拒絕權限授予</string>
 </resources>

@@ -20,6 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewGuided"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:orientation="vertical"
         android:paddingTop="20dp" />
 
@@ -60,7 +62,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/currentPageLinearLayout"
         android:layout_alignParentRight="true"
-        android:layout_margin="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/NO_ASK_AGAIN" />
 
     <Button

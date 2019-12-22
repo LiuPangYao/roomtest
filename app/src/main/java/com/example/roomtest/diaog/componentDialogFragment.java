@@ -1,7 +1,6 @@
-package com.example.roomtest.Diaog;
+package com.example.roomtest.diaog;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

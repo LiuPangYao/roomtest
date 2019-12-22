@@ -41,8 +41,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.roomtest.Diaog.editDialogFragment;
-import com.example.roomtest.Diaog.viewPager2DialogFragment;
+import com.example.roomtest.diaog.editDialogFragment;
+import com.example.roomtest.diaog.viewPager2DialogFragment;
 import com.example.roomtest.asyncTask.InsertFakeDataAsyncTask;
 import com.example.roomtest.asyncTask.InsertAsyncTask;
 import com.example.roomtest.asyncTask.updateAsyncTask;
@@ -130,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements
 
         // ad mod
         initAdMod();
+
+        checkPermission();
 
         // avoid data repeat store
         shared = getSharedPreferences("app_setting", MODE_PRIVATE);
@@ -540,6 +542,10 @@ public class MainActivity extends AppCompatActivity implements
                 mImageReader.getSurface(), null, null);
     }
 
+    /**
+     * 2019-12-22
+     * check storage permission
+     */
     private void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -550,7 +556,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 return;
             } else {
-                saveToFile();
+                //saveToFile();
             }
         }
     }
@@ -559,6 +565,13 @@ public class MainActivity extends AppCompatActivity implements
         return ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED;
     }
 
+    /**
+     * 2019-12-22
+     * permission state
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -567,11 +580,11 @@ public class MainActivity extends AppCompatActivity implements
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission_dialogfragment was granted, yay! Do the
                     // contacts-related task you need to do.
-                    saveToFile();
+                    //saveToFile();
                 } else {
                     // permission_dialogfragment denied, boo! Disable the
                     // functionality that depends on this permission_dialogfragment.
-                    Toast.makeText(this.getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this.getApplicationContext(), getString(R.string.PERMISSION_DENIED), Toast.LENGTH_SHORT).show();
                 }
                 break;
             }

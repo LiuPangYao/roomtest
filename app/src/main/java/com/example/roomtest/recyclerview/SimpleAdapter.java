@@ -10,13 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.roomtest.Diaog.messageUpdateDialogFragment;
-import com.example.roomtest.Diaog.componentDialogFragment;
-import com.example.roomtest.Diaog.feedbackDialogFragment;
-import com.example.roomtest.Diaog.permissionDialogFragment;
-import com.example.roomtest.Diaog.themeDialogFragment;
+import com.example.roomtest.diaog.messageUpdateDialogFragment;
+import com.example.roomtest.diaog.componentDialogFragment;
+import com.example.roomtest.diaog.feedbackDialogFragment;
+import com.example.roomtest.diaog.permissionDialogFragment;
+import com.example.roomtest.diaog.themeDialogFragment;
 import com.example.roomtest.R;
-import com.example.roomtest.ToyConstants;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;

@@ -8,9 +8,13 @@ import com.example.roomtest.firestore.UpdateMessage;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 2019-12-22
+ */
 public class listSort {
 
     static String TAG = "listSort";
@@ -45,6 +49,7 @@ public class listSort {
             }
         }
 
+        Collections.reverse(storeList);
         return storeList;
     }
 

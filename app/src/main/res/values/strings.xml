@@ -70,4 +70,5 @@
     <string name="THEME">Theme Change</string>
     <string name="NIGHT">Night</string>
     <string name="MORNING">Morning</string>
+    <string name="PERMISSION_DENIED">Permission denied</string>
 </resources>

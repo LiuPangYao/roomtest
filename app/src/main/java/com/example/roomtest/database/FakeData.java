@@ -6,6 +6,68 @@ import com.example.roomtest.ToyConstants;
 
 public class FakeData {
 
+    public static void setDataForMain(Context context) {
+        dataBase dataInstance = null;
+        dataInstance = dataBase.getInstance(context);
+
+        toyInfo toy1 = new toyInfo();
+        toy1.setName("EAA-051 返校日");
+        toy1.setBuyPrice(2390);
+        toy1.setSellPrice(2390);
+        toy1.setWeb("https://www.toy-people.com/?p=38665");
+        toy1.setImageUri("https://imgur.com/5BHCO65");
+        toy1.setDate("2019-05-01");
+        toy1.setSoldState(ToyConstants.SOLD_OUT);
+        toy1.setGain(ToyConstants.SELL);
+        dataInstance.getToyDao().insert(toy1);
+
+        toyInfo toy6 = new toyInfo();
+        toy6.setName("EAA-060 鋼鐵蜘蛛人");
+        toy6.setBuyPrice(2790);
+        toy6.setSellPrice(2990);
+        toy6.setWeb("https://www.toy-people.com/?p=45927");
+        toy6.setImageUri("https://imgur.com/4apuRHs");
+        toy6.setDate("2019-09-07");
+        toy6.setSoldState(ToyConstants.SELL);
+        toy6.setGain(ToyConstants.INCREASE);
+        dataInstance.getToyDao().insert(toy6);
+
+        toyInfo toy7 = new toyInfo();
+        toy7.setName("EAA-074 自製戰衣");
+        toy7.setBuyPrice(2150);
+        toy7.setSellPrice(2390);
+        toy7.setWeb("https://www.toy-people.com/?p=48110");
+        toy7.setImageUri("https://imgur.com/DiAvxnM");
+        toy7.setDate("2019-09-28");
+        toy7.setSoldState(ToyConstants.PRE_ORDER);
+        toy7.setGain(ToyConstants.INCREASE);
+        dataInstance.getToyDao().insert(toy7);
+
+        toyInfo toy8 = new toyInfo();
+        toy8.setName("EAA-099 特製戰衣");
+        toy8.setBuyPrice(2150);
+        toy8.setSellPrice(2390);
+        toy8.setWeb("https://www.toy-people.com/?p=48751");
+        toy8.setImageUri("https://imgur.com/GjZFw9o");
+        toy8.setDate("2019-10-10");
+        toy8.setSoldState(ToyConstants.PRE_ORDER);
+        toy8.setGain(ToyConstants.INCREASE);
+        dataInstance.getToyDao().insert(toy8);
+
+        toyInfo toy9 = new toyInfo();
+        toy9.setName("EAA-098 潛行戰衣");
+        toy9.setBuyPrice(2150);
+        toy9.setSellPrice(2390);
+        toy9.setWeb("");
+        toy9.setImageUri("https://imgur.com/7WlxG8d");
+        toy9.setDate("2019-10-22");
+        toy9.setSoldState(ToyConstants.PRE_ORDER);
+        toy9.setGain(ToyConstants.INCREASE);
+        dataInstance.getToyDao().insert(toy9);
+
+
+    }
+
     public static void setData(Context context) {
 
         dataBase dataInstance = null;
