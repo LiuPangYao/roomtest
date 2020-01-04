@@ -3,7 +3,7 @@ describe some toy
 
 screencut
 
-<img src="https://imgur.com/s8yxydI.png" width="315" height="612">.  <img src="https://imgur.com/hG53aAZ.png" width="315" height="612">
+<img src="https://i.imgur.com/5CmsuVt.png" width="315" height="612">.  <img src="https://i.imgur.com/q5jOn2T.png" width="315" height="612">
 
 隱私權
 
