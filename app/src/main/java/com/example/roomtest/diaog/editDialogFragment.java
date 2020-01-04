@@ -119,7 +119,7 @@ public class editDialogFragment extends DialogFragment {
             sellstateSpinner.setSelection(toys.getSoldState());
             gainSpinner.setSelection(toys.getGain());
 
-        } else {
+        } else { // Insert
             // Fake Data
             /*mEdtName.setText("EAA-051 返校日");
             mEdtUri.setText("https://imgur.com/IVxECP6");

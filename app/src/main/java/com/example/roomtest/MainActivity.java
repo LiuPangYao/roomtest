@@ -16,21 +16,15 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.hardware.display.DisplayManager;
-import android.hardware.display.VirtualDisplay;
-import android.media.Image;
-import android.media.ImageReader;
-import android.media.projection.MediaProjection;
-import android.media.projection.MediaProjectionManager;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.DisplayMetrics;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -42,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.roomtest.diaog.editDialogFragment;
+import com.example.roomtest.diaog.shareDialogFragment;
 import com.example.roomtest.diaog.viewPager2DialogFragment;
 import com.example.roomtest.asyncTask.InsertFakeDataAsyncTask;
 import com.example.roomtest.asyncTask.InsertAsyncTask;
@@ -49,6 +44,7 @@ import com.example.roomtest.asyncTask.updateAsyncTask;
 import com.example.roomtest.database.dataBase;
 import com.example.roomtest.database.listSort;
 import com.example.roomtest.database.toyInfo;
+import com.example.roomtest.mediastore.mediaStoreControl;
 import com.example.roomtest.recyclerview.ListAdapter;
 import com.example.roomtest.recyclerview.ListAdapterTouchHelperCallback;
 import com.example.roomtest.recyclerview.RecyclerViewNoBugLinearLayoutManager;
@@ -63,11 +59,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -81,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements
         InsertFakeDataAsyncTask.CompleteFakeCallBack,
         updateAsyncTask.UpdateCallBack, ListAdapter.OnDeleteListener {
 
-    private String TAG = "MainActivity.class";
+    private String TAG = "MainActivity";
     dataBase dataInstance = null;
     boolean isDataReady = false; // Warning
     boolean isDeveloper = false;
@@ -113,11 +107,6 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null) {
-            mResultCode = savedInstanceState.getInt(STATE_RESULT_CODE);
-            mResultData = savedInstanceState.getParcelable(STATE_RESULT_DATA);
-        }
-
         // full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -131,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements
         // ad mod
         initAdMod();
 
-        checkPermission();
+        checkPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA});
 
         // avoid data repeat store
         shared = getSharedPreferences("app_setting", MODE_PRIVATE);
@@ -184,15 +173,6 @@ public class MainActivity extends AppCompatActivity implements
 
         if (adView != null) {
             adView.destroy();
-        }
-
-        if (mVirtualDisplay != null) {
-            mVirtualDisplay.release();
-            mVirtualDisplay = null;
-        }
-
-        if (mMediaProjection != null) {
-            mMediaProjection.stop();
         }
 
         super.onDestroy();
@@ -297,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements
 
                         closeInitList();
                         initEdit();
-                        mImageCameraButton.setVisibility(View.GONE);
+                        mImageCameraButton.setVisibility(View.VISIBLE);
                         //Log.d(TAG, "onTabSelected: info");
                         break;
                     case 2:
@@ -437,19 +417,7 @@ public class MainActivity extends AppCompatActivity implements
                 showInsertOrUpdateDialog(ToyConstants.ACTION_INSERT);
                 break;
             case R.id.imageButton_camera:
-
-                createEnvironment();
-
-                if (startScreenCapture()) {
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.e(TAG, "start startCapture");
-                            startCapture();
-                        }
-                    }, 200);
-                }
+                takeScreenShot(this);
                 break;
         }
     }
@@ -470,97 +438,97 @@ public class MainActivity extends AppCompatActivity implements
         return false;
     }
 
-    private final int REQUEST_CODE_SAVE_IMAGE_FILE = 0x002;
-    private int REQUEST_MEDIA_PROJECTION = 0x001;
-    private MediaProjection mMediaProjection;
-    private MediaProjectionManager mMediaProjectionManager;
-    private int mResultCode;
-    private Intent mResultData;
-    private ImageReader mImageReader;
-    private VirtualDisplay mVirtualDisplay;
-    private int mScreenDensity;
-    private int mWindowWidth;
-    private int mWindowHeight;
-    private String mImagePath;
-    private WindowManager mWindowManager;
-    private String mImageName;
-    private Bitmap mBitmap;
-    private static final String STATE_RESULT_CODE = "result_code";
-    private static final String STATE_RESULT_DATA = "result_data";
+    /**
+     * 2020-01-01
+     * @param activity
+     * @return
+     */
+    public Bitmap takeScreenShot(Activity activity) {
 
-    private void createEnvironment() {
-        mImagePath = getFilesDir() + "/screenshot/";
-
-        mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        mWindowWidth = mWindowManager.getDefaultDisplay().getWidth();
-        mWindowHeight = mWindowManager.getDefaultDisplay().getHeight();
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        mWindowManager.getDefaultDisplay().getMetrics(displayMetrics);
-        mScreenDensity = displayMetrics.densityDpi;
-        mImageReader = ImageReader.newInstance(mWindowWidth, mWindowHeight, 0x1, 2);
-        mMediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        //startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), 0x003);
-    }
-
-    private boolean startScreenCapture() {
-        Log.e(TAG, "startScreenCapture");
-        if (this == null) {
-            return false;
+        if (activity == null || activity.isFinishing()) {
+            return null;
         }
 
-        if (mMediaProjection != null) {
-            Log.e(TAG, "startScreenCapture 1");
-            setUpVirtualDisplay();
-            return true;
-        } else if (mResultCode != 0 && mResultData != null) {
-            Log.e(TAG, "startScreenCapture 2");
-            setUpMediaProjection();
-            setUpVirtualDisplay();
-            return true;
-        } else {
-            Log.e(TAG, "startScreenCapture 3");
-            Log.d(TAG, "Requesting confirmation");
-            // This initiates a prompt dialog for the user to confirm screen projection.
-            //startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), REQUEST_MEDIA_PROJECTION);
-            Intent captureIntent = mMediaProjectionManager.createScreenCaptureIntent();
-            startActivityForResult(captureIntent, 0x001);
-            //openMainActivity();
-            return false;
+        View scrView = activity.getWindow().getDecorView();
+        scrView.setDrawingCacheEnabled(true);
+        scrView.buildDrawingCache(true);
+
+        Rect statuBarRect = new Rect();
+        scrView.getWindowVisibleDisplayFrame(statuBarRect);
+
+        int statusBarHeight = statuBarRect.top;
+        int width = activity.getWindowManager().getDefaultDisplay().getWidth();
+        int height = activity.getWindowManager().getDefaultDisplay().getHeight();
+
+        Bitmap scrBmp = null;
+        try {
+            scrBmp = Bitmap.createBitmap(scrView.getDrawingCache(), 0, statusBarHeight, width, height - statusBarHeight);
+
+            if(!checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd&HH:mm");
+                String fileName = dateFormat.format(new Date());
+
+                Uri uri = mediaStoreControl.insertImage(getContentResolver()
+                        , scrBmp
+                        ,Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+ ToyConstants.TOYSOUL_FOLDER + "/" + fileName + ToyConstants.JPG_SMALL
+                        , fileName + ToyConstants.JPG_SMALL
+                        , "screen cut, date = " + fileName);
+
+                FragmentManager fm = ((AppCompatActivity) this).getSupportFragmentManager();
+                shareDialogFragment dialog = shareDialogFragment.newInstance(this, scrBmp, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/ToySoul/" + fileName + ".jpg", uri);
+                dialog.show(fm, "share_dialogfragment");
+            } else {
+                // not get permission
+                checkPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE});
+            }
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            Log.d(TAG, getString(R.string.TAKE_SCREENSHOT_ERROR));
         }
-    }
 
-    private void setUpMediaProjection() {
-        mMediaProjection = mMediaProjectionManager.getMediaProjection(mResultCode, mResultData);
-    }
+        scrView.setDrawingCacheEnabled(false);
+        scrView.destroyDrawingCache();
 
-    private void setUpVirtualDisplay() {
-        mVirtualDisplay = mMediaProjection.createVirtualDisplay(
-                "ScreenCapture",
-                mWindowWidth, mWindowHeight, mScreenDensity,
-                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-                mImageReader.getSurface(), null, null);
+        return scrBmp;
     }
 
     /**
-     * 2019-12-22
-     * check storage permission
+     * 2020-01-02
+     * check permission
+     * 1. storage
+     * 2. camera
      */
-    private void checkPermission() {
+    private void checkPermission(String[] permissionString) {
+
+        boolean permissionCheck = false;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_SAVE_IMAGE_FILE);
-                } else {
-                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_SAVE_IMAGE_FILE);
+            for(int i = 0 ; i < permissionString.length-1 ; i++) {
+                if (checkSelfPermission(this, permissionString[i])) {
+                    //if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissionString[i])) {
+                        // no ask again click no show
+                    //    requestPermissions(permissionString, ToyConstants.REQUEST_CODE_PERMISSION);
+                    //} else {
+                    //    requestPermissions(permissionString, ToyConstants.REQUEST_CODE_PERMISSION);
+                    //}
+                    permissionCheck = true;
                 }
-                return;
-            } else {
-                //saveToFile();
+            }
+
+            if(permissionCheck) {
+                requestPermissions(permissionString, ToyConstants.REQUEST_CODE_PERMISSION);
             }
         }
     }
 
+    /**
+     * 2020-01-02
+     * @param context
+     * @param permission
+     * @return
+     * false get permission
+     */
     public static boolean checkSelfPermission(Context context, String permission) {
         return ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED;
     }
@@ -575,127 +543,16 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case REQUEST_CODE_SAVE_IMAGE_FILE: {
+            case ToyConstants.REQUEST_CODE_PERMISSION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission_dialogfragment was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    //saveToFile();
+                    // permission granted
                 } else {
-                    // permission_dialogfragment denied, boo! Disable the
-                    // functionality that depends on this permission_dialogfragment.
+                    // permission denied
                     Toast.makeText(this.getApplicationContext(), getString(R.string.PERMISSION_DENIED), Toast.LENGTH_SHORT).show();
                 }
                 break;
             }
-        }
-    }
-
-    private void saveToFile() {
-        try {
-            File fileFolder = new File(mImagePath);
-            if (!fileFolder.exists())
-                fileFolder.mkdirs();
-            File file = new File(mImagePath, mImageName);
-            if (!file.exists()) {
-                Log.d(TAG, "file create success ");
-                file.createNewFile();
-            }
-            FileOutputStream out = new FileOutputStream(file);
-            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-            out.flush();
-            out.close();
-            Log.d(TAG, "file save success ");
-            //Toast.makeText(this.getApplicationContext(), "Screenshot is done.", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            Log.e(TAG, e.toString());
-            e.printStackTrace();
-        }
-    }
-
-    private void startCapture() {
-        mImageName = System.currentTimeMillis() + ".png";
-        Log.i(TAG, "image name is : " + mImageName);
-
-        Image image = mImageReader.acquireLatestImage();
-        if (image == null) {
-            Log.e(TAG, "image is null.");
-            return;
-        }
-
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        final Image.Plane[] planes = image.getPlanes();
-        final ByteBuffer buffer = planes[0].getBuffer();
-        int pixelStride = planes[0].getPixelStride();
-        int rowStride = planes[0].getRowStride();
-        int rowPadding = rowStride - pixelStride * width;
-
-        mBitmap = Bitmap.createBitmap(width + rowPadding / pixelStride, height, Bitmap.Config.ARGB_8888);
-        mBitmap.copyPixelsFromBuffer(buffer);
-        mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, width, height);
-        image.close();
-
-        if (mBitmap != null) {
-            checkPermission();
-        }
-    }
-
-    private void openMainActivity() {
-        Intent mainIntent = new Intent(this, MainActivity.class);
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(mainIntent);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_MEDIA_PROJECTION) {
-            if (resultCode != Activity.RESULT_OK) {
-                Log.d(TAG, "User cancelled");
-                //Toast.makeText(this, "User cancelled", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (this == null) {
-                return;
-            }
-
-            Intent service = new Intent(this, ExampleService.class);
-            service.putExtra("code", resultCode);
-            service.putExtra("data", data);
-            startForegroundService(service);
-
-            //Log.d(TAG, "Starting screen capture");
-            /*if (mMediaProjectionManager != null) {
-
-                mResultCode = resultCode;
-                mResultData = data;
-
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        //mMediaProjection = mMediaProjectionManager.getMediaProjection(mResultCode, mResultData);
-
-                        //setUpMediaProjection();
-                        setUpVirtualDisplay();
-                        startCapture();
-                    }
-                }, 200);
-            }*/
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mResultData != null) {
-            outState.putInt(STATE_RESULT_CODE, mResultCode);
-            outState.putParcelable(STATE_RESULT_DATA, mResultData);
         }
     }
 

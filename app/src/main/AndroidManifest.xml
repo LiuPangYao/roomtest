@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
@@ -19,11 +20,6 @@
         android:excludeFromRecents="true"
         android:roundIcon="@mipmap/app_launcher_main_round"
         android:supportsRtl="true">
-
-        <service
-            android:name=".ExampleService"
-            android:enabled="true"
-            android:foregroundServiceType="mediaProjection"/>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

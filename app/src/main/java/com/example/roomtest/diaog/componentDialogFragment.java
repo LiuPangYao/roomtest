@@ -67,6 +67,8 @@ public class componentDialogFragment extends DialogFragment {
         recyclerListKnowledge.add("Room");
         recyclerListKnowledge.add("Picasso");
         recyclerListKnowledge.add("Imgur");
+        recyclerListKnowledge.add("Share");
+        recyclerListKnowledge.add("Screen Cut");
 
         // default, show recyclerListTool data
         TextAdapter textAdapter = new TextAdapter(recyclerListTool, mContext);

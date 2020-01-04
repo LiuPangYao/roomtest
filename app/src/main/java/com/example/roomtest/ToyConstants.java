@@ -1,5 +1,7 @@
 package com.example.roomtest;
 
+import android.Manifest;
+
 /**
  * 2019-12-21
  */
@@ -39,5 +41,12 @@ public class ToyConstants {
     // THEME
     public static final int DARK_MODE  = 1;
     public static final int LIGHT_MODE = 0;
+
+    public static final int REQUEST_CODE_PERMISSION = 0;
+
+    // FILE NAME
+    public static final String JPG_LARGE = ".JPG";
+    public static final String JPG_SMALL = ".jpg";
+    public static final String TOYSOUL_FOLDER = "/Toysoul";
 
 }

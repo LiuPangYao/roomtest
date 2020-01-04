@@ -15,15 +15,19 @@ import com.example.roomtest.R;
 
 import java.util.List;
 
+/**
+ * 2020-01-04
+ */
 public class ViewPager2Adapter extends RecyclerView.Adapter<ViewPager2Adapter.ViewHolder> {
 
     private List<Drawable> mData;
     private LayoutInflater mInflater;
     private ViewPager2 viewPager2;
-    String TAG = "ViewPager2Adapter.class";
+    String TAG = "ViewPager2Adapter";
 
     OnCurrentPageCallBack mCallback;
 
+    // this callback not use
     public interface OnCurrentPageCallBack {
         void currentState(int totalPage, int currentPage);
     }
@@ -47,7 +51,9 @@ public class ViewPager2Adapter extends RecyclerView.Adapter<ViewPager2Adapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.mImageView.setBackground(mData.get(position));
+        holder.mImageView.setScaleType(ImageView.ScaleType.CENTER);
         Log.d(TAG, "onBindViewHolder = position " + position);
+
         // display current page
         //mCallback.currentState(mData.size(), (position + 1));
     }

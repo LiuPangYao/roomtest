@@ -60,4 +60,11 @@
     <string name="NIGHT">夜間</string>
     <string name="MORNING">白天</string>
     <string name="PERMISSION_DENIED">拒絕權限授予</string>
+    <string name="SHARE">分享</string>
+    <string name="END">結束</string>
+    <string name="PATH">路徑</string>
+    <string name="SCREENCUT_SAHRE_PATH">截圖路徑</string>
+    <string name="TAKE_SCREENSHOT_ERROR">截圖失敗！</string>
+    <string name="SEND_TO">傳送給</string>
+    <string name="PERMISSION_NOT_GET">未取得權限</string>
 </resources>

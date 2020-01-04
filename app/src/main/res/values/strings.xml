@@ -71,4 +71,11 @@
     <string name="NIGHT">Night</string>
     <string name="MORNING">Morning</string>
     <string name="PERMISSION_DENIED">Permission denied</string>
+    <string name="SHARE">share</string>
+    <string name="END">End</string>
+    <string name="PATH">path</string>
+    <string name="SCREENCUT_SAHRE_PATH">screencut share path</string>
+    <string name="TAKE_SCREENSHOT_ERROR">take screen shot!</string>
+    <string name="SEND_TO">send to</string>
+    <string name="PERMISSION_NOT_GET">not get permission</string>
 </resources>
