@@ -1,0 +1,66 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.roomtest.fragment.AboutFragment">
+
+    <RelativeLayout
+        android:id="@+id/relative_about"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/about_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="@dimen/icon_top"
+            app:srcCompat="@mipmap/app_launcher_main_round" />
+
+        <TextView
+            android:id="@+id/textViewVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/about_icon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:text="Version"
+            android:textSize="20sp" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_height"
+            android:layout_below="@id/textViewVersion"
+            android:layout_margin="@dimen/textview_bottom"
+            android:background="@color/colorDarkRed" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/about_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/view"
+            android:paddingLeft="30dp"
+            android:paddingTop="15dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="15dp" />
+
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@id/about_recyclerview"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="0dp"
+            android:paddingTop="15dp"
+            android:paddingRight="0dp"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+
+        <!-- test "ca-app-pub-3940256099942544/6300978111"-->
+        <!-- real "ca-app-pub-2657997950776627/9014448267"-->
+
+    </RelativeLayout>
+
+</FrameLayout>

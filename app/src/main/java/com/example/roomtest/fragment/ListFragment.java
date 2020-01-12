@@ -1,0 +1,579 @@
+package com.example.roomtest.fragment;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.TextView;
+
+import com.example.roomtest.R;
+import com.example.roomtest.ToyConstants;
+import com.example.roomtest.asyncTask.InsertAsyncTask;
+import com.example.roomtest.asyncTask.InsertFakeDataAsyncTask;
+import com.example.roomtest.asyncTask.updateAsyncTask;
+import com.example.roomtest.database.dataBase;
+import com.example.roomtest.database.listSort;
+import com.example.roomtest.database.toyInfo;
+import com.example.roomtest.diaog.editDialogFragment;
+import com.example.roomtest.recyclerview.ListAdapter;
+import com.example.roomtest.recyclerview.ListAdapterTouchHelperCallback;
+import com.example.roomtest.recyclerview.RecyclerViewNoBugLinearLayoutManager;
+import com.example.roomtest.recyclerview.onLoadMoreListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
+
+/**
+ *2020-01-11
+ */
+public class ListFragment extends Fragment implements
+        View.OnClickListener,
+        editDialogFragment.InsertDialogListener,
+        InsertAsyncTask.CompleteCallBack,
+        InsertFakeDataAsyncTask.CompleteFakeCallBack,
+        updateAsyncTask.UpdateCallBack,
+        ListAdapter.OnDeleteListener{
+
+    public static final String TAG = "ListFragment";
+
+    dataBase dataInstance = null;
+
+    private RadioButton radioButtonPrice, radioButtonName;
+    private EditText edtSearch;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView mRecyclerView;
+    private TextView mTextViewEmpty;
+    private ConstraintLayout mConstraintLayoutKeyWord;
+    private FloatingActionButton mFloatButton;
+
+    SharedPreferences shared = null;
+
+    boolean isDataReady = false; // Warning
+    boolean isDeveloper = false;
+    private boolean isRefresh = false;
+
+    private ListAdapter mListAdapter;
+
+    List<toyInfo> toyList = null;
+    List<toyInfo> toyListRestore = null;
+
+    private boolean isStaggeredAdapter = false;
+    private boolean isDateOrder = false;
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    private OnFragmentInteractionListener mListener;
+
+    public ListFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment ListFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static ListFragment newInstance(String param1, String param2) {
+        ListFragment fragment = new ListFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        init(view);
+        initSwipeRefresh();
+        return view;
+    }
+
+    public void init(View view) {
+        // avoid data repeat store
+        shared = getActivity().getSharedPreferences("app_setting", MODE_PRIVATE);
+        isDataReady = shared.getBoolean("isReady", false);
+        isDeveloper = shared.getBoolean("isDeveloper", false);
+
+        mSwipeRefreshLayout = view.findViewById(R.id.swipeToRefresh);
+        mRecyclerView = view.findViewById(R.id.recyclerView);
+        mTextViewEmpty = view.findViewById(R.id.textViewEmpty);
+        mConstraintLayoutKeyWord = view.findViewById(R.id.relative_recycler_item);
+        mFloatButton = view.findViewById(R.id.floatingActionButton);
+        mFloatButton.setOnClickListener(this);
+
+        // key word search
+        edtSearch = view.findViewById(R.id.editTextSearch);
+        radioButtonName = view.findViewById(R.id.radioButtonName);
+        radioButtonPrice = view.findViewById(R.id.radioButtonPrice);
+        radioButtonPrice.setChecked(true);
+        initSearchKeyWord();
+
+        // init
+        dataInstance = dataBase.getInstance(getActivity());
+
+        InsertFakeDataAsyncTask asyncTask =
+                new InsertFakeDataAsyncTask(getActivity(), this, isDataReady, isDeveloper);
+        asyncTask.execute("load data");
+
+        checkDataSizeDisplay();
+
+        if (!isDataReady) {
+            mTextViewEmpty.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void insertFakeData() {
+        // load Data ,do not run in main thread
+        isDeveloper = true;
+        InsertFakeDataAsyncTask asyncTask =
+                new InsertFakeDataAsyncTask(getActivity(), this, isDataReady, isDeveloper);
+        asyncTask.execute("load data");
+    }
+
+    /**
+     * 2020-01-07
+     */
+    public void initSearchKeyWord() {
+
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged: " + s);
+                if (mListAdapter != null) {
+                    mListAdapter.getFilter().filter(s);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        radioButtonName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    radioButtonPrice.setChecked(false);
+                } else {
+                    radioButtonPrice.setChecked(true);
+                }
+            }
+        });
+
+        radioButtonPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    radioButtonName.setChecked(false);
+                } else {
+                    radioButtonName.setChecked(true);
+                }
+            }
+        });
+    }
+
+    /**
+     * 2020-01-06
+     */
+    public void initSwipeRefresh() {
+
+        mRecyclerView.addOnScrollListener(new onLoadMoreListener() {
+            @Override
+            protected void onLoading(int countItem, int lastItem) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mConstraintLayoutKeyWord.setVisibility(View.GONE);
+                    }
+                }, 20);
+            }
+        });
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                if (!isRefresh) {
+                    isRefresh = true;
+
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            if(toyList.size() != 0) {
+                                mConstraintLayoutKeyWord.setVisibility(View.VISIBLE);
+                            }
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            isRefresh = false;
+                        }
+                    }, 100);
+                }
+            }
+        });
+    }
+
+    /**
+     * visible no data message
+     */
+    public void checkDataSizeDisplay() {
+        Log.d(TAG, "checkDataSizeDisplay: someone to call this, " + isDataReady);
+        if (isDataReady) {
+            mTextViewEmpty.setVisibility(View.GONE);
+        } else {
+            mTextViewEmpty.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void initAdapter(List<toyInfo> toy_List) {
+        // init
+        //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        //linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(new RecyclerViewNoBugLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        //mRecyclerView.setLayoutManager(linearLayoutManager);
+        // show data
+        mListAdapter = new ListAdapter(toy_List, getActivity());
+        mListAdapter.setItemStyle(ToyConstants.LINEARITEM);
+
+        //notify data change
+        mListAdapter.notifyDataSetChanged();
+
+        // move and delete
+        ItemTouchHelper.Callback callback = new ListAdapterTouchHelperCallback(mListAdapter/*, mListAdapter*/, toy_List);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mRecyclerView);
+
+        mRecyclerView.setAdapter(mListAdapter);
+        mListAdapter.setOnDeleteListener(this);
+        mListAdapter.notifySetListDataChanged(toy_List);
+
+        mListAdapter.notifyDataSetChanged();
+    }
+
+    public void initAdapterStaggered(List<toyInfo> toy_List) {
+        // init
+        StaggeredGridLayoutManager layoutManager =
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
+        // show data
+        mListAdapter = new ListAdapter(toy_List, getActivity());
+        mListAdapter.setItemStyle(ToyConstants.STAGGERITEM);
+        mListAdapter.setOnDeleteListener(this);
+        mRecyclerView.setAdapter(mListAdapter);
+        mListAdapter.notifySetListDataChanged(toy_List);
+        mListAdapter.notifyDataSetChanged();
+    }
+
+    public boolean getIsStaggered() {
+        return isStaggeredAdapter;
+    }
+
+    public void menuListUpdate() {
+        if (!isDataReady) {
+            return;
+        } else {
+            if (!isStaggeredAdapter) {
+                initAdapterStaggered(toyList);
+                //ConstraintLayout.LayoutParams mParams = new ConstraintLayout.LayoutParams(30, 30);
+                //mImageButton.setLayoutParams(mParams);
+                isStaggeredAdapter = true;
+            } else {
+                initAdapter(toyList);
+                isStaggeredAdapter = false;
+            }
+        }
+    }
+
+    public int getDateListStyle() {
+        return mListAdapter.getDateOrder();
+    }
+
+    public void dateListUpdate() {
+        if (!isDataReady) {
+            return;
+        } else {
+            if (!isDateOrder) {
+                mListAdapter.setDateOrder(ToyConstants.DATE_NEW_OLD);
+                isDateOrder = true;
+            } else {
+                mListAdapter.setDateOrder(ToyConstants.DATE_OLD_NEW);
+                isDateOrder = false;
+            }
+
+            mListAdapter.notifyDataSetChanged();
+        }
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        /*if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }*/
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.floatingActionButton:
+                showInsertOrUpdateDialog(ToyConstants.ACTION_INSERT);
+            break;
+        }
+    }
+
+    /**
+     * action move
+     * ACTION_INSERT, ACTION_UPDATE
+     */
+    public void showInsertOrUpdateDialog(int dialogStyle) {
+
+        editDialogFragment dialog = null;
+
+        if (dialogStyle == ToyConstants.ACTION_INSERT) {
+            dialog = editDialogFragment.instance(getString(R.string.INSERT_INFO), ToyConstants.ACTION_INSERT, this);
+            dialog.show(getActivity().getSupportFragmentManager(), "InsertDialog");
+        } else if (dialogStyle == ToyConstants.ACTION_UPDATE) {
+            dialog = editDialogFragment.instance(getString(R.string.UPDATE_INFO), ToyConstants.ACTION_UPDATE, this);
+            dialog.show(getActivity().getSupportFragmentManager(), "updateDialog");
+        }
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
+    // callback start
+    @Override
+    public void onDialogOKClick(DialogFragment dialog, toyInfo info, int style) {
+        if (style == ToyConstants.ACTION_INSERT) {
+            InsertAsyncTask insertAsyncTask = new InsertAsyncTask(getActivity(), this);
+            insertAsyncTask.execute(info);
+        } else {
+            // update
+            // Toast.makeText(this, getString(R.string.PREPARE_WAIT), Toast.LENGTH_LONG).show();
+            // create async task fot update
+            updateAsyncTask task = new updateAsyncTask(getActivity(), this);
+            task.execute(info);
+        }
+
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onDialogCancelClick(DialogFragment dialog) {
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onTaskComplete(List<toyInfo> list) {
+
+        toyList = list;
+
+        // sequence list
+        if (!isDateOrder) {
+            toyListRestore = listSort.sortlist(ToyConstants.DATE_OLD_NEW, list);
+            toyList.clear();
+            toyList.addAll(toyListRestore);
+        } else {
+            toyListRestore = listSort.sortlist(ToyConstants.DATE_NEW_OLD, list);
+            toyList.clear();
+            toyList.addAll(toyListRestore);
+        }
+
+        isDataReady = true;
+        shared.edit().putBoolean("isReady", true).commit();
+
+        checkDataSizeDisplay();
+
+        if (isStaggeredAdapter) {
+            initAdapterStaggered(toyList);
+        } else {
+            initAdapter(toyList);
+        }
+    }
+
+    /**
+     * Insert Fake Data
+     *
+     * @param list
+     * @param dataReady
+     * @param developer
+     */
+    @Override
+    public void onTaskComplete(List<toyInfo> list, boolean dataReady, boolean developer) {
+        isDataReady = dataReady;
+        isDeveloper = developer;
+
+        //shared.edit().putBoolean("isReady", isDataReady).commit();
+        //shared.edit().putBoolean("isDeveloper", isDeveloper).commit();
+
+        toyList = list;
+
+        // sequence list
+        if (!isDateOrder) {
+            toyListRestore = listSort.sortlist(ToyConstants.DATE_OLD_NEW, list);
+            toyList.clear();
+            toyList.addAll(toyListRestore);
+        } else {
+            toyListRestore = listSort.sortlist(ToyConstants.DATE_NEW_OLD, list);
+            toyList.clear();
+            toyList.addAll(toyListRestore);
+        }
+
+        checkDataSizeDisplay();
+
+        if (isDataReady) {
+            if (isStaggeredAdapter) {
+                initAdapterStaggered(toyList);
+            } else {
+                initAdapter(toyList);
+            }
+        }
+    }
+
+    @Override
+    public void onUpdateTaskComplete(List<toyInfo> list) {
+        toyList = list;
+
+        // sequence list
+        if (!isDateOrder) {
+            toyListRestore = listSort.sortlist(ToyConstants.DATE_OLD_NEW, list);
+            toyList.clear();
+            toyList.addAll(toyListRestore);
+            //isDateOrder = true;
+        } else {
+            toyListRestore = listSort.sortlist(ToyConstants.DATE_NEW_OLD, list);
+            toyList.clear();
+            toyList.addAll(toyListRestore);
+            //isDateOrder = false;
+        }
+
+        if (isStaggeredAdapter) {
+            initAdapterStaggered(toyList);
+        } else {
+            initAdapter(toyList);
+        }
+    }
+
+    /**
+     * print data base data, ready for use
+     */
+    public void loadList() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                toyList = dataBase.getInstance(getActivity()).getToyDao().getAll();
+                if (toyList.size() > 0) {
+                    for (int i = 0; i < toyList.size(); i++) {
+                        Log.d(TAG, "printData: name = " + toyList.get(i).getName() + ", buyPrice = " + toyList.get(i).getBuyPrice() + ", web = " + toyList.get(i).getWeb());
+                    }
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * list size = 0
+     */
+    @Override
+    public void deleteStateNone() {
+        // can not be Winnie the Pooh
+        isDataReady = false;
+        isDeveloper = false;
+        shared.edit().putBoolean("isReady", false).commit();
+        shared.edit().putBoolean("isDeveloper", false).commit();
+
+        //checkDataSizeDisplay();
+
+        //findViewById(R.id.textViewEmpty).setVisibility(View.VISIBLE);
+
+        /*this.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        // some problem
+                        findViewById(R.id.textViewEmpty).setVisibility(View.VISIBLE);
+                    }
+                }
+        );*/
+    }
+    // callback end
+}

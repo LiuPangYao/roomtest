@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,12 +34,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 2020-01-08
+ */
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> implements
-        ItemTouchHelperAdapter//,
+        ItemTouchHelperAdapter,
+        Filterable//,
         //deleteDialogFragment.deleteDialogListener
 {
 
     List<toyInfo> toyList = new ArrayList<toyInfo>();
+    List<toyInfo> toyListKeyword = new ArrayList<toyInfo>();
     List<toyInfo> toyListRestore = new ArrayList<toyInfo>();
 
     OnDeleteListener mCallback;
@@ -51,7 +58,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
     public ListAdapter(List<toyInfo> data, Context con) {
 
         toyList.clear();
+
         toyList.addAll(data);
+        toyListKeyword.addAll(data);
+
         Log.d(TAG, "toyList size pre prepare = " + toyList.size());
         context = con;
 
@@ -68,6 +78,43 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
 
     public ListAdapter(Context context) {
         this.context = context;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                String charString = constraint.toString();
+
+                if (charString.isEmpty() || charString.equals("")) {
+                    toyList = toyListKeyword;
+                } else {
+
+                    List<toyInfo> toyListKeywordAdd = new ArrayList<toyInfo>();
+
+                    for (toyInfo data : toyListKeyword) {
+                        if (data.getName().toLowerCase().contains(charString)){
+                            toyListKeywordAdd.add(data);
+                        }
+                    }
+
+                    toyList = toyListKeywordAdd;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = toyList;
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                toyList = (List<toyInfo>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     // check for list size is 0
@@ -144,6 +191,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         toyList.clear();
         toyList.addAll(toyListRestore);
         toyListRestore.clear();
+    }
+
+    public int getDateOrder() {
+        return dateStyle;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -275,4 +326,5 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         this.toyList = list;
         notifyDataSetChanged();
     }
+
 }

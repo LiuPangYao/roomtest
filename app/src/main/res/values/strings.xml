@@ -42,6 +42,12 @@
         <item>@string/PRICE_COMMON</item>
         <item>@string/PRICE_FALLING</item>
     </string-array>
+
+    <string-array name="keyword_array">
+        <item>關鍵字</item>
+        <item>價格</item>
+    </string-array>
+
     <string name="IMAGE_URI">image uri</string>
     <string name="UPDATE_INFO">update info</string>
     <string name="INSERT_INFO">insert info</string>
@@ -78,4 +84,10 @@
     <string name="TAKE_SCREENSHOT_ERROR">take screen shot!</string>
     <string name="SEND_TO">send to</string>
     <string name="PERMISSION_NOT_GET">not get permission</string>
+    <string name="FAVORITE">Favorite</string>
+    <string name="SEARCH_VALUE">input search value</string>
+    <string name="KEYWORD">Keyword</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

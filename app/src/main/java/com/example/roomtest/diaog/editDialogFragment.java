@@ -19,6 +19,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.roomtest.ToyConstants;
 import com.example.roomtest.R;
 import com.example.roomtest.database.toyInfo;
+import com.example.roomtest.fragment.ListFragment;
 
 import java.util.Calendar;
 
@@ -39,13 +40,14 @@ public class editDialogFragment extends DialogFragment {
     EditText mEdtName, mEdtBuyPrice, mEdtSellPrice, mEdtWeb, mEdtUri;
     Spinner sellstateSpinner, gainSpinner;
 
+    static ListFragment mContext;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
             // Instantiate the NoticeDialogListener so we can send events to the host
-            listener = (InsertDialogListener) context;
+            listener = (InsertDialogListener) mContext;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(context.toString() + " must implement NoticeDialogListener");
@@ -57,9 +59,10 @@ public class editDialogFragment extends DialogFragment {
         void onDialogCancelClick(DialogFragment dialog);
     }
 
-    public static editDialogFragment instance(String title, int action) {
-        dialog = new editDialogFragment();
+    public static editDialogFragment instance(String title, int action, ListFragment context) {
 
+        mContext = context;
+        dialog = new editDialogFragment();
         actionMove = action;
 
         Bundle bundle = new Bundle();

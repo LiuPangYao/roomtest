@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_list"
+        android:enabled="true"
+        android:title="@string/TAB_LIST"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_detail"
+        android:enabled="true"
+        android:title="@string/TAB_INFO"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_about"
+        android:enabled="true"
+        android:title="@string/TAB_ABOUT"
+        app:showAsAction="ifRoom" />
+</menu>

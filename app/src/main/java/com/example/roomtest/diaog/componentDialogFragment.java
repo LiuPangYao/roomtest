@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import info.hoang8f.android.segmented.SegmentedGroup;
 
 /**
- * 2019-12-18
+ * 2020-01-11
  */
 public class componentDialogFragment extends DialogFragment {
 
@@ -51,7 +51,7 @@ public class componentDialogFragment extends DialogFragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        // init recyclerListTool
+        // init recyclerList Tool
         recyclerListTool = new ArrayList<>();
         recyclerListTool.add("RecyclerView");
         recyclerListTool.add("CardView");
@@ -59,6 +59,8 @@ public class componentDialogFragment extends DialogFragment {
         recyclerListTool.add("TextView");
         recyclerListTool.add("Button");
         recyclerListTool.add("EditText");
+        recyclerListTool.add("ViewPager2");
+        recyclerListTool.add("BottomNavigationView");
 
         // init technology
         recyclerListKnowledge = new ArrayList<>();
@@ -68,7 +70,8 @@ public class componentDialogFragment extends DialogFragment {
         recyclerListKnowledge.add("Picasso");
         recyclerListKnowledge.add("Imgur");
         recyclerListKnowledge.add("Share");
-        recyclerListKnowledge.add("Screen Cut");
+        recyclerListKnowledge.add("ScreenShot");
+        recyclerListKnowledge.add("Navigation");
 
         // default, show recyclerListTool data
         TextAdapter textAdapter = new TextAdapter(recyclerListTool, mContext);
