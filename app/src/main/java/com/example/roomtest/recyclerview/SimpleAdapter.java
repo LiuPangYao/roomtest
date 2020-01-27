@@ -85,7 +85,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
                     messageUpdateDialogFragment dialog = messageUpdateDialogFragment.newInstance();
                     dialog.show(fm, "message_update_dialogfragment");
                 } else if (position == 2) {
-                    feedbackDialogFragment dialog = feedbackDialogFragment.instance();
+                    feedbackDialogFragment dialog = feedbackDialogFragment.instance(context);
                     dialog.show(fm, "feedback_dialogfragment");
                 } else if (position == 3) {
                     componentDialogFragment dialog = componentDialogFragment.newInstance(context);

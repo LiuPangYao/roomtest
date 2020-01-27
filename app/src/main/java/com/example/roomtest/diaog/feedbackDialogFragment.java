@@ -1,5 +1,6 @@
 package com.example.roomtest.diaog;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +23,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
- * 2019-12-19
+ * 2020-01-12
  */
 public class feedbackDialogFragment extends DialogFragment {
 
@@ -32,12 +33,14 @@ public class feedbackDialogFragment extends DialogFragment {
     Button sendButton;
     EditText edtTelMail, edtTitle, edtDetail;
     FirebaseFirestore db;
+    static Context mContext;
 
     public interface SendDialogListener {
         void onDialogSendClick(DialogFragment dialog);
     }
 
-    public static feedbackDialogFragment instance() {
+    public static feedbackDialogFragment instance(Context context) {
+        mContext = context;
         dialog = new feedbackDialogFragment();
         return dialog;
     }
@@ -66,7 +69,7 @@ public class feedbackDialogFragment extends DialogFragment {
                         edtTitle.getText().toString(),
                         edtDetail.getText().toString());
                 insert(feedBack);
-                //dialog.dismiss();
+                dialog.dismiss();
             }
         });
 
@@ -82,7 +85,7 @@ public class feedbackDialogFragment extends DialogFragment {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        Toast.makeText(getContext(), R.string.FEED_BACK_SUCCESSFUL, Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, R.string.FEED_BACK_SUCCESSFUL, Toast.LENGTH_LONG).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

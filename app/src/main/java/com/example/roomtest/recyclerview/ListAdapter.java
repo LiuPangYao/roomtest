@@ -2,8 +2,8 @@ package com.example.roomtest.recyclerview;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +23,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.roomtest.ToyConstants;
 import com.example.roomtest.diaog.editDialogFragment;
 import com.example.roomtest.R;
-import com.example.roomtest.WebActivity;
 import com.example.roomtest.asyncTask.deleteAsyncTask;
 import com.example.roomtest.database.listSort;
 import com.example.roomtest.database.toyInfo;
+import com.example.roomtest.fragment.WebFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
@@ -48,6 +48,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
     List<toyInfo> toyListRestore = new ArrayList<toyInfo>();
 
     OnDeleteListener mCallback;
+    CallBackListener mCallBackListener;
     AlertDialog dialog;
 
     private Context context;
@@ -115,6 +116,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
                 notifyDataSetChanged();
             }
         };
+    }
+
+    public interface CallBackListener {
+        void goToWebFragment();
+    }
+
+    public void setCallBackListener(CallBackListener listener) {
+        this.mCallBackListener = listener;
     }
 
     // check for list size is 0
@@ -278,9 +287,35 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
             public void onClick(View v) {
                 //Toast.makeText(context, "Item " + position + " is clicked.", Toast.LENGTH_SHORT).show();
                 if (!toyList.get(position).getWeb().equals("")) {
-                    Intent intent = new Intent(context, WebActivity.class);
-                    intent.putExtra("mId", toyList.get(position).getId());
-                    context.startActivity(intent);
+
+                    // 2020-01-13
+                    //Intent intent = new Intent(context, WebActivity.class);
+                    //intent.putExtra("mId", toyList.get(position).getId());
+                    //context.startActivity(intent);
+
+                    WebFragment mWebFragment = new WebFragment();
+                    Bundle b = new Bundle();
+                    b.putInt("mId", toyList.get(position).getId());
+                    mWebFragment.setArguments(b);
+
+                    Log.d(TAG, "onClick: " + position);
+
+                    /*Fragment navhost = ((AppCompatActivity)context).getSupportFragmentManager().findFragmentById(R.id.test_framelayout);
+                    NavController c = NavHostFragment.findNavController(navhost);
+                    c.setGraph(R.navigation.main_navigation);
+                    c.navigate(R.id.listFragment);*/
+
+                    //Navigation.findNavController((AppCompatActivity)context ,R.id.mainViewPager2).setGraph(R.navigation.main_navigation);
+                    //Navigation.findNavController((AppCompatActivity)context, R.id.main_fragment).navigate(R.id.action_listFragment_to_webFragment);
+
+                    //mCallBackListener.goToWebFragment();
+                    ((AppCompatActivity) context).getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.test_framelayout, mWebFragment, null)
+                            .addToBackStack(null)
+                            .commit();
+                    ((AppCompatActivity) context).findViewById(R.id.bottomNavigationView).setVisibility(View.INVISIBLE);
+
                 } else {
                     Snackbar.make(v, context.getString(R.string.WEBVIEW_NOT_SUPPORT), Snackbar.LENGTH_SHORT).show();
                 }

@@ -24,7 +24,7 @@ public class WebActivity extends Activity implements View.OnClickListener {
     private WebView mWebView;
     private ImageView imgButton;
     List<toyInfo> toyList = null;
-    private final String TAG = "WebActivity.class";
+    private final String TAG = "WebActivity";
     int[] toyIds;
 
     @Override

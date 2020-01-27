@@ -54,7 +54,7 @@ public class ListFragment extends Fragment implements
         InsertAsyncTask.CompleteCallBack,
         InsertFakeDataAsyncTask.CompleteFakeCallBack,
         updateAsyncTask.UpdateCallBack,
-        ListAdapter.OnDeleteListener{
+        ListAdapter.OnDeleteListener, ListAdapter.CallBackListener {
 
     public static final String TAG = "ListFragment";
 
@@ -296,6 +296,7 @@ public class ListFragment extends Fragment implements
 
         mRecyclerView.setAdapter(mListAdapter);
         mListAdapter.setOnDeleteListener(this);
+        mListAdapter.setCallBackListener(this);
         mListAdapter.notifySetListDataChanged(toy_List);
 
         mListAdapter.notifyDataSetChanged();
@@ -403,6 +404,11 @@ public class ListFragment extends Fragment implements
             dialog = editDialogFragment.instance(getString(R.string.UPDATE_INFO), ToyConstants.ACTION_UPDATE, this);
             dialog.show(getActivity().getSupportFragmentManager(), "updateDialog");
         }
+    }
+
+    @Override
+    public void goToWebFragment() {
+
     }
 
     /**

@@ -173,6 +173,8 @@ public class MainActivity extends AppCompatActivity implements
 
         mBottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationViewListener();
+
+        //NavController navController = Navigation.findNavController(this, R.id.main_fragment);
     }
 
     /**
