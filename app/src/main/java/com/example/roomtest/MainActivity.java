@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         init();
-        //initMode(); // not use
 
         checkPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA});
 
@@ -172,25 +171,29 @@ public class MainActivity extends AppCompatActivity implements
         mViewPager2.setCurrentItem(0, false);
 
         mBottomNavigationView = findViewById(R.id.bottomNavigationView);
+        initMode();
         bottomNavigationViewListener();
 
         //NavController navController = Navigation.findNavController(this, R.id.main_fragment);
     }
 
     /**
-     * init APP setting theme, not use
+     * init APP setting theme
      */
     public void initMode() {
         //int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         int currentNightMode = themeControl.getInstance(this).getCurrentMode();
+        Log.d(TAG, "initMode: " + currentNightMode);
         switch (currentNightMode) {
             //case Configuration.UI_MODE_NIGHT_NO:
             case ToyConstants.LIGHT_MODE:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                mBottomNavigationView.inflateMenu(R.menu.bottom_navigation_main_v2);
                 break;
             //case Configuration.UI_MODE_NIGHT_YES:
             case ToyConstants.DARK_MODE:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                mBottomNavigationView.inflateMenu(R.menu.bottom_navigation_main);
                 break;
             //case Configuration.UI_MODE_NIGHT_UNDEFINED:
             //    break;

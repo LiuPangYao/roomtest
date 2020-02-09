@@ -24,7 +24,7 @@ import com.example.roomtest.fragment.ListFragment;
 import java.util.Calendar;
 
 /**
- * 2019-12-19
+ * 2020-02-08
  */
 public class editDialogFragment extends DialogFragment {
 
@@ -32,22 +32,21 @@ public class editDialogFragment extends DialogFragment {
     static int actionMove = ToyConstants.ACTION_NULL;
     static toyInfo toys = null;
     static String TAG = "editDialogFragment";
+    static ListFragment mContext;
 
-    InsertDialogListener listener;
+    static InsertDialogListener listener;
     Button mButtonOK, mButtonCancel;
     TextView mTextViewTitle;
     EditText mEdtDate; // extra onclick
     EditText mEdtName, mEdtBuyPrice, mEdtSellPrice, mEdtWeb, mEdtUri;
     Spinner sellstateSpinner, gainSpinner;
 
-    static ListFragment mContext;
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
             // Instantiate the NoticeDialogListener so we can send events to the host
-            listener = (InsertDialogListener) mContext;
+            // listener = (InsertDialogListener) mContext;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(context.toString() + " must implement NoticeDialogListener");
@@ -62,6 +61,7 @@ public class editDialogFragment extends DialogFragment {
     public static editDialogFragment instance(String title, int action, ListFragment context) {
 
         mContext = context;
+        listener = (InsertDialogListener) mContext;
         dialog = new editDialogFragment();
         actionMove = action;
 
@@ -72,8 +72,11 @@ public class editDialogFragment extends DialogFragment {
         return dialog;
     }
 
-    public static editDialogFragment instance(String title, int action, toyInfo mToyInfo) {
+    public static editDialogFragment instance(String title, int action, toyInfo mToyInfo, ListFragment context) {
         dialog = new editDialogFragment();
+
+        mContext = context;
+        listener = (InsertDialogListener) mContext;
 
         actionMove = action;
         toys = mToyInfo;

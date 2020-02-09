@@ -46,7 +46,8 @@ import java.util.List;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- *2020-01-11
+ * author:Peter
+ * date:2020-02-08
  */
 public class ListFragment extends Fragment implements
         View.OnClickListener,
@@ -183,6 +184,32 @@ public class ListFragment extends Fragment implements
      */
     public void initSearchKeyWord() {
 
+        radioButtonName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // will called twice
+                mListAdapter.setSearchType(ToyConstants.PRICE_TYPE);
+                if (isChecked) {
+                    radioButtonPrice.setChecked(false);
+                } else {
+                    radioButtonPrice.setChecked(true);
+                }
+            }
+        });
+
+        radioButtonPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // will called twice
+                mListAdapter.setSearchType(ToyConstants.NAME_TYPE);
+                if (isChecked) {
+                    radioButtonName.setChecked(false);
+                } else {
+                    radioButtonName.setChecked(true);
+                }
+            }
+        });
+
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -200,28 +227,6 @@ public class ListFragment extends Fragment implements
             @Override
             public void afterTextChanged(Editable s) {
 
-            }
-        });
-
-        radioButtonName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    radioButtonPrice.setChecked(false);
-                } else {
-                    radioButtonPrice.setChecked(true);
-                }
-            }
-        });
-
-        radioButtonPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    radioButtonName.setChecked(false);
-                } else {
-                    radioButtonName.setChecked(true);
-                }
             }
         });
     }
@@ -283,7 +288,8 @@ public class ListFragment extends Fragment implements
         mRecyclerView.setLayoutManager(new RecyclerViewNoBugLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         //mRecyclerView.setLayoutManager(linearLayoutManager);
         // show data
-        mListAdapter = new ListAdapter(toy_List, getActivity());
+        mListAdapter = new ListAdapter(toy_List, getActivity(), this);
+        mListAdapter.setSearchType(ToyConstants.PRICE_TYPE);
         mListAdapter.setItemStyle(ToyConstants.LINEARITEM);
 
         //notify data change
@@ -308,7 +314,8 @@ public class ListFragment extends Fragment implements
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         // show data
-        mListAdapter = new ListAdapter(toy_List, getActivity());
+        mListAdapter = new ListAdapter(toy_List, getActivity(), this);
+        mListAdapter.setSearchType(ToyConstants.PRICE_TYPE);
         mListAdapter.setItemStyle(ToyConstants.STAGGERITEM);
         mListAdapter.setOnDeleteListener(this);
         mRecyclerView.setAdapter(mListAdapter);

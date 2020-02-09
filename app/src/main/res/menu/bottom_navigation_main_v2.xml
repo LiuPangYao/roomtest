@@ -3,19 +3,19 @@
     <item
         android:id="@+id/action_list"
         android:enabled="true"
-        android:icon="@mipmap/btn_nav1"
+        android:icon="@mipmap/btn_nav01"
         android:title="@string/TAB_LIST"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_detail"
         android:enabled="true"
-        android:icon="@mipmap/btn_nav2"
+        android:icon="@mipmap/btn_nav02"
         android:title="@string/TAB_INFO"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_about"
         android:enabled="true"
-        android:icon="@mipmap/btn_nav3"
+        android:icon="@mipmap/btn_nav03"
         android:title="@string/TAB_ABOUT"
         app:showAsAction="ifRoom" />
 </menu>

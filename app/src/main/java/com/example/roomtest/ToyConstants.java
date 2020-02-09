@@ -1,9 +1,7 @@
 package com.example.roomtest;
 
-import android.Manifest;
-
 /**
- * 2019-12-21
+ * 2020-02-02
  */
 public class ToyConstants {
 
@@ -35,8 +33,8 @@ public class ToyConstants {
     public static final int ACTION_UPDATE = 2;
 
     // SCREEN CUT(NOT USE)
-    public static final String EXTRA_RESULT_CODE="resultCode";
-    public static final String EXTRA_RESULT_INTENT="resultIntent";
+    public static final String EXTRA_RESULT_CODE = "resultCode";
+    public static final String EXTRA_RESULT_INTENT = "resultIntent";
 
     // THEME
     public static final int DARK_MODE  = 1;
@@ -48,5 +46,11 @@ public class ToyConstants {
     public static final String JPG_LARGE = ".JPG";
     public static final String JPG_SMALL = ".jpg";
     public static final String TOYSOUL_FOLDER = "/Toysoul";
+
+    // SEARCH TYPE
+    public static final int NONE  = 0;
+    public static final int NAME_TYPE  = 1;
+    public static final int PRICE_TYPE  = 2;
+
 
 }

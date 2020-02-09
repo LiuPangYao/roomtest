@@ -26,6 +26,7 @@ import com.example.roomtest.R;
 import com.example.roomtest.asyncTask.deleteAsyncTask;
 import com.example.roomtest.database.listSort;
 import com.example.roomtest.database.toyInfo;
+import com.example.roomtest.fragment.ListFragment;
 import com.example.roomtest.fragment.WebFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
@@ -35,7 +36,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 2020-01-08
+ * 2020-02-08
  */
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> implements
         ItemTouchHelperAdapter,
@@ -51,13 +52,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
     CallBackListener mCallBackListener;
     AlertDialog dialog;
 
+    ListFragment listFragment;
+
     private Context context;
     public String TAG = "ListAdapter";
     private int itemStyle = ToyConstants.LINEARITEM;
     private int dateStyle = ToyConstants.DATE_OLD_NEW;
+    private int searchType = ToyConstants.PRICE_TYPE;
 
-    public ListAdapter(List<toyInfo> data, Context con) {
+    public ListAdapter(List<toyInfo> data, Context con, ListFragment listFragment) {
 
+        this.listFragment = listFragment;
         toyList.clear();
 
         toyList.addAll(data);
@@ -81,6 +86,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         this.context = context;
     }
 
+    public void setSearchType(int type) {
+        searchType = type;
+    }
+
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -89,6 +98,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
 
                 String charString = constraint.toString();
 
+                Log.d(TAG, "performFiltering: " + searchType);
+
                 if (charString.isEmpty() || charString.equals("")) {
                     toyList = toyListKeyword;
                 } else {
@@ -96,12 +107,22 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
                     List<toyInfo> toyListKeywordAdd = new ArrayList<toyInfo>();
 
                     for (toyInfo data : toyListKeyword) {
-                        if (data.getName().toLowerCase().contains(charString)){
-                            toyListKeywordAdd.add(data);
+                        if(searchType == ToyConstants.NAME_TYPE) {
+                            if (data.getName().toLowerCase().contains(charString)){
+                                toyListKeywordAdd.add(data);
+                            }
+                        } else if(searchType == ToyConstants.PRICE_TYPE) {
+                            if (data.getSellPrice() > Integer.valueOf(charString)){
+                                toyListKeywordAdd.add(data);
+                            }
                         }
                     }
 
                     toyList = toyListKeywordAdd;
+                }
+
+                if(toyList.size() == 0) {
+                    toyList = toyListKeyword;
                 }
 
                 FilterResults filterResults = new FilterResults();
@@ -330,7 +351,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
                     //Log.d(TAG, "onLongClick: " + position);
                     toyInfo toys = toyList.get(position);
                     FragmentManager manager = ((AppCompatActivity) context).getSupportFragmentManager();
-                    editDialogFragment dialog = editDialogFragment.instance(context.getString(R.string.UPDATE_INFO), ToyConstants.ACTION_UPDATE, toys);
+                    editDialogFragment dialog = editDialogFragment.instance(context.getString(R.string.UPDATE_INFO), ToyConstants.ACTION_UPDATE, toys, listFragment);
                     dialog.show(manager, "update");
                 } else {
                     Snackbar.make(v, "error!", Snackbar.LENGTH_SHORT).show();
@@ -345,10 +366,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
     public int getItemCount() {
 
         // list size = 0
-        if (toyList.size() == 0) {
+        /*if (toyList.size() == 0) {
             mCallback.deleteStateNone();
             Log.d(TAG, "getItemCount: 0");
-        }
+        }*/
 
         return toyList.size();
     }
