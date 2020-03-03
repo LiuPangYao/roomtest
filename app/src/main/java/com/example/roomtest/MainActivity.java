@@ -2,7 +2,6 @@ package com.example.roomtest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -157,6 +156,13 @@ public class MainActivity extends AppCompatActivity implements
         super.onDestroy();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //need to fix some problem
+    }
+
+
     public void init() {
         mImageButton = findViewById(R.id.imageButton_menu);
         mImageDateButton = findViewById(R.id.imageButton_date);
@@ -218,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements
                         mViewPager2.setCurrentItem(1, false);
                         closeInitList();
                         mImageCameraButton.setVisibility(View.VISIBLE);
+                        // update information
                         //detailFragment.loadList();
                         //Log.d(TAG, "onTabSelected: info");
                         break;
