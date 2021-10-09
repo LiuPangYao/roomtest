@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 2020-01-11
+ * 2021-10-09 update
  */
 public class AboutFragment extends Fragment {
 
@@ -111,7 +111,14 @@ public class AboutFragment extends Fragment {
             e.printStackTrace();
         }
 
-        mTextViewVersion.setText("v " + version);
+        mTextViewVersion.setText(getString(R.string.VERSION, version));
+        //mTextViewVersion.setText(getString(R.string.VERSION_NUMBER, 0.01));
+        //mTextViewVersion.setText(getString(R.string.VERSION_NUMBER_STRING, "20210210", "0.01"));
+
+        //mTextViewVersion.setText(getString(R.string.VERSION_NUMBER_MIX,"TEST"," 20210210", 1));
+
+        //mTextViewVersion.setText(getResources().
+        //        getQuantityString(R.plurals.numberOfSongsAvailable, 3, 2));
     }
 
     /**

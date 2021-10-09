@@ -3,6 +3,12 @@ package com.example.roomtest;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+//import androidx.datastore.core.DataStore;
+//import androidx.datastore.preferences.core.MutablePreferences;
+//import androidx.datastore.preferences.core.Preferences;
+//import androidx.datastore.preferences.core.PreferencesKeys;
+//import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder;
+//import androidx.datastore.rxjava3.RxDataStore;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -37,10 +43,17 @@ import com.example.roomtest.mediastore.mediaStoreControl;
 import com.example.roomtest.tool.themeControl;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.FormatStrategy;
+import com.orhanobut.logger.Logger;
+import com.orhanobut.logger.PrettyFormatStrategy;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+//import io.reactivex.rxjava3.core.Flowable;
+//import io.reactivex.rxjava3.core.Single;
 
 /**
  * 2020-01-11 update use viewpager2 + fragment
@@ -48,15 +61,17 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener,
         View.OnLongClickListener {
-
-    private String TAG = "MainActivity";
-
+    
+    private static final String TAG = "MainActivity";
+    
     SharedPreferences shared = null;
+    //SharedPreferences sharedPreferencesListener;
     boolean isGuided = false;
     boolean isDeveloper = false;
 
     private TextView mTextViewTitle;
     private ImageButton mImageButton, mImageDateButton, mImageCameraButton;
+
 
     private BottomNavigationView mBottomNavigationView;
 
@@ -76,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
-
         init();
 
         checkPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA});
@@ -106,7 +120,88 @@ public class MainActivity extends AppCompatActivity implements
         if (!isGuided) {
             initViewPager2();
         }
+
+        /*FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
+                .showThreadInfo(true)  // (Optional) Whether to show thread info or not. Default true
+                .methodCount(0)         // (Optional) How many method line to show. Default 2
+                .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
+                //.logStrategy(customLog) // (Optional) Changes the log strategy to print out. Default LogCat
+                .tag("RoomTest")   // (Optional) Global tag for every log. Default PRETTY_LOGGER
+                .build();
+
+        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));*/
+
+        //sharePreferencesSetting();
+
+        /*SharedPreferences clearDeviceSettings  = getSharedPreferences(PREFS_FILE, PREFS_MODE);
+        SharedPreferences.Editor editor = clearDeviceSettings.edit();
+        editor.clear();
+        editor.commit();*/
+
+        /*SharedPreferences clearDeviceSettings  = getSharedPreferences(PREFS_FILE, PREFS_MODE);
+        SharedPreferences.Editor editor = clearDeviceSettings.edit();
+        editor.remove(KEY_FLOAT);
+        editor.remove(KEY_LONG);
+        editor.commit();*/
+
+        /*SharedPreferences deviceSettings  = getSharedPreferences(PREFS_FILE, PREFS_MODE);
+        Map<String, ?> allEntries = deviceSettings.getAll();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            final String key = entry.getKey();
+            final Object value = entry.getValue();
+            Log.d("SharedPreferences values", key + ": " + value);
+        }*/
+
+        /*sharedPreferencesListener = getSharedPreferences(PREFS_FILE, PREFS_MODE);
+        sharedPreferencesListener.registerOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
+
+        SharedPreferences updateKeyValueSettings = getSharedPreferences(PREFS_FILE, PREFS_MODE);
+        SharedPreferences.Editor editor = updateKeyValueSettings.edit();
+        editor.putString(KEY_STRING, "Google Pixel 4a");
+        editor.apply();
+
+        SharedPreferences deviceSettings  = getSharedPreferences(PREFS_FILE, PREFS_MODE);
+        boolean isTablet = deviceSettings.getBoolean(KEY_BOOLEAN, false);
+        int deviceId = deviceSettings.getInt(KEY_INT, 0);
+        String deviceName = deviceSettings.getString(KEY_STRING, "device:null");
+        long deviceScreenSize = deviceSettings.getLong(KEY_LONG, 0);
+        float deviceWeight = deviceSettings.getFloat(KEY_FLOAT, 0);
+
+        Log.d(TAG, "deviceSettings result: "
+                + "\n"+ KEY_BOOLEAN + " = " + isTablet
+                + "\n" + KEY_INT + " = " + deviceId
+                + "\n" + KEY_STRING + " = " + deviceName
+                + "\n" + KEY_LONG + " = " + deviceScreenSize
+                + "\n" + KEY_FLOAT + " = " + deviceWeight);*/
     }
+
+    /*private SharedPreferences.OnSharedPreferenceChangeListener mOnSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            Log.d(TAG, "onSharedPreferenceChanged: key name -> " + key);
+            Log.d(TAG, "onSharedPreferenceChanged: key value -> " +
+                    sharedPreferences.getString(key, "device : null"));
+        }
+    };*/
+
+    public void sharePreferencesSetting() {
+        SharedPreferences deviceSettings = getSharedPreferences(PREFS_FILE, PREFS_MODE);
+        SharedPreferences.Editor editor = deviceSettings.edit();
+        editor.putBoolean(KEY_BOOLEAN, false);
+        editor.putInt(KEY_INT, 20210131);
+        editor.putString(KEY_STRING, "SamSung Galaxy S21");
+        editor.putLong(KEY_LONG, 6);
+        editor.putFloat(KEY_FLOAT, 220);
+        editor.apply();
+    }
+
+    private static final String PREFS_FILE = "Phone_Setting";
+    private static final int PREFS_MODE = Context.MODE_PRIVATE;
+    private static final String KEY_STRING = "KEY_FOR_DEVICE_NAME";
+    private static final String KEY_BOOLEAN = "KEY_FOR_IS_TABLET";
+    private static final String KEY_INT = "KEY_FOR_DEVICE_ID";
+    private static final String KEY_FLOAT = "KEY_FOR_WEIGHT";
+    private static final String KEY_LONG = "KEY_FOR_SCREEN_SIZE";
 
     public ArrayList<Fragment> getFragments() {
 
@@ -138,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onPause() {
         super.onPause();
+        //sharedPreferencesListener.unregisterOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
     }
 
     /**
@@ -146,6 +242,24 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onResume() {
         super.onResume();
+
+        /*DataStore<Preferences> dataStore =
+                new RxPreferenceDataStoreBuilder(getApplicationContext(), "deviceSettings").build();
+
+        Preferences.Key<Integer> EXAMPLE_COUNTER = PreferencesKeys.int("example_counter");
+
+        Flowable<Integer> exampleCounterFlow =
+                RxDataStore.data(dataStore).map(prefs -> prefs.get(EXAMPLE_COUNTER));
+
+        Single<Preferences> updateResult =  RxDataStore.updateDataAsync(dataStore, prefsIn -> {
+            MutablePreferences mutablePreferences = prefsIn.toMutablePreferences();
+
+            Integer currentInt = prefsIn.get(INTEGER_KEY);
+            mutablePreferences.set(INTEGER_KEY, currentInt != null ? currentInt + 1 : 1);
+
+            return Single.just(mutablePreferences);
+        });*/
+        // The update is completed once updateResult is completed.
     }
 
     /**
@@ -162,8 +276,8 @@ public class MainActivity extends AppCompatActivity implements
         //need to fix some problem
     }
 
-
     public void init() {
+
         mImageButton = findViewById(R.id.imageButton_menu);
         mImageDateButton = findViewById(R.id.imageButton_date);
         mImageCameraButton = findViewById(R.id.imageButton_camera);
@@ -186,10 +300,12 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * init APP setting theme
      */
-    public void initMode() {
+    public void initMode(/*int currentNightMode*/) {
         //int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+
         int currentNightMode = themeControl.getInstance(this).getCurrentMode();
         Log.d(TAG, "initMode: " + currentNightMode);
+
         switch (currentNightMode) {
             //case Configuration.UI_MODE_NIGHT_NO:
             case ToyConstants.LIGHT_MODE:
@@ -273,17 +389,21 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.imageButton_date:
                 listFragment.dateListUpdate();
 
-                int currentStyle = listFragment.getDateListStyle();
-                if(currentStyle == ToyConstants.DATE_NEW_OLD) {
-                    mImageDateButton.setBackground(getResources().getDrawable(R.mipmap.date_new));
-                } else if (currentStyle == ToyConstants.DATE_OLD_NEW){
-                    mImageDateButton.setBackground(getResources().getDrawable(R.mipmap.date_old));
-                }
+                settingImageButton();
 
                 break;
             case R.id.imageButton_camera:
                 takeScreenShot(this);
                 break;
+        }
+    }
+
+    public void settingImageButton() {
+        int currentStyle = listFragment.getDateListStyle();
+        if(currentStyle == ToyConstants.DATE_NEW_OLD) {
+            mImageDateButton.setBackground(getResources().getDrawable(R.mipmap.date_new));
+        } else if (currentStyle == ToyConstants.DATE_OLD_NEW){
+            mImageDateButton.setBackground(getResources().getDrawable(R.mipmap.date_old));
         }
     }
 

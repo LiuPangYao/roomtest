@@ -90,4 +90,15 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="VERSION">version : %1$s</string>
+    <string name="VERSION_NUMBER">update date : %1$d</string>
+    <string name="VERSION_NUMBER_STRING">update date : %1$s, version :%2$s</string>
+    <string name="VERSION_NUMBER_MIX">%1$s update date : %2$s, version :%3$d</string>
+
+    <plurals name="numberOfSongsAvailable">
+        <item quantity="one">Znaleziono %d piosenkę.</item>
+        <item quantity="few">Znaleziono %d piosenki.</item>
+        <item quantity="other">Znaleziono %d piosenek.</item>
+    </plurals>
+
 </resources>

@@ -70,4 +70,5 @@
     <string name="FAVORITE">收藏</string>
     <string name="SEARCH_VALUE">關鍵字</string>
     <string name="KEYWORD">關鍵字</string>
+    <string name="VERSION">version : %1$s</string>
 </resources>
