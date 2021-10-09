@@ -300,7 +300,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         Picasso.get()
                 .load(Uri.parse(toyList.get(position).getImageUri() + ".png")) // internet path
                 //.placeholder(R.mipmap.app_launcher_main_foreground)  // preload
-                .error(R.mipmap.app_launcher_main_foreground)        // load error
+                .error(R.mipmap.app_launcher_icon)        // load error
                 .into(holder.imgToy);  // component_dialogfragment
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

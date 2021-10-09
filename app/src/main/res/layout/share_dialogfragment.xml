@@ -34,7 +34,7 @@
         android:layout_above="@id/buttonShare"
         android:layout_below="@id/textViewImagePath"
         android:layout_centerHorizontal="true"
-        app:srcCompat="@mipmap/app_launcher_main_round" />
+        app:srcCompat="@mipmap/app_launcher_icon_round" />
 
     <Button
         android:id="@+id/buttonShare"

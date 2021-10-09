@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:paddingTop="@dimen/icon_top"
-            app:srcCompat="@mipmap/app_launcher_main_round" />
+            app:srcCompat="@mipmap/app_launcher_icon_round" />
 
         <TextView
             android:id="@+id/textViewVersion"

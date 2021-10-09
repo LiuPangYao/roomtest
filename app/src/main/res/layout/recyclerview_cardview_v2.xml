@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:padding="@dimen/recycler_item_margin"
-            app:srcCompat="@mipmap/app_launcher_main_foreground" />
+            app:srcCompat="@mipmap/app_launcher_icon" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -107,7 +107,7 @@
             android:layout_alignParentRight="true"
             android:padding="@dimen/recycler_item_margin"
             android:visibility="gone"
-            app:srcCompat="@mipmap/app_launcher_main_foreground" />
+            app:srcCompat="@mipmap/app_launcher_icon" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
