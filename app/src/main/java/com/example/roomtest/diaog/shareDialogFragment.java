@@ -26,7 +26,7 @@ public class shareDialogFragment extends DialogFragment {
     static Bitmap mBitmap;
     static Uri mUri;
     static String mPath;
-    String TAG = "shareDialogFragment";
+    private final static String TAG = "shareDialogFragment";
 
     public shareDialogFragment() {
         // Empty constructor is required for DialogFragment

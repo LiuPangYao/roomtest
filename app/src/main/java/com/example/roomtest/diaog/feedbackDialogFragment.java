@@ -6,8 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.roomtest.R;
+import com.example.roomtest.databinding.FeedbackDialogfragmentBinding;
 import com.example.roomtest.firestore.FeedBack;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,17 +22,17 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
- * 2020-01-12
+ * 2021-10-10 view binding
  */
 public class feedbackDialogFragment extends DialogFragment {
 
     static String TAG = "feedbackDialogFragment";
     static feedbackDialogFragment dialog;
     SendDialogListener listener;
-    Button sendButton;
-    EditText edtTelMail, edtTitle, edtDetail;
     FirebaseFirestore db;
     static Context mContext;
+
+    private FeedbackDialogfragmentBinding binding;
 
     public interface SendDialogListener {
         void onDialogSendClick(DialogFragment dialog);
@@ -48,26 +47,22 @@ public class feedbackDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.feedback_dialogfragment, container, false);
-
-        sendButton = view.findViewById(R.id.buttonSend);
-        edtTelMail = view.findViewById(R.id.editTextTelOrMail);
-        edtDetail = view.findViewById(R.id.editTextDetail);
-        edtTitle = view.findViewById(R.id.editTextMainQ);
+        binding = FeedbackDialogfragmentBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
         // init
         db = FirebaseFirestore.getInstance();
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        binding.buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (edtTelMail.getText().toString().equals("") || edtDetail.getText().toString().equals("") || edtTitle.getText().toString().equals("")) {
+                if (binding.editTextTelOrMail.getText().toString().equals("") || binding.editTextDetail.getText().toString().equals("") || binding.editTextMainQ.getText().toString().equals("")) {
                     Snackbar.make(v, getContext().getString(R.string.INPUT_ERROR), Snackbar.LENGTH_LONG).show();
                     return;
                 }
-                FeedBack feedBack = new FeedBack(edtTelMail.getText().toString(),
-                        edtTitle.getText().toString(),
-                        edtDetail.getText().toString());
+                FeedBack feedBack = new FeedBack(binding.editTextTelOrMail.getText().toString(),
+                        binding.editTextMainQ.getText().toString(),
+                        binding.editTextDetail.getText().toString());
                 insert(feedBack);
                 dialog.dismiss();
             }

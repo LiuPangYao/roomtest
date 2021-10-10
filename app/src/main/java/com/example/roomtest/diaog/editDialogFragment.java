@@ -7,11 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -19,12 +15,13 @@ import androidx.fragment.app.DialogFragment;
 import com.example.roomtest.ToyConstants;
 import com.example.roomtest.R;
 import com.example.roomtest.database.toyInfo;
+import com.example.roomtest.databinding.EditDialogfragmentBinding;
 import com.example.roomtest.fragment.ListFragment;
 
 import java.util.Calendar;
 
 /**
- * 2020-02-08
+ * 2021-10-10 view binding
  */
 public class editDialogFragment extends DialogFragment {
 
@@ -35,11 +32,7 @@ public class editDialogFragment extends DialogFragment {
     static ListFragment mContext;
 
     static InsertDialogListener listener;
-    Button mButtonOK, mButtonCancel;
-    TextView mTextViewTitle;
-    EditText mEdtDate; // extra onclick
-    EditText mEdtName, mEdtBuyPrice, mEdtSellPrice, mEdtWeb, mEdtUri;
-    Spinner sellstateSpinner, gainSpinner;
+    private EditDialogfragmentBinding binding;
 
     @Override
     public void onAttach(Context context) {
@@ -91,56 +84,44 @@ public class editDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.edit_dialogfragment, container, false);
-
-        mTextViewTitle = view.findViewById(R.id.dialogTitle);
-        mButtonOK = view.findViewById(R.id.buttonOK);
-        mButtonCancel = view.findViewById(R.id.buttonCancel);
-
-        mEdtName = view.findViewById(R.id.editTextName);
-        mEdtUri = view.findViewById(R.id.editTextToyUri);
-        mEdtDate = view.findViewById(R.id.editTextToyDate);
-        mEdtBuyPrice = view.findViewById(R.id.editTextBuyPrice);
-        mEdtSellPrice = view.findViewById(R.id.editTextSellPrice);
-        mEdtWeb = view.findViewById(R.id.editTextToyWeb);
-        sellstateSpinner = view.findViewById(R.id.spinnerSellState);
-        gainSpinner = view.findViewById(R.id.spinnerGain);
+        binding = EditDialogfragmentBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
         ArrayAdapter<CharSequence> adapterSell = ArrayAdapter.createFromResource(getContext(), R.array.sell_state_array, android.R.layout.simple_spinner_item);
         adapterSell.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sellstateSpinner.setAdapter(adapterSell);
+        binding.spinnerSellState.setAdapter(adapterSell);
 
         ArrayAdapter<CharSequence> adapterGain = ArrayAdapter.createFromResource(getContext(), R.array.gain_state_array, android.R.layout.simple_spinner_item);
         adapterGain.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        gainSpinner.setAdapter(adapterGain);
+        binding.spinnerGain.setAdapter(adapterGain);
 
         if (actionMove == ToyConstants.ACTION_UPDATE) {
-            mEdtName.setText(toys.getName());
-            mEdtUri.setText(toys.getImageUri());
-            mEdtDate.setText(toys.getDate());
-            mEdtBuyPrice.setText(String.valueOf(toys.getBuyPrice()));
-            mEdtSellPrice.setText(String.valueOf(toys.getSellPrice()));
-            mEdtWeb.setText(toys.getWeb());
+            binding.editTextName.setText(toys.getName());
+            binding.editTextToyUri.setText(toys.getImageUri());
+            binding.editTextToyDate.setText(toys.getDate());
+            binding.editTextBuyPrice.setText(String.valueOf(toys.getBuyPrice()));
+            binding.editTextSellPrice.setText(String.valueOf(toys.getSellPrice()));
+            binding.editTextToyWeb.setText(toys.getWeb());
 
-            sellstateSpinner.setSelection(toys.getSoldState());
-            gainSpinner.setSelection(toys.getGain());
+            binding.spinnerSellState.setSelection(toys.getSoldState());
+            binding.spinnerGain.setSelection(toys.getGain());
 
         } else { // Insert
             // Fake Data
-            /*mEdtName.setText("EAA-051 返校日");
-            mEdtUri.setText("https://imgur.com/IVxECP6");
-            mEdtDate.setText("2018-11-09");
-            mEdtBuyPrice.setText("2390");
-            mEdtSellPrice.setText("2390");
-            mEdtWeb.setText("https://www.toy-people.com/?p=38665");*/
+            /*binding.editTextName.setText("EAA-051 返校日");
+            binding.editTextToyUri.setText("https://imgur.com/IVxECP6");
+            binding.editTextToyDate.setText("2018-11-09");
+            binding.editTextBuyPrice.setText("2390");
+            binding.editTextSellPrice.setText("2390");
+            binding.editTextToyWeb.setText("https://www.toy-people.com/?p=38665");*/
 
             // spinner use default sold out, increase
         }
 
         String title = getArguments().getString("title");
-        mTextViewTitle.setText(title);
+        binding.dialogTitle.setText(title);
 
-        mEdtDate.setOnClickListener(new View.OnClickListener() {
+        binding.editTextToyDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
@@ -151,14 +132,14 @@ public class editDialogFragment extends DialogFragment {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int day) {
                         String dateTime = String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day);
-                        mEdtDate.setText(dateTime);
+                        binding.editTextToyDate.setText(dateTime);
                     }
 
                 }, year, month, day).show();
             }
         });
 
-        mButtonOK.setOnClickListener(new View.OnClickListener() {
+        binding.buttonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
@@ -166,25 +147,25 @@ public class editDialogFragment extends DialogFragment {
                     if (actionMove == ToyConstants.ACTION_INSERT) {
                         // TODO: 2019-11-17 沒有輸入資料 
                         toys = new toyInfo();
-                        toys.setName(mEdtName.getText().toString());
-                        toys.setImageUri(mEdtUri.getText().toString());
-                        toys.setDate(mEdtDate.getText().toString());
-                        toys.setBuyPrice(Integer.valueOf(mEdtBuyPrice.getText().toString()));
-                        toys.setSellPrice(Integer.valueOf(mEdtSellPrice.getText().toString()));
-                        toys.setWeb(mEdtWeb.getText().toString());
-                        toys.setGain(Integer.valueOf(sellstateSpinner.getSelectedItemPosition()));
-                        toys.setSoldState(Integer.valueOf(gainSpinner.getSelectedItemPosition()));
+                        toys.setName(binding.editTextName.getText().toString());
+                        toys.setImageUri(binding.editTextToyUri.getText().toString());
+                        toys.setDate(binding.editTextToyDate.getText().toString());
+                        toys.setBuyPrice(Integer.valueOf(binding.editTextBuyPrice.getText().toString()));
+                        toys.setSellPrice(Integer.valueOf(binding.editTextSellPrice.getText().toString()));
+                        toys.setWeb(binding.editTextToyWeb.getText().toString());
+                        toys.setGain(Integer.valueOf(binding.spinnerSellState.getSelectedItemPosition()));
+                        toys.setSoldState(Integer.valueOf(binding.spinnerGain.getSelectedItemPosition()));
                     } else if (actionMove == ToyConstants.ACTION_UPDATE) {
                         // to do nothing
-                        toys.setName(mEdtName.getText().toString());
-                        toys.setDate(mEdtDate.getText().toString());
-                        toys.setBuyPrice(Integer.valueOf(mEdtBuyPrice.getText().toString()));
-                        toys.setSellPrice(Integer.valueOf(mEdtSellPrice.getText().toString()));
-                        toys.setWeb(mEdtWeb.getText().toString());
-                        toys.setGain(Integer.valueOf(sellstateSpinner.getSelectedItemPosition()));
-                        toys.setSoldState(Integer.valueOf(gainSpinner.getSelectedItemPosition()));
+                        toys.setName(binding.editTextName.getText().toString());
+                        toys.setDate(binding.editTextToyDate.getText().toString());
+                        toys.setBuyPrice(Integer.valueOf(binding.editTextBuyPrice.getText().toString()));
+                        toys.setSellPrice(Integer.valueOf(binding.editTextSellPrice.getText().toString()));
+                        toys.setWeb(binding.editTextToyWeb.getText().toString());
+                        toys.setGain(Integer.valueOf(binding.spinnerSellState.getSelectedItemPosition()));
+                        toys.setSoldState(Integer.valueOf(binding.spinnerGain.getSelectedItemPosition()));
                         //toys.setImageUri("https://imgur.com/mLMdIbz"); // write fake data
-                        toys.setImageUri(mEdtUri.getText().toString());
+                        toys.setImageUri(binding.editTextToyUri.getText().toString());
                     }
 
                     listener.onDialogOKClick(editDialogFragment.this, toys, actionMove);
@@ -192,7 +173,7 @@ public class editDialogFragment extends DialogFragment {
             }
         });
 
-        mButtonCancel.setOnClickListener(new View.OnClickListener() {
+        binding.buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {

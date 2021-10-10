@@ -9,9 +9,9 @@ import android.widget.RadioButton;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.roomtest.R;
+import com.example.roomtest.databinding.ComponentDialogfragmentBinding;
 import com.example.roomtest.recyclerview.TextAdapter;
 
 import java.util.ArrayList;
@@ -19,14 +19,14 @@ import java.util.ArrayList;
 import info.hoang8f.android.segmented.SegmentedGroup;
 
 /**
- * 2020-01-11
+ * 2021-10-10 view binding
  */
 public class componentDialogFragment extends DialogFragment {
 
     ArrayList<String> recyclerListTool;
     ArrayList<String> recyclerListKnowledge;
 
-    RecyclerView mRecyclerView;
+    private ComponentDialogfragmentBinding binding;
     static Context mContext;
 
     public componentDialogFragment() {
@@ -44,12 +44,12 @@ public class componentDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.component_dialogfragment, container, false);
-        mRecyclerView = view.findViewById(R.id.recyclerTool);
+        binding = ComponentDialogfragmentBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+        binding.recyclerTool.setLayoutManager(linearLayoutManager);
 
         // init recyclerList Tool
         recyclerListTool = new ArrayList<>();
@@ -75,7 +75,7 @@ public class componentDialogFragment extends DialogFragment {
 
         // default, show recyclerListTool data
         TextAdapter textAdapter = new TextAdapter(recyclerListTool, mContext);
-        mRecyclerView.setAdapter(textAdapter);
+        binding.recyclerTool.setAdapter(textAdapter);
         textAdapter.notifyDataSetChanged();
 
         SegmentedGroup segmentedOne = view.findViewById(R.id.segmentedComponent);
@@ -88,7 +88,7 @@ public class componentDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 // show recyclerListTool data
                 TextAdapter textAdapter = new TextAdapter(recyclerListTool, mContext);
-                mRecyclerView.setAdapter(textAdapter);
+                binding.recyclerTool.setAdapter(textAdapter);
                 textAdapter.notifyDataSetChanged();
             }
         });
@@ -99,7 +99,7 @@ public class componentDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 // show recyclerListKnowledge data
                 TextAdapter textAdapter = new TextAdapter(recyclerListKnowledge, mContext);
-                mRecyclerView.setAdapter(textAdapter);
+                binding.recyclerTool.setAdapter(textAdapter);
                 textAdapter.notifyDataSetChanged();
             }
         });

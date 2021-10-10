@@ -16,6 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.roomtest.R;
+import com.example.roomtest.databinding.Viewpager2DialogfragmentBinding;
 import com.example.roomtest.recyclerview.ViewPager2Adapter;
 
 import java.util.ArrayList;
@@ -24,17 +25,18 @@ import java.util.List;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * 2019-12-19
+ * 2021-10-10 view binding
  */
 public class viewPager2DialogFragment extends DialogFragment
         implements ViewPager2Adapter.OnCurrentPageCallBack {
 
     static Context mContext;
     static viewPager2DialogFragment frag;
-    TextView currentPageText;
     TextView totalPageText;
     List<Drawable> list;
-    String TAG = "viewPager2DialogFragment";
+    private final static String TAG = "viewPager2DialogFragment";
+
+    private Viewpager2DialogfragmentBinding binding;
 
     public viewPager2DialogFragment() {
         // Empty constructor is required for DialogFragment
@@ -51,12 +53,9 @@ public class viewPager2DialogFragment extends DialogFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.viewpager2_dialogfragment, container, false);
-        ViewPager2 viewPager2 = view.findViewById(R.id.viewpager2);
+        binding = Viewpager2DialogfragmentBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
         final CheckBox checkBoxAgain = view.findViewById(R.id.checkBoxAgain);
-
-        currentPageText = view.findViewById(R.id.textCurrentPage);
-        totalPageText = view.findViewById(R.id.textTotalPage);
 
         list = new ArrayList<>();
         list.add(getResources().getDrawable(R.mipmap.viewpager2_00));
@@ -65,12 +64,12 @@ public class viewPager2DialogFragment extends DialogFragment
         list.add(getResources().getDrawable(R.mipmap.viewpager2_02));
         list.add(getResources().getDrawable(R.mipmap.viewpager2_03));
 
-        ViewPager2Adapter adapter2 = new ViewPager2Adapter(mContext, list, viewPager2);
+        ViewPager2Adapter adapter2 = new ViewPager2Adapter(mContext, list, binding.viewpager2);
         adapter2.setOnCurrentListener(this);
-        viewPager2.setAdapter(adapter2);
-        viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        binding.viewpager2.setAdapter(adapter2);
+        binding.viewpager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
 
-        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        binding.viewpager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
@@ -104,13 +103,13 @@ public class viewPager2DialogFragment extends DialogFragment
     @Override
     public void currentState(int totalPage, int currentPage) {
         Log.d(TAG, "current page & total page");
-        currentPageText.setText(String.valueOf(currentPage));
-        totalPageText.setText(String.valueOf(totalPage));
+        binding.textCurrentPage.setText(String.valueOf(currentPage));
+        binding.textTotalPage.setText(String.valueOf(totalPage));
     }
 
     public void currentStatePage(int currentPage) {
         Log.d(TAG, "current page & total page");
-        currentPageText.setText(String.valueOf(currentPage));
-        totalPageText.setText(String.valueOf(list.size()));
+        binding.textCurrentPage.setText(String.valueOf(currentPage));
+        binding.textTotalPage.setText(String.valueOf(list.size()));
     }
 }
