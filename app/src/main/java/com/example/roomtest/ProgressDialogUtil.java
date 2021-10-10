@@ -7,6 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.roomtest.databinding.CustomProgressDialogViewBinding;
+
+/**
+ * 2021-10-10 view binding
+ */
 public class ProgressDialogUtil {
 
     private static AlertDialog mAlertDialog;
@@ -17,12 +22,12 @@ public class ProgressDialogUtil {
             mAlertDialog = new AlertDialog.Builder(context, R.style.CustomProgressDialog).create();
         //}
 
-        View loadView = LayoutInflater.from(context).inflate(R.layout.custom_progress_dialog_view, null);
-        mAlertDialog.setView(loadView, 0, 0, 0, 0);
+        CustomProgressDialogViewBinding binding = CustomProgressDialogViewBinding.inflate(LayoutInflater.from(context.getApplicationContext()));
+
+        mAlertDialog.setView(binding.getRoot(), 0, 0, 0, 0);
         mAlertDialog.setCanceledOnTouchOutside(false);
 
-        TextView mTextViewTip = loadView.findViewById(R.id.textviewTip);
-        mTextViewTip.setText(context.getString(R.string.PROGRESS_DIALOG));
+        binding.textviewTip.setText(context.getString(R.string.PROGRESS_DIALOG));
 
         mAlertDialog.show();
     }

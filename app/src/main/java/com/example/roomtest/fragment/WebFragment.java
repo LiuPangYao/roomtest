@@ -21,16 +21,17 @@ import com.example.roomtest.ProgressDialogUtil;
 import com.example.roomtest.R;
 import com.example.roomtest.database.dataBase;
 import com.example.roomtest.database.toyInfo;
+import com.example.roomtest.databinding.FragmentWebBinding;
 
 import java.util.List;
 
 
 public class WebFragment extends Fragment implements View.OnClickListener{
 
-    private WebView mWebView;
-    private ImageView imgButton;
+    private FragmentWebBinding binding;
+
     List<toyInfo> toyList = null;
-    private final String TAG = "WebFragment";
+    private final static String TAG = "WebFragment";
     int[] toyIds;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -79,15 +80,16 @@ public class WebFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_web, container, false);
-        init(view);
+
+        binding = FragmentWebBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
+        initView(view);
         return view;
     }
 
-    public void init(View view) {
-        mWebView = view.findViewById(R.id.webview);
-        imgButton = view.findViewById(R.id.imageView_back);
-        imgButton.setOnClickListener(this);
+    public void initView(View view) {
+        binding.imageViewBack.setOnClickListener(this);
 
         Bundle bundle = this.getArguments();
         int mId = bundle.getInt("mId");
@@ -96,10 +98,10 @@ public class WebFragment extends Fragment implements View.OnClickListener{
         toyIds = new int[1];
         toyIds[0] = mId;
 
-        WebSettings settings = mWebView.getSettings();
+        WebSettings settings = binding.webview.getSettings();
         settings.setJavaScriptEnabled(true);
 
-        mWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+        binding.webview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
         testTask asyncTask = new testTask(getActivity());
         asyncTask.execute("start");
@@ -126,7 +128,7 @@ public class WebFragment extends Fragment implements View.OnClickListener{
     }
 
     public void initWebView() {
-        mWebView.setWebViewClient(new WebViewClient()
+        binding.webview.setWebViewClient(new WebViewClient()
         {
             public boolean shouldOverrideUrlLoading(WebView view, String url)
             {
@@ -145,7 +147,7 @@ public class WebFragment extends Fragment implements View.OnClickListener{
             }
         });
 
-        mWebView.loadUrl(toyList.get(0).getWeb());
+        binding.webview.loadUrl(toyList.get(0).getWeb());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -175,7 +177,7 @@ public class WebFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.imageView_back:
+            case R.id.imageViewBack:
                 Log.d(TAG, "onClick: back");
                 getFragmentManager().popBackStack();
                 ((AppCompatActivity)getActivity()).findViewById(R.id.bottomNavigationView).setVisibility(View.VISIBLE);

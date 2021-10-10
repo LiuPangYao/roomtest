@@ -52,5 +52,4 @@ public class ToyConstants {
     public static final int NAME_TYPE  = 1;
     public static final int PRICE_TYPE  = 2;
 
-
 }

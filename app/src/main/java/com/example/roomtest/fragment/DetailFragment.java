@@ -10,22 +10,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.roomtest.R;
 import com.example.roomtest.database.dataBase;
 import com.example.roomtest.database.toyInfo;
+import com.example.roomtest.databinding.FragmentDetailBinding;
 
 import java.util.List;
 
 /**
- * 2020-01-11
+ * 2021-10-10 view binding
  */
 public class DetailFragment extends Fragment {
 
     public static final String TAG = "DetailFragment";
 
-    private TextView mCountEdit, mPriceEdit, mSoldEdit, mState;
+    private FragmentDetailBinding binding;
 
     List<toyInfo> toyList = null;
 
@@ -74,17 +74,15 @@ public class DetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_detail, container, false);
-        init(view);
+
+        binding = FragmentDetailBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
+        initView(view);
         return view;
     }
 
-    public void init(View view) {
-        mCountEdit = view.findViewById(R.id.textViewCount);
-        mPriceEdit = view.findViewById(R.id.textViewPrice);
-        mSoldEdit = view.findViewById(R.id.textViewSold);
-        mState = view.findViewById(R.id.State);
-
+    public void initView(View view) {
         loadList();
     }
 
@@ -108,28 +106,28 @@ public class DetailFragment extends Fragment {
 
     public void initEdit() {
         if (toyList != null && toyList.size() != 0) {
-            mCountEdit.setText(String.valueOf(toyList.size()));
+            binding.textViewCount.setText(String.valueOf(toyList.size()));
 
             int sumPrice = 0;
             for (int i = 0; i < toyList.size(); i++) {
                 sumPrice = sumPrice + toyList.get(i).getBuyPrice();
-                mPriceEdit.setText("NT " + sumPrice);
+                binding.textViewPrice.setText("NT " + sumPrice);
             }
 
             int soldPrice = 0;
             for (int i = 0; i < toyList.size(); i++) {
                 soldPrice = soldPrice + toyList.get(i).getSellPrice();
-                mSoldEdit.setText("NT " + soldPrice);
+                binding.textViewSold.setText("NT " + soldPrice);
             }
 
             if (soldPrice == sumPrice) {
-                mState.setText(getString(R.string.PRICE_COMMON));
+                binding.State.setText(getString(R.string.PRICE_COMMON));
             } else if (soldPrice > sumPrice) {
-                mState.setText(getString(R.string.NET_E) + " " + String.valueOf(soldPrice - sumPrice));
-                mState.setTextColor(getActivity().getColor(R.color.colorIncrease));
+                binding.State.setText(getString(R.string.NET_E) + " " + String.valueOf(soldPrice - sumPrice));
+                binding.State.setTextColor(getActivity().getColor(R.color.colorIncrease));
             } else {
-                mState.setText(getString(R.string.NET_L) + " " + String.valueOf(sumPrice - soldPrice));
-                mState.setTextColor(getActivity().getColor(R.color.colorFalling));
+                binding.State.setText(getString(R.string.NET_L) + " " + String.valueOf(sumPrice - soldPrice));
+                binding.State.setTextColor(getActivity().getColor(R.color.colorFalling));
             }
 
         }

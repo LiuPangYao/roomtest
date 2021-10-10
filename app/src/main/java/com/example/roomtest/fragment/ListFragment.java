@@ -10,7 +10,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -22,9 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.TextView;
 
 import com.example.roomtest.R;
 import com.example.roomtest.ToyConstants;
@@ -34,20 +30,20 @@ import com.example.roomtest.asyncTask.updateAsyncTask;
 import com.example.roomtest.database.dataBase;
 import com.example.roomtest.database.listSort;
 import com.example.roomtest.database.toyInfo;
+import com.example.roomtest.databinding.FragmentListBinding;
+import com.example.roomtest.databinding.RecyclerItemBinding;
 import com.example.roomtest.diaog.editDialogFragment;
 import com.example.roomtest.recyclerview.ListAdapter;
 import com.example.roomtest.recyclerview.ListAdapterTouchHelperCallback;
 import com.example.roomtest.recyclerview.RecyclerViewNoBugLinearLayoutManager;
 import com.example.roomtest.recyclerview.onLoadMoreListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * author:Peter
- * date:2020-02-08
+ * date:2021-10-10 view binding
  */
 public class ListFragment extends Fragment implements
         View.OnClickListener,
@@ -61,15 +57,9 @@ public class ListFragment extends Fragment implements
 
     dataBase dataInstance = null;
 
-    private RadioButton radioButtonPrice, radioButtonName;
-    private EditText edtSearch;
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mRecyclerView;
-    private TextView mTextViewEmpty;
-    private ConstraintLayout mConstraintLayoutKeyWord;
-    private FloatingActionButton mFloatButton;
-
+    private FragmentListBinding binding;
+    private RecyclerItemBinding includeBinding;
+    
     SharedPreferences shared = null;
 
     boolean isDataReady = false; // Warning
@@ -125,36 +115,32 @@ public class ListFragment extends Fragment implements
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
-        init(view);
+
+        binding = FragmentListBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
+        includeBinding = RecyclerItemBinding.bind(view);
+
+        initView(view);
         initSwipeRefresh();
         return view;
     }
 
-    public void init(View view) {
+    public void initView(View view) {
         // avoid data repeat store
         shared = getActivity().getSharedPreferences("app_setting", MODE_PRIVATE);
         isDataReady = shared.getBoolean("isReady", false);
         isDeveloper = shared.getBoolean("isDeveloper", false);
 
-        mSwipeRefreshLayout = view.findViewById(R.id.swipeToRefresh);
-        mRecyclerView = view.findViewById(R.id.recyclerView);
-        mTextViewEmpty = view.findViewById(R.id.textViewEmpty);
-        mConstraintLayoutKeyWord = view.findViewById(R.id.relative_recycler_item);
-        mFloatButton = view.findViewById(R.id.floatingActionButton);
-        mFloatButton.setOnClickListener(this);
+        binding.floatingActionButton.setOnClickListener(this);
 
         // key word search
-        edtSearch = view.findViewById(R.id.editTextSearch);
-        radioButtonName = view.findViewById(R.id.radioButtonName);
-        radioButtonPrice = view.findViewById(R.id.radioButtonPrice);
-        radioButtonPrice.setChecked(true);
+        includeBinding.radioButtonPrice.setChecked(true);
         initSearchKeyWord();
 
         // init
@@ -167,7 +153,7 @@ public class ListFragment extends Fragment implements
         checkDataSizeDisplay();
 
         if (!isDataReady) {
-            mTextViewEmpty.setVisibility(View.VISIBLE);
+            binding.textViewEmpty.setVisibility(View.VISIBLE);
         }
     }
 
@@ -184,33 +170,33 @@ public class ListFragment extends Fragment implements
      */
     public void initSearchKeyWord() {
 
-        radioButtonName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        includeBinding.radioButtonName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // will called twice
                 mListAdapter.setSearchType(ToyConstants.PRICE_TYPE);
                 if (isChecked) {
-                    radioButtonPrice.setChecked(false);
+                    includeBinding.radioButtonPrice.setChecked(false);
                 } else {
-                    radioButtonPrice.setChecked(true);
+                    includeBinding.radioButtonPrice.setChecked(true);
                 }
             }
         });
 
-        radioButtonPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        includeBinding.radioButtonPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // will called twice
                 mListAdapter.setSearchType(ToyConstants.NAME_TYPE);
                 if (isChecked) {
-                    radioButtonName.setChecked(false);
+                    includeBinding.radioButtonName.setChecked(false);
                 } else {
-                    radioButtonName.setChecked(true);
+                    includeBinding.radioButtonName.setChecked(true);
                 }
             }
         });
 
-        edtSearch.addTextChangedListener(new TextWatcher() {
+        includeBinding.editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -236,19 +222,19 @@ public class ListFragment extends Fragment implements
      */
     public void initSwipeRefresh() {
 
-        mRecyclerView.addOnScrollListener(new onLoadMoreListener() {
+        binding.recyclerView.addOnScrollListener(new onLoadMoreListener() {
             @Override
             protected void onLoading(int countItem, int lastItem) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mConstraintLayoutKeyWord.setVisibility(View.GONE);
+                        includeBinding.includeRecyclerItem.setVisibility(View.GONE);
                     }
                 }, 20);
             }
         });
 
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
@@ -258,9 +244,9 @@ public class ListFragment extends Fragment implements
                     new Handler().postDelayed(new Runnable() {
                         public void run() {
                             if(toyList.size() != 0) {
-                                mConstraintLayoutKeyWord.setVisibility(View.VISIBLE);
+                                includeBinding.includeRecyclerItem.setVisibility(View.VISIBLE);
                             }
-                            mSwipeRefreshLayout.setRefreshing(false);
+                            binding.swipeToRefresh.setRefreshing(false);
                             isRefresh = false;
                         }
                     }, 100);
@@ -275,9 +261,9 @@ public class ListFragment extends Fragment implements
     public void checkDataSizeDisplay() {
         Log.d(TAG, "checkDataSizeDisplay: someone to call this, " + isDataReady);
         if (isDataReady) {
-            mTextViewEmpty.setVisibility(View.GONE);
+            binding.textViewEmpty.setVisibility(View.GONE);
         } else {
-            mTextViewEmpty.setVisibility(View.VISIBLE);
+            binding.textViewEmpty.setVisibility(View.VISIBLE);
         }
     }
 
@@ -285,8 +271,7 @@ public class ListFragment extends Fragment implements
         // init
         //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         //linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(new RecyclerViewNoBugLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        //mRecyclerView.setLayoutManager(linearLayoutManager);
+        binding.recyclerView.setLayoutManager(new RecyclerViewNoBugLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         // show data
         mListAdapter = new ListAdapter(toy_List, getActivity(), this);
         mListAdapter.setSearchType(ToyConstants.PRICE_TYPE);
@@ -298,9 +283,9 @@ public class ListFragment extends Fragment implements
         // move and delete
         ItemTouchHelper.Callback callback = new ListAdapterTouchHelperCallback(mListAdapter/*, mListAdapter*/, toy_List);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(mRecyclerView);
+        touchHelper.attachToRecyclerView(binding.recyclerView);
 
-        mRecyclerView.setAdapter(mListAdapter);
+        binding.recyclerView.setAdapter(mListAdapter);
         mListAdapter.setOnDeleteListener(this);
         mListAdapter.setCallBackListener(this);
         mListAdapter.notifySetListDataChanged(toy_List);
@@ -312,13 +297,13 @@ public class ListFragment extends Fragment implements
         // init
         StaggeredGridLayoutManager layoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
+        binding.recyclerView.setLayoutManager(layoutManager);
         // show data
         mListAdapter = new ListAdapter(toy_List, getActivity(), this);
         mListAdapter.setSearchType(ToyConstants.PRICE_TYPE);
         mListAdapter.setItemStyle(ToyConstants.STAGGERITEM);
         mListAdapter.setOnDeleteListener(this);
-        mRecyclerView.setAdapter(mListAdapter);
+        binding.recyclerView.setAdapter(mListAdapter);
         mListAdapter.notifySetListDataChanged(toy_List);
         mListAdapter.notifyDataSetChanged();
     }

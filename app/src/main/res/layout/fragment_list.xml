@@ -35,7 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <include
-            android:id="@+id/relative_recycler_item"
+            android:id="@+id/relativeRecyclerItem"
             layout="@layout/recycler_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relative_recycler_item">
+            app:layout_constraintTop_toBottomOf="@+id/relativeRecyclerItem">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"

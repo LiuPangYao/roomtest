@@ -5,26 +5,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
 
 import com.example.roomtest.database.dataBase;
 import com.example.roomtest.database.toyInfo;
+import com.example.roomtest.databinding.ActivityWebBinding;
 
 import java.util.List;
 
+/**
+ * 2021-10-10 view binding
+ */
 public class WebActivity extends Activity implements View.OnClickListener {
 
-    private WebView mWebView;
-    private ImageView imgButton;
+    private ActivityWebBinding binding;
+
     List<toyInfo> toyList = null;
-    private final String TAG = "WebActivity";
+    private final static String TAG = "WebActivity";
     int[] toyIds;
 
     @Override
@@ -35,10 +37,14 @@ public class WebActivity extends Activity implements View.OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        // 2021-10-10 view binding
+        binding = ActivityWebBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
         setContentView(R.layout.activity_web);
 
         //init
-        init();
+        initView();
 
         ProgressDialogUtil.showProgressDialog(this);
 
@@ -49,17 +55,17 @@ public class WebActivity extends Activity implements View.OnClickListener {
         toyIds = new int[1];
         toyIds[0] = mId;
 
-        WebSettings settings = mWebView.getSettings();
+        WebSettings settings = binding.webview.getSettings();
         settings.setJavaScriptEnabled(true);
 
-        mWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+        binding.webview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
         testTask asyncTask = new testTask(this);
         asyncTask.execute("start");
     }
 
     public void initWebView() {
-        mWebView.setWebViewClient(new WebViewClient()
+        binding.webview.setWebViewClient(new WebViewClient()
         {
             public boolean shouldOverrideUrlLoading(WebView view, String url)
             {
@@ -78,19 +84,17 @@ public class WebActivity extends Activity implements View.OnClickListener {
             }
         });
 
-        mWebView.loadUrl(toyList.get(0).getWeb());
+        binding.webview.loadUrl(toyList.get(0).getWeb());
     }
 
-    public void init() {
-        mWebView = findViewById(R.id.webview);
-        imgButton = findViewById(R.id.imageView_back);
-        imgButton.setOnClickListener(this);
+    public void initView() {
+        binding.imageViewback.setOnClickListener(this);
     }
 
     public void onClick(View v) {
         switch (v.getId())
         {
-            case R.id.imageView_back:
+            case R.id.imageViewback:
                 finish();
                 break;
         }
@@ -114,4 +118,3 @@ public class WebActivity extends Activity implements View.OnClickListener {
         }
     }
 }
-

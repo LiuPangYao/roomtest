@@ -9,18 +9,16 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.roomtest.R;
+import com.example.roomtest.databinding.FragmentAboutBinding;
 import com.example.roomtest.recyclerview.SimpleAdapter;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -29,15 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 2021-10-09 last update
+ * 2021-10-10 view binding
+ * 2021-10-10 last update
  */
 public class AboutFragment extends Fragment {
 
     public static final String TAG = "AboutFragment";
 
-    private TextView mTextViewVersion;
-    private RecyclerView mRecyclerViewSimple;
-    private AdView adView;
+    private FragmentAboutBinding binding;
 
     List<String> simpleList = null;
     private SimpleAdapter mSimpleAdapter;
@@ -88,14 +85,12 @@ public class AboutFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (adView != null) {
-            adView.pause();
+        if (binding.adView != null) {
+            binding.adView.pause();
         }
     }
 
     public void init(View view) {
-        mTextViewVersion = view.findViewById(R.id.textViewVersion);
-        mRecyclerViewSimple = view.findViewById(R.id.about_recyclerview);
         initSimpleAdapter();
         initAbout();
         initAdMod(view); // ad mod
@@ -111,12 +106,7 @@ public class AboutFragment extends Fragment {
             e.printStackTrace();
         }
 
-        mTextViewVersion.setText(getString(R.string.VERSION, version));
-
-        //mTextViewVersion.setText(getString(R.string.VERSION_NUMBER, 0.01));
-        //mTextViewVersion.setText(getString(R.string.VERSION_NUMBER_STRING, "20210210", "0.01"));
-        //mTextViewVersion.setText(getString(R.string.VERSION_NUMBER_MIX,"TEST"," 20210210", 1));
-        //mTextViewVersion.setText(getResources().getQuantityString(R.plurals.numberOfSongsAvailable, 3, 2));
+        binding.textViewVersion.setText(getString(R.string.VERSION, version));
     }
 
     /**
@@ -126,7 +116,7 @@ public class AboutFragment extends Fragment {
     public void initSimpleAdapter() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerViewSimple.setLayoutManager(linearLayoutManager);
+        binding.aboutRecyclerview.setLayoutManager(linearLayoutManager);
 
         simpleList = new ArrayList<>();
         simpleList.add(getString(R.string.PERMISSION));
@@ -138,8 +128,8 @@ public class AboutFragment extends Fragment {
 
         // init SimpleAdapter
         mSimpleAdapter = new SimpleAdapter(simpleList, getActivity());
-        mRecyclerViewSimple.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-        mRecyclerViewSimple.setAdapter(mSimpleAdapter);
+        binding.aboutRecyclerview.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        binding.aboutRecyclerview.setAdapter(mSimpleAdapter);
         mSimpleAdapter.notifyDataSetChanged();
     }
 
@@ -151,14 +141,13 @@ public class AboutFragment extends Fragment {
             }
         });
 
-        adView = view.findViewById(R.id.adView);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 AdRequest adRequest = new AdRequest.Builder()
                         .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                         .build();
-                adView.loadAd(adRequest);
+                binding.adView.loadAd(adRequest);
             }
         });
     }
@@ -167,7 +156,11 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_about, container, false);
+
+        // 2021-10-10 view binding
+        binding = FragmentAboutBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
         init(view);
         return view;
     }
@@ -190,16 +183,16 @@ public class AboutFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (adView != null) {
-            adView.resume();
+        if (binding.adView != null) {
+            binding.adView.resume();
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (adView != null) {
-            adView.destroy();
+        if (binding.adView != null) {
+            binding.adView.destroy();
         }
     }
 
