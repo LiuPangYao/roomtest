@@ -4,19 +4,23 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.roomtest.R;
+import com.example.roomtest.databinding.ComponentItemBinding;
 
 import java.util.ArrayList;
 
+/**
+ * 2021-10-11 view binding
+ */
 public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ViewHolder> {
     ArrayList<String> stringList = new ArrayList<>();
 
     private Context context;
-    public String TAG = "TextAdapter";
+    public static final String TAG = "TextAdapter";
+    private ComponentItemBinding binding;
 
     public TextAdapter(ArrayList<String> data, Context context) {
         this.stringList = data;
@@ -24,11 +28,9 @@ public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewCenterTitle;
-
         public ViewHolder(View itemView) {
             super(itemView);
-            this.textViewCenterTitle = itemView.findViewById(R.id.textViewCenterTitle);
+            binding = ComponentItemBinding.bind(itemView);
         }
     }
 
@@ -42,7 +44,7 @@ public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.textViewCenterTitle.setText(stringList.get(position).toString());
+        binding.textViewCenterTitle.setText(stringList.get(position).toString());
     }
 
     @Override

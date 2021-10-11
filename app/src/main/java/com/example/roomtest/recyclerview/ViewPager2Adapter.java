@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.roomtest.R;
+import com.example.roomtest.databinding.Viewpager2ItemBinding;
 
 import java.util.List;
 
@@ -23,7 +24,9 @@ public class ViewPager2Adapter extends RecyclerView.Adapter<ViewPager2Adapter.Vi
     private List<Drawable> mData;
     private LayoutInflater mInflater;
     private ViewPager2 viewPager2;
-    String TAG = "ViewPager2Adapter";
+    private static final String TAG = "ViewPager2Adapter";
+
+    private Viewpager2ItemBinding binding;
 
     OnCurrentPageCallBack mCallback;
 
@@ -50,8 +53,8 @@ public class ViewPager2Adapter extends RecyclerView.Adapter<ViewPager2Adapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mImageView.setBackground(mData.get(position));
-        holder.mImageView.setScaleType(ImageView.ScaleType.CENTER);
+        binding.imgViewpager2.setBackground(mData.get(position));
+        binding.imgViewpager2.setScaleType(ImageView.ScaleType.CENTER);
         Log.d(TAG, "onBindViewHolder = position " + position);
 
         // display current page
@@ -65,11 +68,9 @@ public class ViewPager2Adapter extends RecyclerView.Adapter<ViewPager2Adapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView mImageView;
-
         ViewHolder(View itemView) {
             super(itemView);
-            mImageView = itemView.findViewById(R.id.img_viewpager2);
+            binding = Viewpager2ItemBinding.bind(itemView);
         }
     }
 }

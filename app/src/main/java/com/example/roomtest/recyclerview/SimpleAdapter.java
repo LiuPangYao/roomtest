@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.roomtest.ToyConstants;
+import com.example.roomtest.databinding.AboutItemBinding;
 import com.example.roomtest.diaog.messageUpdateDialogFragment;
 import com.example.roomtest.diaog.componentDialogFragment;
 import com.example.roomtest.diaog.feedbackDialogFragment;
@@ -32,25 +33,25 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
     List<String> stringList = new ArrayList<>();
 
     private Context context;
-    public String TAG = "SimpleAdapter";
+    public static final String TAG = "SimpleAdapter";
     private InterstitialAd mInterstitialAd;
+
+    private AboutItemBinding binding;
 
     public SimpleAdapter(List<String> data, Context context) {
         this.stringList = data;
         this.context = context;
 
         mInterstitialAd = new InterstitialAd(context);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-        //mInterstitialAd.setAdUnitId(ToyConstants.AD_INTERNAL);
+        //mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdUnitId(ToyConstants.AD_INTERNAL);
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewAboutTitle;
-
         public ViewHolder(View itemView) {
             super(itemView);
-            this.textViewAboutTitle = itemView.findViewById(R.id.textView_about_title);
+            binding = AboutItemBinding.bind(itemView);
         }
     }
 
@@ -64,7 +65,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.textViewAboutTitle.setText(stringList.get(position).toString());
+        binding.textViewAboutTitle.setText(stringList.get(position).toString());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

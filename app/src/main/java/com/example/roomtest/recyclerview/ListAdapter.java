@@ -55,7 +55,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
     ListFragment listFragment;
 
     private Context context;
-    public String TAG = "ListAdapter";
+    public static final String TAG = "ListAdapter";
     private int itemStyle = ToyConstants.LINEARITEM;
     private int dateStyle = ToyConstants.DATE_OLD_NEW;
     private int searchType = ToyConstants.PRICE_TYPE;

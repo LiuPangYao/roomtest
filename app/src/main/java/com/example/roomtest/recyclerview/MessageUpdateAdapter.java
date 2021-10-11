@@ -4,12 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.roomtest.R;
+import com.example.roomtest.databinding.MessageUpdateItemBinding;
 import com.example.roomtest.firestore.UpdateMessage;
 
 import java.util.ArrayList;
@@ -19,7 +19,8 @@ public class MessageUpdateAdapter extends RecyclerView.Adapter<MessageUpdateAdap
     ArrayList<UpdateMessage> updateMessageList = new ArrayList<UpdateMessage>();
 
     private Context context;
-    public String TAG = "MessageUpdateAdapter";
+    public static final String TAG = "MessageUpdateAdapter";
+    private MessageUpdateItemBinding binding;
 
     public MessageUpdateAdapter(ArrayList<UpdateMessage> data, Context context) {
         this.updateMessageList = data;
@@ -27,15 +28,9 @@ public class MessageUpdateAdapter extends RecyclerView.Adapter<MessageUpdateAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewDate;
-        TextView textViewVersion;
-        TextView textViewDetail;
-
         public ViewHolder(View itemView) {
             super(itemView);
-            this.textViewDate = itemView.findViewById(R.id.textView_date);
-            this.textViewVersion = itemView.findViewById(R.id.textView_version);
-            this.textViewDetail = itemView.findViewById(R.id.textView_details);
+            binding = MessageUpdateItemBinding.bind(itemView);
         }
     }
 
@@ -49,8 +44,8 @@ public class MessageUpdateAdapter extends RecyclerView.Adapter<MessageUpdateAdap
 
     @Override
     public void onBindViewHolder(@NonNull MessageUpdateAdapter.ViewHolder holder, int position) {
-        holder.textViewVersion.setText(updateMessageList.get(position).getVersion());
-        holder.textViewDate.setText(updateMessageList.get(position).getDate());
+        binding.textViewVersion.setText(updateMessageList.get(position).getVersion());
+        binding.textViewDate.setText(updateMessageList.get(position).getDate());
 
         ArrayList<String> arrayList = updateMessageList.get(position).getDetail();
 
@@ -62,7 +57,7 @@ public class MessageUpdateAdapter extends RecyclerView.Adapter<MessageUpdateAdap
                 visibleString +=  "\n" + (i+1) + ". " +arrayList.get(i).toString();
             }
         }
-        holder.textViewDetail.setText(visibleString);
+        binding.textViewDetails.setText(visibleString);
     }
 
     @Override

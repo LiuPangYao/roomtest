@@ -5,7 +5,7 @@
     android:gravity="center">
 
     <ImageView
-        android:id="@+id/img_viewpager2"
+        android:id="@+id/imgViewpager2"
         android:layout_width="280dp"
         android:layout_height="140dp"
         android:scaleType="center"
