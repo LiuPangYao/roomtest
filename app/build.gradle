@@ -26,11 +26,11 @@ android {
 }
 
 dependencies {
-    //implementation "androidx.datastore:datastore-preferences-core:1.0.0-alpha06"
 
-    //implementation "androidx.datastore:datastore-preferences:1.0.0-alpha06"
-    //implementation "androidx.datastore:datastore-preferences-rxjava2:1.0.0-alpha06"
-    //implementation "androidx.datastore:datastore-preferences-rxjava3:1.0.0-alpha06"
+    implementation "androidx.datastore:datastore:1.0.0"
+    implementation "androidx.datastore:datastore-rxjava2:1.0.0"
+    implementation "androidx.datastore:datastore-rxjava3:1.0.0"
+    implementation "androidx.datastore:datastore-core:1.0.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -39,6 +39,7 @@ dependencies {
     implementation 'com.orhanobut:logger:2.2.0'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.datastore:datastore-preferences-rxjava2:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
