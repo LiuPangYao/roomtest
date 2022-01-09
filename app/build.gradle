@@ -8,8 +8,8 @@ android {
         applicationId "com.toysoul.roomtest"
         minSdkVersion 25
         targetSdkVersion 31
-        versionCode 19
-        versionName "2.0.4"
+        versionCode 20
+        versionName "2.0.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

@@ -84,7 +84,8 @@
             android:text="toy_sell_price_state"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/recycler_item_size_main_v2"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/toy_sell_state"

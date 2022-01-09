@@ -6,13 +6,14 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.2101851851851852" />
         <entry key="app/src/main/res/layout/about.xml" value="0.1" />
         <entry key="app/src/main/res/layout/about_item.xml" value="0.195703125" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.18719211822660098" />
         <entry key="app/src/main/res/layout/activity_web.xml" value="0.141796875" />
         <entry key="app/src/main/res/layout/custom_progress_dialog_view.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_detail.xml" value="0.1625" />
         <entry key="app/src/main/res/layout/fragment_list.xml" value="0.18046875" />
         <entry key="app/src/main/res/layout/fragment_web.xml" value="0.141796875" />
         <entry key="app/src/main/res/layout/recycler_item.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/recyclerview_cardview.xml" value="0.75" />
+        <entry key="app/src/main/res/layout/recyclerview_cardview.xml" value="0.1" />
         <entry key="app/src/main/res/layout/recyclerview_cardview_v2.xml" value="0.1" />
         <entry key="app/src/main/res/layout/share_dialogfragment.xml" value="0.1296875" />
         <entry key="app/src/main/res/layout/viewpager2_item.xml" value="0.1" />
