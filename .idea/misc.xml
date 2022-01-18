@@ -12,6 +12,8 @@
         <entry key="app/src/main/res/layout/fragment_detail.xml" value="0.1625" />
         <entry key="app/src/main/res/layout/fragment_list.xml" value="0.18046875" />
         <entry key="app/src/main/res/layout/fragment_web.xml" value="0.141796875" />
+        <entry key="app/src/main/res/layout/message_update_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/permission_dialogfragment.xml" value="0.1" />
         <entry key="app/src/main/res/layout/recycler_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/recyclerview_cardview.xml" value="0.1" />
         <entry key="app/src/main/res/layout/recyclerview_cardview_v2.xml" value="0.1" />

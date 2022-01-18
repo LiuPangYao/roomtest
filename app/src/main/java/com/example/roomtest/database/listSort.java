@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 2019-12-22
+ * 2021-01-09 fix error
  */
 public class listSort {
 
@@ -25,19 +25,36 @@ public class listSort {
         list.addAll(sample);
         ArrayList<UpdateMessage> storeList = new ArrayList<UpdateMessage>();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = new Date();
+        Date date2 = new Date();
+
         for(int i = 0 ; i < list.size() ; i++) {
-            String dateString = list.get(i).getDate();
+
+            String dateString = list.get(i).getDate(); // current value
+            try {
+                date1 = sdf.parse(dateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             if(storeList.size() == 0) {
-                storeList.add(list.get(i));
+                storeList.add(0, list.get(i));
             } else {
                 for(int j = 0 ; j < storeList.size() ; j++) {
                     try {
-                        boolean isBigger = compare(storeList.get(j).getDate(), dateString);
+                        date2  = sdf.parse(storeList.get(j).getDate());
 
-                        if(!isBigger) {
+                        if (date1.compareTo(date2) > 0) {
+                            System.out.println("Date1 is after Date2");
+                            //continue;
+                        } else if (date1.compareTo(date2) < 0) {
+                            System.out.println("Date1 is before Date2");
                             storeList.add(j, list.get(i));
                             break;
-                        } else if(j == storeList.size() - 1) {
+                        }
+
+                        if(j == (storeList.size()-1)) {
                             storeList.add(list.get(i));
                             break;
                         }

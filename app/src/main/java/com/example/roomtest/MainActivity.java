@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.d(TAG, "onCreate: ");
+
         // full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -145,6 +147,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume: ");
+        //binding.bottomNavigationView.setVisibility(View.VISIBLE);
+        //bottomNavigationViewListener();
     }
 
     /**
@@ -159,6 +164,10 @@ public class MainActivity extends AppCompatActivity implements
     public void onBackPressed() {
         super.onBackPressed();
         //need to fix some problem
+    }
+
+    interface BackPressHandler {
+        boolean onBackPressed();
     }
 
     public void initView() {

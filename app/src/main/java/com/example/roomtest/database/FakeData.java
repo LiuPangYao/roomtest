@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.example.roomtest.ToyConstants;
 
+/**
+ * 2021-01-18
+ */
 public class FakeData {
 
     public static void setData(Context context) {
@@ -146,7 +149,7 @@ public class FakeData {
         toyInfo toy_eaa097 = new toyInfo();
         toy_eaa097.setName("EAA-097 X戰警 機堡");
         toy_eaa097.setBuyPrice(2150);
-        toy_eaa097.setSellPrice(2290);
+        toy_eaa097.setSellPrice(2390);
         toy_eaa097.setWeb("https://www.beast-kingdom.com.tw/SalePage/Index/6549777?lang=zh-TW");
         toy_eaa097.setImageUri("https://imgur.com/Hz3QQK3");
         toy_eaa097.setDate("2020-10-02");

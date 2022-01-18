@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
 
 import com.example.roomtest.ProgressDialogUtil;
 import com.example.roomtest.R;
@@ -24,7 +23,6 @@ import com.example.roomtest.database.toyInfo;
 import com.example.roomtest.databinding.FragmentWebBinding;
 
 import java.util.List;
-
 
 public class WebFragment extends Fragment implements View.OnClickListener{
 
@@ -198,5 +196,12 @@ public class WebFragment extends Fragment implements View.OnClickListener{
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+        ((AppCompatActivity)getActivity()).findViewById(R.id.bottomNavigationView).setVisibility(View.VISIBLE);
     }
 }

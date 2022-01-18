@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.roomtest.R;
 
 /**
- * 2019-12-18
+ * 2021-01-09 更新 APP 畫面
  */
 public class permissionDialogFragment extends DialogFragment {
 

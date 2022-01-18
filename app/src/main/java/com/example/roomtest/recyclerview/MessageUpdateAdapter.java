@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,9 @@ import com.example.roomtest.firestore.UpdateMessage;
 
 import java.util.ArrayList;
 
+/**
+ * 2022-01-09 update
+ */
 public class MessageUpdateAdapter extends RecyclerView.Adapter<MessageUpdateAdapter.ViewHolder> {
 
     ArrayList<UpdateMessage> updateMessageList = new ArrayList<UpdateMessage>();
@@ -28,9 +32,18 @@ public class MessageUpdateAdapter extends RecyclerView.Adapter<MessageUpdateAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView textViewVersoin;
+        TextView textViewDate;
+        TextView textViewDetails;
+
         public ViewHolder(View itemView) {
             super(itemView);
             binding = MessageUpdateItemBinding.bind(itemView);
+
+            this.textViewVersoin = itemView.findViewById(R.id.textView_version);
+            this.textViewDate = itemView.findViewById(R.id.textView_date);
+            this.textViewDetails = itemView.findViewById(R.id.textView_details);
         }
     }
 
@@ -44,11 +57,12 @@ public class MessageUpdateAdapter extends RecyclerView.Adapter<MessageUpdateAdap
 
     @Override
     public void onBindViewHolder(@NonNull MessageUpdateAdapter.ViewHolder holder, int position) {
-        binding.textViewVersion.setText(updateMessageList.get(position).getVersion());
-        binding.textViewDate.setText(updateMessageList.get(position).getDate());
+        holder.textViewVersoin.setText(updateMessageList.get(position).getVersion());
+        holder.textViewDate.setText(updateMessageList.get(position).getDate());
+        holder.textViewDetails.setText(createDetail(updateMessageList.get(position).getDetail()));
+    }
 
-        ArrayList<String> arrayList = updateMessageList.get(position).getDetail();
-
+    public String createDetail(ArrayList<String> arrayList) {
         String visibleString = null;
         for( int i = 0 ; i < arrayList.size() ; i++) {
             if(i == 0) {
@@ -57,7 +71,7 @@ public class MessageUpdateAdapter extends RecyclerView.Adapter<MessageUpdateAdap
                 visibleString +=  "\n" + (i+1) + ". " +arrayList.get(i).toString();
             }
         }
-        binding.textViewDetails.setText(visibleString);
+        return  visibleString;
     }
 
     @Override
