@@ -51,7 +51,10 @@ public class InsertFakeDataAsyncTask extends AsyncTask<String, Integer, Boolean>
     }
 
     public void saveData() {
+
+        // Fill Fake Data
         FakeData.setData(mContext);
+
         if (!isDataReady) {
             boolean isFakeDataReady = true;
             shared.edit().putBoolean("isReady", isFakeDataReady).commit();
