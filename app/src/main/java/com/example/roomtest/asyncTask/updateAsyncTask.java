@@ -9,10 +9,13 @@ import com.example.roomtest.database.toyInfo;
 
 import java.util.List;
 
+/**
+ * 2022-02-05 整理
+ */
 public class updateAsyncTask extends AsyncTask<toyInfo, Integer, Boolean> {
 
     Context mContext;
-    String TAG = "deleteAsyncTask";
+    String TAG = "updateAsyncTask";
     UpdateCallBack callback;
     List<toyInfo> toyList = null;
 

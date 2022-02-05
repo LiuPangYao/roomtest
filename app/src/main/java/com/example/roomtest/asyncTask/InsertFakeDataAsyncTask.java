@@ -13,6 +13,9 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * 2022-02-05 整理
+ */
 public class InsertFakeDataAsyncTask extends AsyncTask<String, Integer, Boolean> {
 
     Context mContext = null;

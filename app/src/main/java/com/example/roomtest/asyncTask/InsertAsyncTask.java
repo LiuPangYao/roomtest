@@ -9,6 +9,9 @@ import com.example.roomtest.database.toyInfo;
 
 import java.util.List;
 
+/**
+ * 2022-02-05 整理
+ */
 public class InsertAsyncTask extends AsyncTask<toyInfo, Integer, Boolean> {
 
     Context mContext = null;
@@ -44,7 +47,7 @@ public class InsertAsyncTask extends AsyncTask<toyInfo, Integer, Boolean> {
         dataInstance.getToyDao().insert(toy);
 
         toyList = dataInstance.getToyDao().getAll();
-        Log.d(TAG, "doInBackground: done");
+        Log.d(TAG, "InsertAsyncTask doInBackground: done");
 
         return true;
     }

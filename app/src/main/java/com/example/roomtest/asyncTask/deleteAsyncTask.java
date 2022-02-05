@@ -7,6 +7,9 @@ import android.util.Log;
 import com.example.roomtest.database.dataBase;
 import com.example.roomtest.database.toyInfo;
 
+/**
+ * 2022-02-05 整理
+ */
 public class deleteAsyncTask extends AsyncTask<toyInfo, Integer, Boolean> {
 
     Context mContext;
