@@ -134,7 +134,7 @@ public class ListFragment extends Fragment implements
         // avoid data repeat store
         shared = getActivity().getSharedPreferences("app_setting", MODE_PRIVATE);
         isDataReady = shared.getBoolean("isReady", false);
-        isDeveloper = shared.getBoolean("isDeveloper", false);
+        isDeveloper = shared.getBoolean("isDeveloper", true);
 
         binding.floatingActionButton.setOnClickListener(this);
 
