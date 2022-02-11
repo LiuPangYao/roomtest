@@ -16,6 +16,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 2022-02-11 整理
+ * deprecated
+ */
 public class Firebasefirestore {
 
     static String TAG = "Firebasefirestore";
@@ -49,7 +53,7 @@ public class Firebasefirestore {
 
     }
 
-    public static void insert_new() {
+    public static void insertNewData() {
 
         // Create a new user with a first, middle, and last name
         Map<String, Object> user = new HashMap<>();
@@ -94,6 +98,4 @@ public class Firebasefirestore {
                 });
 
     }
-
-
 }

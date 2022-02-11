@@ -102,13 +102,13 @@ public class viewPager2DialogFragment extends DialogFragment
 
     @Override
     public void currentState(int totalPage, int currentPage) {
-        Log.d(TAG, "current page & total page");
+        //Log.d(TAG, "current page & total page");
         binding.textCurrentPage.setText(String.valueOf(currentPage));
         binding.textTotalPage.setText(String.valueOf(totalPage));
     }
 
     public void currentStatePage(int currentPage) {
-        Log.d(TAG, "current page & total page");
+        //Log.d(TAG, "current page & total page");
         binding.textCurrentPage.setText(String.valueOf(currentPage));
         binding.textTotalPage.setText(String.valueOf(list.size()));
     }

@@ -40,6 +40,6 @@ public class updateAsyncTask extends AsyncTask<toyInfo, Integer, Boolean> {
     public void onPostExecute(Boolean result) {
         super.onPostExecute(result);
         callback.onUpdateTaskComplete(toyList);
-        Log.d(TAG, "onPostExecute: update success");
+        //Log.d(TAG, "onPostExecute: update success");
     }
 }
