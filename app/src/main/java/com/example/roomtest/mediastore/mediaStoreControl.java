@@ -2,10 +2,12 @@ package com.example.roomtest.mediastore;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.webkit.MimeTypeMap;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,7 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * 2020-01-01
+ * 2022-02-28
  */
 public class mediaStoreControl {
 
@@ -53,6 +55,39 @@ public class mediaStoreControl {
         }
 
         return uri;
+    }
+
+    public static Uri getFileStreamFromExternal(String fileName) {
+
+        File externalPubPath = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS + "/blogger"
+        );
+
+        File filePath = new File(externalPubPath, fileName);
+
+        Uri uri = null;
+        if(filePath.exists()) {
+            uri = Uri.fromFile(filePath);
+        }
+
+        return uri;
+    }
+
+    public static String getMimeType(Context context, Uri uri) {
+
+        String mimeType = null;
+
+        if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
+            ContentResolver cr = context.getContentResolver();
+            mimeType = cr.getType(uri);
+        } else {
+            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
+                    .toString());
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    fileExtension.toLowerCase());
+        }
+
+        return mimeType;
     }
 
 }

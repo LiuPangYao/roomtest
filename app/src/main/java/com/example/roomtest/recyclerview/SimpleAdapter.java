@@ -46,7 +46,7 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
         this.context = context;
 
         mInterstitialAd = new InterstitialAd(context);
-        //mInterstitialAd.setAdUnitId("z-3940256099942544/1033173712");
+        //mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
         mInterstitialAd.setAdUnitId(ToyConstants.AD_INTERNAL);
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
     }
@@ -86,6 +86,9 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
                     permissionDialogFragment dialog = permissionDialogFragment.newInstance();
                     dialog.show(fm, "permission_dialogfragment");
 
+                    // 更動 直接編輯
+
+                    // for blogger need to delete
                     /*long function1 = 0;
                     long function2 = 0;
                     long function3 = 0;
@@ -129,6 +132,8 @@ public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ViewHolder
                 }
             }
         });
+
+        // 更動 1
 
         // reload
         mInterstitialAd.setAdListener(new AdListener() {
